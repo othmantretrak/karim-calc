@@ -214,57 +214,9 @@ export default function ProductDisplay({ product }: ProductDisplayProps) {
     const filteredAttributes = getFilteredAttributes()
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Product Image */}
-            <div className="space-y-4">
-                <div className="aspect-square relative rounded-lg overflow-hidden border">
-                    <Image
-                        src={currentImage}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        onError={(e) => {
-                            const target = e.target as HTMLImageElement
-                            target.src = '/placeholder-product.jpg'
-                        }}
-                    />
-                </div>
-
-                {/* Additional images could be shown here */}
-                {product.variations.length > 1 && (
-                    <div className="grid grid-cols-4 gap-2">
-                        {product.variations
-                            .filter(v => v.image)
-                            .slice(0, 4)
-                            .map((variation) => (
-                                <div
-                                    key={variation.id}
-                                    className="aspect-square relative rounded border cursor-pointer hover:ring-2 hover:ring-primary"
-                                    onClick={() => {
-                                        // Set selections to match this variation
-                                        const newSelections: SelectedOptions = {}
-                                        variation.attributes.forEach(attr => {
-                                            newSelections[attr.attribute.name] = attr.value
-                                        })
-                                        setSelectedOptions(newSelections)
-                                    }}
-                                >
-                                    <Image
-                                        src={variation.image!}
-                                        alt={`${product.name} variation`}
-                                        fill
-                                        className="object-cover"
-                                        sizes="25vw"
-                                    />
-                                </div>
-                            ))}
-                    </div>
-                )}
-            </div>
-
+        <div className="grid grid-cols-1 gap-8">
             {/* Product Details */}
-            <div className="space-y-6">
+            <div className="space-y-6 mx-auto w-3/4">
                 <div>
                     <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
                     <p className="text-muted-foreground">{product.description}</p>

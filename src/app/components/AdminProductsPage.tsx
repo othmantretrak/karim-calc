@@ -240,7 +240,7 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
                                                     Edit Product
                                                 </Button>
                                             </Link>
-                                            <Link href={`/products/${product.slug}`} target="_blank">
+                                            <Link href={`/products/${product.slug}`}>
                                                 <Button variant="ghost" size="sm" className="w-full">
                                                     Preview
                                                 </Button>
