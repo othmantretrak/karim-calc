@@ -2,6 +2,11 @@ import { getProductBySlug, getAllProducts } from '@/app/actions/productActions'
 import ProductDisplay, { VariationMatch } from '@/app/components/ProductDisplay'
 import { notFound } from 'next/navigation'
 
+
+interface ProductPageProps {
+    params: Promise<{ slug: string }>;
+}
+
 // Generate static params for all existing products
 export async function generateStaticParams() {
     try {
@@ -16,8 +21,9 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for the page
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-    const product = await getProductBySlug(params.slug)
+export async function generateMetadata({ params }: ProductPageProps) {
+    const { slug } = await params;
+    const product = await getProductBySlug(slug)
 
     if (!product) {
         return {
@@ -31,9 +37,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
 }
 
-export default async function ProductPage({ params }: { params: { slug: string } }) {
+export default async function ProductPage({ params }: ProductPageProps) {
     // Fetch product data with all related information
-    const product = await getProductBySlug(params.slug)
+    const { slug } = await params;
+    const product = await getProductBySlug(slug)
 
     if (!product) {
         notFound()
