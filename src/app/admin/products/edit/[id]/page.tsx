@@ -3,16 +3,12 @@ import EditProductForm from '@/app/components/EditProductForm'
 import { notFound } from 'next/navigation'
 
 interface EditProductPageProps {
-    params: {
-        id: string
-    }
+    params: Promise<{ id: string }>;
 }
 
 export default async function EditProductPage({
     params,
-}: {
-    params: Promise<{ id: string }>;
-}) {
+}: EditProductPageProps) {
     const { id } = await params;
     try {
         const product = await getProductForEdit(id)
@@ -49,8 +45,9 @@ export default async function EditProductPage({
 
 // Generate metadata for the page
 export async function generateMetadata({ params }: EditProductPageProps) {
+    const { id } = await params;
     try {
-        const product = await getProductForEdit(params.id)
+        const product = await getProductForEdit(id)
 
         return {
             title: `Edit ${product?.name || 'Product'} | Admin`,
