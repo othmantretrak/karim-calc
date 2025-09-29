@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button'
 import HomePage from '@/components/Homepage'
 import { getProductsForCalculator } from './actions/calculatorActions'
 
+export const revalidate = 1 // Revalidate every second
+
 export default async function Home() {
   const productForCalc = await getProductsForCalculator()
 
