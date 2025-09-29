@@ -4,10 +4,12 @@ import prisma from '../lib/prisma'
 
 export interface CalculatorProduct {
     id: string
+    slug: string
     name: string
     variations: Array<{
         id: string
         price: number
+        sku: string
         attributes: Array<{
             name: string
             value: string
@@ -35,10 +37,12 @@ export async function getProductsForCalculator(): Promise<CalculatorProduct[]> {
         // Transform the data for the calculator
         return products.map(product => ({
             id: product.id,
+            slug: product.slug,
             name: product.name,
             variations: product.variations.map(variation => ({
                 id: variation.id,
                 price: variation.price,
+                sku: variation.sku,
                 attributes: variation.attributes.map(attr => ({
                     name: attr.attribute.name,
                     value: attr.value

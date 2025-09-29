@@ -1,13 +1,9 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { getAllProducts } from '@/app/actions/productActions'
-import { Product } from './generated/prisma'
 import HomePage from '@/components/Homepage'
 import { getProductsForCalculator } from './actions/calculatorActions'
 
 export default async function Home() {
-  const products = await getAllProducts()
   const productForCalc = await getProductsForCalculator()
 
   return (

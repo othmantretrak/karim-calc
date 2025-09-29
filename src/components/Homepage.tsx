@@ -1,24 +1,15 @@
-"use client"
-import { useState, useEffect } from 'react'
+// Homepage.tsx
+'use client'
+
+import { useState, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
-import { Progress } from '@/components/ui/progress'
 import { ChevronLeft, ChevronRight, Calculator } from 'lucide-react'
-
-interface CalculatorProduct {
-    id: string
-    name: string
-    variations: Array<{
-        id: string
-        price: number
-        attributes: Array<{
-            name: string
-            value: string
-        }>
-    }>
-}
+import useStore from '@/lib/store'
+import Link from 'next/link'
+import { findMatchingVariation, getFilteredAttributes } from '@/app/utils/productUtils'
+import { CalculatorProduct, Attribute } from '@/app/types'
 
 interface HomePageProps {
     products: CalculatorProduct[]
@@ -30,151 +21,74 @@ interface CalculatorStep {
     field: string
 }
 
-interface Selection {
-    productId: string
-    attributes: Record<string, string>
-}
-
 export default function HomePage({ products }: HomePageProps) {
+    const { selection, setSelection } = useStore()
     const [currentStep, setCurrentStep] = useState(0)
-    const [selection, setSelection] = useState<Selection>({
-        productId: '',
-        attributes: {}
-    })
     const [calculatedPrice, setCalculatedPrice] = useState(0)
-    const [availableAttributes, setAvailableAttributes] = useState<string[]>([])
 
-    // Define calculator steps
-    const [steps, setSteps] = useState<CalculatorStep[]>([
-        { id: 'product', title: 'Product', field: 'productId' }
-    ])
+    // Compute steps and attributes using useMemo to avoid recalculations
+    const { steps, attributes } = useMemo(() => {
+        const steps: CalculatorStep[] = [{ id: 'product', title: 'Product', field: 'productSlug' }]
+        let attributes: Attribute[] = []
 
-    // Update steps and available attributes when product changes
-    useEffect(() => {
-        if (selection.productId) {
-            const selectedProduct = products.find(p => p.id === selection.productId)
+        if (selection.productSlug) {
+            const selectedProduct = products.find((p) => p.slug === selection.productSlug)
             if (selectedProduct) {
-                // Get unique attribute names from variations
-                const attributeNames = new Set<string>()
-                selectedProduct.variations.forEach(variation => {
-                    variation.attributes.forEach(attr => {
-                        attributeNames.add(attr.name)
-                    })
-                })
-
-                const uniqueAttributes = Array.from(attributeNames)
-                setAvailableAttributes(uniqueAttributes)
-
-                // Update steps to include product selection + attribute steps
-                const newSteps = [
-                    { id: 'product', title: 'Product', field: 'productId' },
-                    ...uniqueAttributes.map(attr => ({
-                        id: attr.toLowerCase(),
-                        title: `Choose ${attr.toLowerCase()}`,
-                        field: attr
-                    }))
-                ]
-                setSteps(newSteps)
-
-                // Only reset attributes when product actually changes, not on step changes
-                setSelection(prev => ({
-                    ...prev,
-                    attributes: prev.productId === selection.productId ? prev.attributes : {}
-                }))
+                attributes = getFilteredAttributes(selectedProduct, selection.attributes)
+                steps.push(...attributes.map((attr) => ({
+                    id: attr.name.toLowerCase(),
+                    title: `Choose ${attr.name.toLowerCase()}`,
+                    field: attr.name,
+                })))
             }
-        } else {
-            setSteps([{ id: 'product', title: 'Product', field: 'productId' }])
-            setAvailableAttributes([])
         }
-    }, [selection.productId, products])
 
-    // Calculate price when selection changes
+        return { steps, attributes }
+    }, [selection.productSlug, selection.attributes, products])
+
+    // Calculate price when selections are complete
     useEffect(() => {
-        if (selection.productId && Object.keys(selection.attributes).length === availableAttributes.length) {
-            const selectedProduct = products.find(p => p.id === selection.productId)
+        if (selection.productSlug && Object.keys(selection.attributes).length === attributes.length) {
+            const selectedProduct = products.find((p) => p.slug === selection.productSlug)
             if (selectedProduct) {
-                const matchingVariation = selectedProduct.variations.find(variation => {
-                    return variation.attributes.every(attr =>
-                        selection.attributes[attr.name] === attr.value
-                    )
-                })
-
-                if (matchingVariation) {
-                    setCalculatedPrice(matchingVariation.price)
-                }
+                const matchingVariation = findMatchingVariation(selectedProduct, selection.attributes)
+                setCalculatedPrice(matchingVariation ? matchingVariation.price : 0)
             }
         } else {
             setCalculatedPrice(0)
         }
-    }, [selection, availableAttributes, products])
+    }, [selection, attributes, products])
 
-    // Get available values for current attribute step
-    const getAvailableValues = (attributeName: string) => {
-        if (!selection.productId) return []
-
-        const selectedProduct = products.find(p => p.id === selection.productId)
-        if (!selectedProduct) return []
-
-        // Get other selected attributes (excluding current one)
-        const otherSelections = Object.entries(selection.attributes).filter(
-            ([name]) => name !== attributeName
-        )
-
-        // Filter variations that match other selections
-        const compatibleVariations = selectedProduct.variations.filter(variation => {
-            return otherSelections.every(([attrName, selectedValue]) => {
-                return variation.attributes.some(attr =>
-                    attr.name === attrName && attr.value === selectedValue
-                )
-            })
-        })
-
-        // Get unique values for current attribute
-        const availableValues = new Set<string>()
-        compatibleVariations.forEach(variation => {
-            const attr = variation.attributes.find(a => a.name === attributeName)
-            if (attr) {
-                availableValues.add(attr.value)
-            }
-        })
-
-        return Array.from(availableValues).sort()
-    }
-
-    const handleProductSelect = (productId: string) => {
-        setSelection(prev => ({ ...prev, productId }))
+    const handleProductSelect = (productSlug: string) => {
+        setSelection({ productSlug, attributes: {}, variationId: undefined })
+        setCurrentStep(0)
     }
 
     const handleAttributeSelect = (attributeName: string, value: string) => {
-        console.log('Selecting attribute:', attributeName, 'value:', value) // Debug log
-        setSelection(prev => {
-            const newSelection = {
-                ...prev,
-                attributes: { ...prev.attributes, [attributeName]: value }
-            }
-            console.log('New selection state:', newSelection) // Debug log
-            return newSelection
-        })
+        setSelection((prev) => ({
+            ...prev,
+            attributes: { ...prev.attributes, [attributeName]: value },
+        }))
     }
 
     const nextStep = () => {
         if (currentStep < steps.length - 1) {
-            setCurrentStep(prev => prev + 1)
+            setCurrentStep((prev) => prev + 1)
         }
     }
 
     const prevStep = () => {
         if (currentStep > 0) {
-            setCurrentStep(prev => prev - 1)
+            setCurrentStep((prev) => prev - 1)
         }
     }
 
     const canProceed = () => {
         const currentStepData = steps[currentStep]
-        if (currentStepData.field === 'productId') {
-            return selection.productId !== ''
+        if (currentStepData.field === 'productSlug') {
+            return !!selection.productSlug
         }
-        return selection.attributes[currentStepData.field] !== undefined && selection.attributes[currentStepData.field] !== ''
+        return !!selection.attributes[currentStepData.field]
     }
 
     const isLastStep = currentStep === steps.length - 1
@@ -183,75 +97,48 @@ export default function HomePage({ products }: HomePageProps) {
     const getCurrentStepContent = () => {
         const currentStepData = steps[currentStep]
 
-        if (currentStepData.field === 'productId') {
+        if (currentStepData.field === 'productSlug') {
             return (
-                <div className="space-y-4">
-                    <Select
-                        value={selection.productId}
-                        onValueChange={handleProductSelect}
-                    >
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a product" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {products.map((product) => (
-                                <SelectItem key={product.id} value={product.id}>
-                                    <div className="flex flex-col">
-                                        <span className="font-medium">{product.name}</span>
-                                        <span className="text-sm text-muted-foreground">
-                                            Starting from €{Math.min(...product.variations.map(v => v.price)).toFixed(2)}
-                                        </span>
-                                    </div>
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
-            )
-        }
-
-        // Attribute selection step
-        const attributeName = currentStepData.field
-        const availableValues = getAvailableValues(attributeName)
-
-        return (
-            <div className="space-y-4">
-                <Select
-                    value={selection.attributes[attributeName] || ''}
-                    onValueChange={(value) => handleAttributeSelect(attributeName, value)}
-                >
+                <Select value={selection.productSlug} onValueChange={handleProductSelect}>
                     <SelectTrigger className="w-full">
-                        <SelectValue placeholder={`Select ${attributeName.toLowerCase()}`} />
+                        <SelectValue placeholder="Select a product" />
                     </SelectTrigger>
                     <SelectContent>
-                        {availableValues.map((value) => (
-                            <SelectItem key={value} value={value}>
-                                {value}
+                        {products.map((product) => (
+                            <SelectItem key={product.id} value={product.slug}>
+                                <div className="flex flex-col">
+                                    <span className="font-medium">{product.name}</span>
+                                    <span className="text-sm text-muted-foreground">
+                                        Starting from €{Math.min(...product.variations.map((v) => v.price)).toFixed(2)}
+                                    </span>
+                                </div>
                             </SelectItem>
                         ))}
                     </SelectContent>
                 </Select>
-            </div>
-        )
-    }
-
-    const handleGetQuote = () => {
-        // Find the selected product and variation
-        const selectedProduct = products.find(p => p.id === selection.productId)
-        if (selectedProduct) {
-            const matchingVariation = selectedProduct.variations.find(variation => {
-                return variation.attributes.every(attr =>
-                    selection.attributes[attr.name] === attr.value
-                )
-            })
-
-            if (matchingVariation) {
-                // Redirect to product page with selected variation
-                // You can implement this based on your routing structure
-                const slug = selectedProduct.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-                window.open(`/products/${slug}`, '_blank')
-            }
+            )
         }
+
+        const attributeName = currentStepData.field
+        const availableValues = attributes.find((attr) => attr.name === attributeName)?.availableValues || []
+
+        return (
+            <Select
+                value={selection.attributes[attributeName] || ''}
+                onValueChange={(value) => handleAttributeSelect(attributeName, value)}
+            >
+                <SelectTrigger className="w-full">
+                    <SelectValue placeholder={`Select ${attributeName.toLowerCase()}`} />
+                </SelectTrigger>
+                <SelectContent>
+                    {availableValues.map((value) => (
+                        <SelectItem key={value} value={value}>
+                            {value}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        )
     }
 
     if (products.length === 0) {
@@ -275,7 +162,7 @@ export default function HomePage({ products }: HomePageProps) {
             <div className="w-full max-w-md mx-auto">
                 <Card className="overflow-hidden shadow-xl py-0">
                     <CardHeader className="bg-gradient-to-r from-green-700 to-green-800 text-white text-center">
-                        <div className="flex items-center justify-center gap-2 mb-2 py-2">
+                        <div className="flex items-center justify-center gap-2 mb-2 my-5">
                             <Calculator className="w-5 h-5" />
                             <CardTitle className="text-lg">Calculate your price quickly!</CardTitle>
                         </div>
@@ -287,31 +174,26 @@ export default function HomePage({ products }: HomePageProps) {
                             style={{ width: `${progress}%` }}
                         />
                     </div>
-
                     <CardContent className="p-6 space-y-6">
                         <div>
-                            <p className="text-sm text-muted-foreground mb-4">
-                                What can we help you with?
-                            </p>
+                            <p className="text-sm text-muted-foreground mb-4">What can we help you with?</p>
                             <h3 className="font-semibold mb-4">
                                 {steps[currentStep]?.title}
                                 <span className="text-red-500">*</span>
                             </h3>
                             {getCurrentStepContent()}
-
                             {/* Debug section - remove this in production */}
                             {process.env.NODE_ENV === 'development' && (
                                 <div className="mt-4 p-2 bg-gray-100 rounded text-xs">
                                     <div>Current Step: {currentStep} / {steps.length - 1}</div>
-                                    <div>Selected Product: {selection.productId}</div>
+                                    <div>Selected Product: {selection.productSlug}</div>
                                     <div>Selected Attributes: {JSON.stringify(selection.attributes)}</div>
                                     <div>Can Proceed: {canProceed().toString()}</div>
-                                    <div>Available Attributes: {availableAttributes.join(', ')}</div>
+                                    <div> Total steps : {steps.length} </div>
                                 </div>
                             )}
                         </div>
 
-                        {/* Price Display */}
                         {calculatedPrice > 0 && (
                             <div className="border-t pt-4">
                                 <div className="flex justify-between items-center text-lg font-semibold">
@@ -321,36 +203,29 @@ export default function HomePage({ products }: HomePageProps) {
                             </div>
                         )}
 
-                        {/* Navigation */}
                         <div className="flex gap-3 pt-4">
                             {currentStep > 0 && (
-                                <Button
-                                    variant="outline"
-                                    onClick={prevStep}
-                                    className="flex-1"
-                                >
+                                <Button variant="outline" onClick={prevStep} className="flex-1">
                                     <ChevronLeft className="w-4 h-4 mr-2" />
                                     Back
                                 </Button>
                             )}
-
-                            {!isLastStep ? (
+                            {(!isLastStep || steps.length - 1 === 0) ? (
                                 <Button
                                     onClick={nextStep}
                                     disabled={!canProceed()}
-                                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                                    className="flex-1 bg-green-700 hover:bg-green-800 text-white"
                                 >
                                     Next
                                     <ChevronRight className="w-4 h-4 ml-2" />
                                 </Button>
                             ) : (
-                                <Button
-                                    disabled={calculatedPrice === 0}
-                                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                                    onClick={handleGetQuote}
+                                <Link
+                                    className="flex-1 bg-green-700 hover:bg-green-800 text-white text-center py-2 rounded"
+                                    href={`/products/${selection.productSlug}`}
                                 >
                                     View Product
-                                </Button>
+                                </Link>
                             )}
                         </div>
                     </CardContent>

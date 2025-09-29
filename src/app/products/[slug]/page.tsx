@@ -1,5 +1,5 @@
 import { getProductBySlug, getAllProducts } from '@/app/actions/productActions'
-import ProductDisplay, { VariationMatch } from '@/app/components/ProductDisplay'
+import ProductDisplay from '@/app/components/ProductDisplay'
 import { notFound } from 'next/navigation'
 
 
