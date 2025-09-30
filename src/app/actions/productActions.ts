@@ -96,7 +96,7 @@ export async function createProductWithVariations(payload: CreateProductPayload)
         })
 
         // Revalidate product-related paths
-        revalidatePath('/admin/products')
+        revalidatePath('/dashboard')
         revalidatePath('/products')
         revalidatePath(`/products/${payload.product.slug}`)
 
@@ -307,7 +307,7 @@ export async function updateProduct(productId: string, payload: UpdateProductPay
         })
 
         // Revalidate product-related paths
-        revalidatePath('/admin/products')
+        revalidatePath('/dashboard')
         revalidatePath('/products')
         revalidatePath(`/products/${payload.product.slug}`)
 
@@ -326,7 +326,7 @@ export async function deleteProduct(productId: string) {
         })
 
         // Revalidate product-related paths
-        revalidatePath('/admin/products')
+        revalidatePath('/dashboard')
         revalidatePath('/products')
 
         return { success: true }
@@ -364,7 +364,7 @@ export async function deleteVariation(variationId: string) {
         })
 
         // Revalidate product-related paths
-        revalidatePath('/admin/products')
+        revalidatePath('/dashboard')
         revalidatePath('/products')
         revalidatePath(`/products/${variation.product.slug}`)
 

@@ -183,7 +183,7 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
                             </DialogContent>
                         </Dialog>
 
-                        <Link href="/admin/products/new">
+                        <Link href="/dashboard/new">
                             <Button>Create New Product</Button>
                         </Link>
                     </div>
@@ -197,7 +197,7 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
                                 <p className="text-muted-foreground mb-4">
                                     Get started by creating your first variable product
                                 </p>
-                                <Link href="/admin/products/new">
+                                <Link href="/dashboard/new">
                                     <Button>Create Product</Button>
                                 </Link>
                             </div>
@@ -218,7 +218,7 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
                                         </div>
                                         <div>
                                             <p className="text-sm text-muted-foreground">Base Price</p>
-                                            <p className="font-semibold">${product.basePrice.toFixed(2)}</p>
+                                            <p className="font-semibold">€{product.basePrice.toFixed(2)}</p>
                                         </div>
                                         <div>
                                             <p className="text-sm text-muted-foreground">Variations</p>
@@ -235,7 +235,7 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
                                             </div>
                                         </div>
                                         <div className="pt-2 space-y-2">
-                                            <Link href={`/admin/products/edit/${product.id}`}>
+                                            <Link href={`/dashboard/edit/${product.id}`}>
                                                 <Button variant="outline" size="sm" className="w-full">
                                                     Edit Product
                                                 </Button>

@@ -17,6 +17,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { SquareTerminal } from "lucide-react"
+import Image from "next/image"
 
 const data = {
   user: {
@@ -33,15 +34,15 @@ const data = {
       items: [
         {
           title: "Products",
-          url: "/admin/products",
+          url: "/dashboard",
         },
         {
           title: "Attributes",
-          url: "/admin/attributes",
+          url: "/dashboard/attributes",
         },
         {
           title: "Variation",
-          url: "/admin/variations",
+          url: "/dashboard/variations",
         },
       ],
     },
@@ -108,7 +109,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">
+                  <Image
+                    src="/logo.svg"
+                    alt="KarimCalc Logo"
+                    width={52}
+                    height={52}
+                  />
+                </span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

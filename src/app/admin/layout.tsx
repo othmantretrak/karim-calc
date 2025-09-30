@@ -16,7 +16,7 @@ export default function AdminLayout({
                                 Admin Dashboard
                             </Link>
                             <nav className="hidden md:flex space-x-4">
-                                <Link href="/admin/products">
+                                <Link href="/dashboard">
                                     <Button variant="ghost">Products</Button>
                                 </Link>
                             </nav>

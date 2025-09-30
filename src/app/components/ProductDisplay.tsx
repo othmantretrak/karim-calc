@@ -80,10 +80,10 @@ export default function ProductDisplay({ product }: ProductDisplayProps) {
                 </div>
 
                 <div className="space-y-2">
-                    <div className="text-3xl font-bold">${currentPrice.toFixed(2)}</div>
+                    <div className="text-3xl font-bold">€{currentPrice.toFixed(2)}</div>
                     {!currentVariation && (
                         <p className="text-sm text-muted-foreground">
-                            Starting from ${product.basePrice.toFixed(2)}
+                            Starting from €{product.basePrice.toFixed(2)}
                         </p>
                     )}
                 </div>

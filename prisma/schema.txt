@@ -68,7 +68,6 @@ model Variation {
   id        String   @id @default(cuid())
   sku       String   @unique
   price     Float
-  stock     Int
   image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

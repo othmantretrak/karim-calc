@@ -24,7 +24,7 @@ export default function AdminHomePage() {
                                     Create and manage variable products with multiple variations
                                 </p>
                                 <div className="space-y-2">
-                                    <Link href="/admin/products">
+                                    <Link href="/dashboard">
                                         <Button className="w-full">Manage Products</Button>
                                     </Link>
 

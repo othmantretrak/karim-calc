@@ -112,7 +112,7 @@ export default function EditProductForm({ product: initialProduct }: EditProduct
         try {
             await deleteProduct(initialProduct.id)
             toast.success('Product deleted successfully!')
-            router.push('/admin/products')
+            router.push('/dashboard')
         } catch (error) {
             toast.error('Failed to delete product')
             console.error(error)
@@ -144,7 +144,7 @@ export default function EditProductForm({ product: initialProduct }: EditProduct
                 })
 
                 toast.success('Product updated successfully!')
-                router.push('/admin/products')
+                router.push('/dashboard')
             } catch (error) {
                 toast.error('Failed to update product')
                 console.error(error)
@@ -157,7 +157,7 @@ export default function EditProductForm({ product: initialProduct }: EditProduct
             <div className="max-w-4xl mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-4">
-                        <Link href="/admin/products">
+                        <Link href="/dashboard">
                             <Button variant="outline" size="sm">
                                 <ArrowLeft className="w-4 h-4 mr-2" />
                                 Back to Products
@@ -378,7 +378,7 @@ export default function EditProductForm({ product: initialProduct }: EditProduct
 
                     {/* Submit Button */}
                     <div className="flex justify-end gap-4">
-                        <Link href="/admin/products">
+                        <Link href="/dashboard">
                             <Button variant="outline" type="button">
                                 Cancel
                             </Button>

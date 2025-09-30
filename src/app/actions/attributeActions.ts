@@ -33,8 +33,8 @@ export async function createAttribute(data: CreateAttributeData) {
         })
 
         // Revalidate relevant paths
-        revalidatePath('/admin/products')
-        revalidatePath('/admin/products/new')
+        revalidatePath('/dashboard')
+        revalidatePath('/dashboard/new')
 
         return attribute
     } catch (error: any) {
@@ -88,8 +88,8 @@ export async function deleteAttribute(attributeId: string) {
         })
 
         // Revalidate relevant paths
-        revalidatePath('/admin/products')
-        revalidatePath('/admin/products/new')
+        revalidatePath('/dashboard')
+        revalidatePath('/dashboard/new')
 
         return { success: true }
     } catch (error: any) {
@@ -135,8 +135,8 @@ export async function updateAttribute(attributeId: string, data: CreateAttribute
         })
 
         // Revalidate relevant paths
-        revalidatePath('/admin/products')
-        revalidatePath('/admin/products/new')
+        revalidatePath('/dashboard')
+        revalidatePath('/dashboard/new')
 
         return updatedAttribute
     } catch (error: any) {

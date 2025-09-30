@@ -159,7 +159,7 @@ export default function ProductForm({ attributes }: ProductFormProps) {
                 })
 
                 toast.success('Product created successfully!')
-                router.push('/admin/products')
+                router.push('/dashboard')
             } catch (error) {
                 toast.error('Failed to create product')
                 console.error(error)
@@ -308,7 +308,7 @@ export default function ProductForm({ attributes }: ProductFormProps) {
                                             />
                                         </div>
                                         <div className="space-y-1">
-                                            <Label htmlFor={`price-${index}`}>Price *</Label>
+                                            <Label htmlFor={`-${index}`}>Price *</Label>
                                             <Input
                                                 id={`price-${index}`}
                                                 type="number"

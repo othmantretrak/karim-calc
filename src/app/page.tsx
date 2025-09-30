@@ -18,7 +18,7 @@ export default async function Home() {
             Gedreven door vakmanschap gaan we samen op zoek naar een passende en duurzame oplossing voor uw project.
           </p>
           <div className="flex justify-center gap-4">
-            <Link href="/admin">
+            <Link href="/dashboard">
               <Button variant="outline">Admin Dashboard</Button>
             </Link>
           </div>
