@@ -1,54 +1,55 @@
-// types/Homepage.ts
-export interface CalculatorProduct {
-    id: string
-    name: string
-    slug: string
-    variations: Array<{
-        id: string
-        price: number
-        attributes: Array<{
-            name: string
-            value: string
-        }>
-    }>
-}
-// types/ProductDisplay.ts
-export interface Product {
-    id: string
-    name: string
-    slug: string
-    description?: string
-    basePrice: number
-    baseImage?: string
-    variations: Array<{
-        id: string
-        sku: string
-        price: number
-        image?: string
-        attributes: Array<{
-            id: string
-            value: string
-            attribute: {
-                id: string
-                name: string
-            }
-        }>
-    }>
-}
+// app/types.ts
 
-export interface VariationMatch {
+export type AttributeType = 'SELECT' | 'NUMBER'
+
+export interface AttributeValue {
     id: string
-    sku: string
-    price: number
-    image?: string
-    attributes: Array<{
-        attributeName: string
-        value: string
-    }>
+    value: string
+    attributeId: string
 }
 
 export interface Attribute {
     id: string
     name: string
-    availableValues: string[]
+    type: AttributeType
+    unit?: string | null
+    values?: AttributeValue[]
+    availableValues?: string[] // For filtered attributes in the UI
+}
+
+export interface ProductUnitPrice {
+    id: string
+    productId: string
+    attributeId: string
+    pricePerUnit: number
+    defaultQuantity: number
+    attribute: Attribute
+}
+
+export interface Variation {
+    id: string
+    sku: string
+    price: number
+    image?: string | null
+    productId: string
+    attributes: AttributeValue[]
+}
+
+export interface CalculatorProduct {
+    id: string
+    name: string
+    slug: string
+    description?: string | null
+    basePrice: number
+    baseImage?: string | null
+    variations: Variation[]
+    attributes: Attribute[]
+    unitPrices: ProductUnitPrice[]
+}
+
+export interface SelectionState {
+    productSlug: string | undefined
+    attributes: Record<string, string> // { attributeName: selectedValue }
+    numberInputs: Record<string, number> // { attributeName: quantity }
+    variationId: string | undefined
 }

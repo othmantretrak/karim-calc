@@ -125,46 +125,58 @@ exports.Prisma.ProductScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   description: 'description',
-  basePrice: 'basePrice',
   baseImage: 'baseImage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.AttributeScalarFieldEnum = {
+exports.Prisma.FormStepScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  productId: 'productId',
+  order: 'order',
+  type1: 'type1',
+  question1: 'question1',
+  required1: 'required1',
+  type2: 'type2',
+  question2: 'question2',
+  required2: 'required2',
+  pricingImpact1: 'pricingImpact1',
+  pricePerUnit1: 'pricePerUnit1',
+  unit1: 'unit1',
+  minValue1: 'minValue1',
+  maxValue1: 'maxValue1',
+  defaultValue1: 'defaultValue1',
+  pricingImpact2: 'pricingImpact2',
+  pricePerUnit2: 'pricePerUnit2',
+  unit2: 'unit2',
+  minValue2: 'minValue2',
+  maxValue2: 'maxValue2',
+  defaultValue2: 'defaultValue2',
+  conditionalOn: 'conditionalOn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.AttributeValueScalarFieldEnum = {
+exports.Prisma.StepOptionScalarFieldEnum = {
   id: 'id',
+  stepId: 'stepId',
+  questionNum: 'questionNum',
+  label: 'label',
   value: 'value',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  attributeId: 'attributeId'
-};
-
-exports.Prisma.ProductAttributeScalarFieldEnum = {
-  id: 'id',
-  productId: 'productId',
-  attributeId: 'attributeId'
-};
-
-exports.Prisma.VariationScalarFieldEnum = {
-  id: 'id',
-  sku: 'sku',
   price: 'price',
-  image: 'image',
+  order: 'order',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  productId: 'productId'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -177,13 +189,29 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.StepType = exports.$Enums.StepType = {
+  SELECT: 'SELECT',
+  NUMBER: 'NUMBER',
+  TEXT: 'TEXT',
+  CHECKBOX: 'CHECKBOX'
+};
+
+exports.PricingImpact = exports.$Enums.PricingImpact = {
+  BASE: 'BASE',
+  MULTIPLIER: 'MULTIPLIER',
+  ADDITIVE: 'ADDITIVE',
+  NONE: 'NONE'
+};
 
 exports.Prisma.ModelName = {
   Product: 'Product',
-  Attribute: 'Attribute',
-  AttributeValue: 'AttributeValue',
-  ProductAttribute: 'ProductAttribute',
-  Variation: 'Variation'
+  FormStep: 'FormStep',
+  StepOption: 'StepOption'
 };
 
 /**

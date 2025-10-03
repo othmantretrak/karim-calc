@@ -1,84 +1,138 @@
-import { CalculatorProduct, Product, Attribute, VariationMatch } from "../types"
+// app/utils/productUtils.ts
+import { CalculatorProduct, Attribute, Variation, ProductUnitPrice } from '@/app/types'
 
-// utils/productUtils.ts
-const getAttribute = (attr: any): { name: string; value: string } => {
-    if ('name' in attr) {
-        // This is for CalculatorProduct variation attributes
-        return { name: attr.name, value: attr.value }
-    }
-    // This is for Product variation attributes
-    return { name: attr.attribute.name, value: attr.value }
-}
-
-export function getFilteredAttributes(
-    product: CalculatorProduct | Product,
-    selections: Record<string, string>
-): Attribute[] {
-    const variations = product.variations || []
-    const attributes = new Set<string>()
-
-    // Collect all attribute names
-    variations.forEach((variation) => {
-        variation.attributes.forEach((attr) => attributes.add(getAttribute(attr).name))
-    })
-
-    return Array.from(attributes).map((attributeName) => ({
-        id: attributeName,
-        name: attributeName,
-        availableValues: getAvailableValuesForAttributeFiltered(product, attributeName, selections),
-    }))
-}
-
-export function getAvailableValuesForAttributeFiltered(
-    product: CalculatorProduct | Product,
-    targetAttributeName: string,
-    selections: Record<string, string>
-): string[] {
-    const variations = product.variations || []
-    const otherSelections = Object.entries(selections).filter(([attrName]) => attrName !== targetAttributeName)
-
-    const compatibleVariations = variations.filter((variation) => {
-        return otherSelections.every(([attrName, selectedValue]) => {
-            return variation.attributes.some((attr) => {
-                const { name, value } = getAttribute(attr)
-                return name === attrName && value === selectedValue
-            })
-        })
-    })
-
-    const availableValues = new Set<string>()
-    compatibleVariations.forEach((variation) => {
-        const attr = variation.attributes.find((a) => getAttribute(a).name === targetAttributeName)
-        if (attr) availableValues.add(getAttribute(attr).value)
-    })
-
-    return Array.from(availableValues).sort()
-}
-
+/**
+ * Find a matching variation based on SELECT-type attributes only
+ */
 export function findMatchingVariation(
-    product: CalculatorProduct | Product,
-    selections: Record<string, string>
-): VariationMatch | null {
-    const variations = product.variations || []
-    const matchedVariation = variations.find((variation) => {
-        return Object.entries(selections).every(([attrName, selectedValue]) => {
-            return variation.attributes.some((attr) => {
-                const { name, value } = getAttribute(attr)
-                return name === attrName && value === selectedValue
-            })
+    product: CalculatorProduct,
+    selectedAttributes: Record<string, string>
+): Variation | null {
+    return product.variations.find((variation) => {
+        // Get only SELECT type attributes for matching
+        const selectAttributes = product.attributes.filter(attr => attr.type === 'SELECT')
+
+        return selectAttributes.every((attr) => {
+            const selectedValue = selectedAttributes[attr.name]
+            if (!selectedValue) return false
+
+            return variation.attributes.some(
+                (va) => va.attributeId === attr.id && va.value === selectedValue
+            )
+        })
+    }) || null
+}
+
+/**
+ * Calculate final price including number-based attributes
+ */
+export function calculatePrice(
+    variation: Variation,
+    unitPrices: ProductUnitPrice[],
+    numberInputs: Record<string, number>
+): number {
+    let finalPrice = variation.price
+
+    // For each number attribute, calculate the delta from default
+    unitPrices.forEach((unitPrice) => {
+        const inputQuantity = numberInputs[unitPrice.attribute.name] || unitPrice.defaultQuantity
+        const delta = inputQuantity - unitPrice.defaultQuantity
+        const additionalCost = delta * unitPrice.pricePerUnit
+
+        finalPrice += additionalCost
+    })
+
+    return finalPrice
+}
+
+/**
+ * Calculate the "starting from" price with current selections
+ * This finds the minimum price among variations that match selected attributes
+ */
+export function calculateStartingPrice(
+    product: CalculatorProduct,
+    selectedAttributes: Record<string, string>,
+    numberInputs: Record<string, number>
+): number {
+    // Filter variations that match the currently selected attributes
+    const selectAttributes = product.attributes.filter(attr => attr.type === 'SELECT')
+    const selectedAttrNames = Object.keys(selectedAttributes)
+
+    const matchingVariations = product.variations.filter((variation) => {
+        return selectedAttrNames.every((attrName) => {
+            const attr = selectAttributes.find(a => a.name === attrName)
+            if (!attr) return true
+
+            const selectedValue = selectedAttributes[attrName]
+            return variation.attributes.some(
+                (va) => va.attributeId === attr.id && va.value === selectedValue
+            )
         })
     })
 
-    if (!matchedVariation) return null
+    if (matchingVariations.length === 0) return 0
 
-    return {
-        id: matchedVariation.id,
-        sku: 'sku' in matchedVariation ? matchedVariation.sku : matchedVariation.id,
-        price: matchedVariation.price,
-        image: 'image' in matchedVariation ? matchedVariation.image : undefined,
-        attributes: matchedVariation.attributes.map((attr) => {
-            const { name, value } = getAttribute(attr)
-            return { attributeName: name, value }
-        }),
-    }
+    // Calculate price for each matching variation and return the minimum
+    const prices = matchingVariations.map(variation =>
+        calculatePrice(variation, product.unitPrices, numberInputs)
+    )
+
+    return Math.min(...prices)
+}
+
+/**
+ * Get filtered attributes with available values based on current selection
+ */
+export function getFilteredAttributes(
+    product: CalculatorProduct,
+    selectedAttributes: Record<string, string>
+): Attribute[] {
+    const selectAttributes = product.attributes.filter(attr => attr.type === 'SELECT')
+
+    return selectAttributes.map((attribute) => {
+        // Find variations that match currently selected attributes (excluding this one)
+        const otherSelectedAttrs = Object.entries(selectedAttributes).filter(
+            ([key]) => key !== attribute.name
+        )
+
+        const matchingVariations = product.variations.filter((variation) => {
+            return otherSelectedAttrs.every(([attrName, attrValue]) => {
+                const attr = selectAttributes.find((a) => a.name === attrName)
+                if (!attr) return true
+
+                return variation.attributes.some(
+                    (va) => va.attributeId === attr.id && va.value === attrValue
+                )
+            })
+        })
+
+        // Get unique available values from matching variations
+        const availableValues = new Set<string>()
+        matchingVariations.forEach((variation) => {
+            variation.attributes.forEach((va) => {
+                if (va.attributeId === attribute.id) {
+                    availableValues.add(va.value)
+                }
+            })
+        })
+
+        return {
+            ...attribute,
+            availableValues: Array.from(availableValues).sort(),
+        }
+    })
+}
+
+/**
+ * Get number-type attributes for a product
+ */
+export function getNumberAttributes(product: CalculatorProduct): Attribute[] {
+    return product.attributes.filter(attr => attr.type === 'NUMBER')
+}
+
+/**
+ * Get select-type attributes for a product
+ */
+export function getSelectAttributes(product: CalculatorProduct): Attribute[] {
+    return product.attributes.filter(attr => attr.type === 'SELECT')
 }

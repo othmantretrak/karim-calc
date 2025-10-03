@@ -36,14 +36,6 @@ const data = {
           title: "Products",
           url: "/dashboard",
         },
-        {
-          title: "Attributes",
-          url: "/dashboard/attributes",
-        },
-        {
-          title: "Variation",
-          url: "/dashboard/variations",
-        },
       ],
     },
   ],

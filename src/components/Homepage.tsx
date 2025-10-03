@@ -1,145 +1,238 @@
-// Homepage.tsx
+// app/components/Homepage.tsx
 'use client'
-
 import { useState, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ChevronLeft, ChevronRight, Calculator } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Calculator, ArrowLeft } from 'lucide-react'
 import useStore from '@/lib/store'
 import Link from 'next/link'
-import { findMatchingVariation, getFilteredAttributes } from '@/app/utils/productUtils'
-import { CalculatorProduct, Attribute } from '@/app/types'
+import { Product, FormStep } from '@/app/types/formBuilder'
+import {
+    calculatePrice,
+    calculatePartialPrice,
+    getVisibleSteps,
+    areAllStepsComplete,
+} from '@/app/utils/priceCalculator'
 
 interface HomePageProps {
-    products: CalculatorProduct[]
-}
-
-interface CalculatorStep {
-    id: string
-    title: string
-    field: string
+    products: Product[]
 }
 
 export default function HomePage({ products }: HomePageProps) {
-    const { selection, setSelection } = useStore()
-    const [currentStep, setCurrentStep] = useState(0)
-    const [calculatedPrice, setCalculatedPrice] = useState(0)
+    const { productSlug, answers, setProductSlug, setAnswer } = useStore()
 
-    // Compute steps and attributes using useMemo to avoid recalculations
-    const { steps, attributes } = useMemo(() => {
-        const steps: CalculatorStep[] = [{ id: 'product', title: 'Product', field: 'productSlug' }]
-        let attributes: Attribute[] = []
+    // Get selected product
+    const selectedProduct = useMemo(() => {
+        return products.find(p => p.slug === productSlug)
+    }, [products, productSlug])
 
-        if (selection.productSlug) {
-            const selectedProduct = products.find((p) => p.slug === selection.productSlug)
-            if (selectedProduct) {
-                attributes = getFilteredAttributes(selectedProduct, selection.attributes)
-                steps.push(...attributes.map((attr) => ({
-                    id: attr.name.toLowerCase(),
-                    title: `Choose ${attr.name.toLowerCase()}`,
-                    field: attr.name,
-                })))
+    // Get visible steps based on current answers
+    const visibleSteps = useMemo(() => {
+        if (!selectedProduct) return []
+        return getVisibleSteps(selectedProduct, answers)
+    }, [selectedProduct, answers])
+
+    // Calculate price
+    const priceInfo = useMemo(() => {
+        if (!selectedProduct) return { total: 0, isComplete: false, partial: 0 }
+
+        const isComplete = areAllStepsComplete(selectedProduct, answers)
+
+        if (isComplete) {
+            const breakdown = calculatePrice(selectedProduct, answers)
+            return { total: breakdown.total, isComplete: true, partial: 0 }
+        }
+
+        const partial = calculatePartialPrice(selectedProduct, answers)
+        return { total: 0, isComplete: false, partial }
+    }, [selectedProduct, answers])
+
+    const handleProductSelect = (slug: string) => {
+        setProductSlug(slug)
+    }
+
+    const handleAnswer = (stepId: string, questionNum: number, value: string | number | null) => {
+        const key = `${stepId}_q${questionNum}`
+        setAnswer(key, value === null ? '' : value) // Store null answers as empty string for consistency/clearing
+    }
+
+    // Check if a question is answered
+    const isQuestionAnswered = (stepId: string, questionNum: number) => {
+        const key = `${stepId}_q${questionNum}`
+        const answer = answers[key]
+        return answer !== undefined && answer !== '' && answer !== null
+    }
+
+    // Get all answered steps (both questions answered if step has 2 questions)
+    const getAnsweredSteps = () => {
+        return visibleSteps.filter(step => {
+            const q1Answered = isQuestionAnswered(step.id, 1)
+            if (!step.question2) return q1Answered
+            const q2Answered = isQuestionAnswered(step.id, 2)
+            return q1Answered && q2Answered
+        })
+    }
+
+    // Get the first unanswered step
+    const getFirstUnansweredStep = () => {
+        return visibleSteps.find(step => {
+            const q1Answered = isQuestionAnswered(step.id, 1)
+            if (!q1Answered) return true
+            if (step.question2) {
+                const q2Answered = isQuestionAnswered(step.id, 2)
+                return !q2Answered
+            }
+            return false
+        })
+    }
+
+    const answeredSteps = getAnsweredSteps()
+    const currentUnansweredStep = getFirstUnansweredStep()
+    const allComplete = !currentUnansweredStep && visibleSteps.length > 0
+    const currentStepIndex = currentUnansweredStep
+        ? visibleSteps.findIndex(s => s.id === currentUnansweredStep.id)
+        : visibleSteps.length
+
+    const handleGoBack = () => {
+        if (!selectedProduct || visibleSteps.length === 0) return;
+
+        // 1. If calculation is complete, target the last step
+        if (allComplete) {
+            const stepToClear = visibleSteps[visibleSteps.length - 1];
+            if (stepToClear) {
+                handleAnswer(stepToClear.id, 1, null);
+                if (stepToClear.question2) {
+                    handleAnswer(stepToClear.id, 2, null);
+                }
+            }
+            return;
+        }
+
+        // 2. We are currently stopped at currentUnansweredStep
+        if (currentUnansweredStep) {
+            // Case A: Q2 is pending, but Q1 is answered -> Clear Q1 (to go back to start of step, which recalculates visibility)
+            // Note: Since Q1 is required before Q2 appears, if Q1 is answered, we check Q2. If Q2 is unanswered, we clear Q1 to go back.
+            const q1Answered = isQuestionAnswered(currentUnansweredStep.id, 1);
+            const q2Answered = currentUnansweredStep.question2 && isQuestionAnswered(currentUnansweredStep.id, 2);
+
+            if (q2Answered) {
+                // Clear Q2
+                handleAnswer(currentUnansweredStep.id, 2, null);
+            }
+            else if (q1Answered) {
+                // Clear Q1 (forces progression back to Q1 input state)
+                handleAnswer(currentUnansweredStep.id, 1, null);
+
+                // If this step became invisible due to clearing Q1, the next action should target the previous step.
+                // However, simply clearing Q1 here is usually enough to let the logic re-evaluate.
+            }
+            else if (currentStepIndex > 0) {
+                // Case C: Q1 is unanswered, go to the previous step (index - 1) and clear its answers.
+                const prevStep = visibleSteps[currentStepIndex - 1];
+                handleAnswer(prevStep.id, 1, null);
+                if (prevStep.question2) {
+                    handleAnswer(prevStep.id, 2, null);
+                }
+            } else if (productSlug) {
+                // We are on the very first step, clear product selection
+                setProductSlug('');
             }
         }
+    };
 
-        return { steps, attributes }
-    }, [selection.productSlug, selection.attributes, products])
 
-    // Calculate price when selections are complete
-    useEffect(() => {
-        if (selection.productSlug && Object.keys(selection.attributes).length === attributes.length) {
-            const selectedProduct = products.find((p) => p.slug === selection.productSlug)
-            if (selectedProduct) {
-                const matchingVariation = findMatchingVariation(selectedProduct, selection.attributes)
-                setCalculatedPrice(matchingVariation ? matchingVariation.price : 0)
-            }
-        } else {
-            setCalculatedPrice(0)
-        }
-    }, [selection, attributes, products])
+    const renderQuestion = (step: FormStep, questionNum: 1 | 2, isDisabled: boolean = false) => {
+        const type = questionNum === 1 ? step.type1 : step.type2
+        const question = questionNum === 1 ? step.question1 : step.question2
+        const unit = questionNum === 1 ? step.unit1 : step.unit2
+        const minValue = questionNum === 1 ? step.minValue1 : step.minValue2
+        const maxValue = questionNum === 1 ? step.maxValue1 : step.maxValue2
+        const defaultValue = questionNum === 1 ? step.defaultValue1 : step.defaultValue2
+        const pricePerUnit = questionNum === 1 ? step.pricePerUnit1 : step.pricePerUnit2
 
-    const handleProductSelect = (productSlug: string) => {
-        setSelection({ productSlug, attributes: {}, variationId: undefined })
-        setCurrentStep(0)
-    }
+        if (!question) return null
 
-    const handleAttributeSelect = (attributeName: string, value: string) => {
-        setSelection((prev) => ({
-            ...prev,
-            attributes: { ...prev.attributes, [attributeName]: value },
-        }))
-    }
+        const answerKey = `${step.id}_q${questionNum}`
+        const answer = answers[answerKey]
 
-    const nextStep = () => {
-        if (currentStep < steps.length - 1) {
-            setCurrentStep((prev) => prev + 1)
-        }
-    }
+        if (type === 'SELECT') {
+            const options = step.options.filter(o => o.questionNum === questionNum)
 
-    const prevStep = () => {
-        if (currentStep > 0) {
-            setCurrentStep((prev) => prev - 1)
-        }
-    }
-
-    const canProceed = () => {
-        const currentStepData = steps[currentStep]
-        if (currentStepData.field === 'productSlug') {
-            return !!selection.productSlug
-        }
-        return !!selection.attributes[currentStepData.field]
-    }
-
-    const isLastStep = currentStep === steps.length - 1
-    const progress = ((currentStep + 1) / steps.length) * 100
-
-    const getCurrentStepContent = () => {
-        const currentStepData = steps[currentStep]
-
-        if (currentStepData.field === 'productSlug') {
             return (
-                <Select value={selection.productSlug} onValueChange={handleProductSelect}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a product" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {products.map((product) => (
-                            <SelectItem key={product.id} value={product.slug}>
-                                <div className="flex flex-col">
-                                    <span className="font-medium">{product.name}</span>
-                                    <span className="text-sm text-muted-foreground">
-                                        Starting from €{Math.min(...product.variations.map((v) => v.price)).toFixed(2)}
-                                    </span>
-                                </div>
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                <div className="space-y-2">
+                    <Label htmlFor={answerKey} className="font-semibold">
+                        {question}
+                        <span className="text-red-500">*</span>
+                    </Label>
+                    <Select
+                        value={answer as string || ''}
+                        onValueChange={(value) => handleAnswer(step.id, questionNum, value)}
+                        disabled={isDisabled}
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder={`Select ${question.toLowerCase()}`} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {options.map((option) => (
+                                <SelectItem key={option.id} value={option.value}>
+                                    <div className="flex justify-between items-center w-full gap-4">
+                                        <span>{option.label}</span>
+                                        {option.price !== null && option.price !== undefined && (
+                                            <span className="text-sm text-muted-foreground">
+                                                €{option.price.toFixed(2)}
+                                            </span>
+                                        )}
+                                    </div>
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             )
         }
 
-        const attributeName = currentStepData.field
-        const availableValues = attributes.find((attr) => attr.name === attributeName)?.availableValues || []
+        if (type === 'NUMBER') {
+            const numValue = typeof answer === 'number' ? answer : (answer ? parseFloat(answer as string) : defaultValue || 1)
 
-        return (
-            <Select
-                value={selection.attributes[attributeName] || ''}
-                onValueChange={(value) => handleAttributeSelect(attributeName, value)}
-            >
-                <SelectTrigger className="w-full">
-                    <SelectValue placeholder={`Select ${attributeName.toLowerCase()}`} />
-                </SelectTrigger>
-                <SelectContent>
-                    {availableValues.map((value) => (
-                        <SelectItem key={value} value={value}>
-                            {value}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-        )
+            return (
+                <div className="space-y-2">
+                    <Label htmlFor={answerKey} className="font-semibold">
+                        {question} {unit && `(${unit})`}
+                        <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                        id={answerKey}
+                        type="number"
+                        min={minValue || 1}
+                        max={maxValue || undefined}
+                        step="1"
+                        value={numValue}
+                        onChange={(e) => {
+                            const value = parseInt(e.target.value) || (minValue || 1)
+                            handleAnswer(step.id, questionNum, Math.max(minValue || 1, value))
+                        }}
+                        className="w-full"
+                        disabled={isDisabled}
+                    />
+                    {pricePerUnit !== null && pricePerUnit !== undefined && (
+                        <div className="text-sm text-muted-foreground bg-blue-50 p-3 rounded-md">
+                            <div className="flex justify-between">
+                                <span>Price per {unit || 'unit'}:</span>
+                                <span className="font-medium">€{pricePerUnit.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )
+        }
+
+        return null
     }
+
+    const showBackButton = productSlug && (currentStepIndex > 0 || answeredSteps.length > 0)
 
     if (products.length === 0) {
         return (
@@ -164,70 +257,119 @@ export default function HomePage({ products }: HomePageProps) {
                     <CardHeader className="bg-gradient-to-r from-green-700 to-green-800 text-white text-center">
                         <div className="flex items-center justify-center gap-2 mb-2 my-5">
                             <Calculator className="w-5 h-5" />
-                            <CardTitle className="text-lg">Calculate your price quickly!</CardTitle>
+                            <CardTitle className="text-lg">Snel uw prijs berekenen!</CardTitle>
                         </div>
-
                     </CardHeader>
-                    <div className="w-full bg-green-800 rounded-full h-2">
-                        <div
-                            className="bg-white h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${progress}%` }}
-                        />
-                    </div>
+
+                    {selectedProduct && (
+                        <div className="w-full bg-green-800 rounded-full h-2">
+                            <div
+                                className="bg-white h-2 rounded-full transition-all duration-300"
+                                style={{
+                                    width: `${visibleSteps.length > 0 ? (answeredSteps.length / visibleSteps.length) * 100 : 0}%`
+                                }}
+                            />
+                        </div>
+                    )}
+
                     <CardContent className="p-6 space-y-6">
-                        <div>
-                            <p className="text-sm text-muted-foreground mb-4">What can we help you with?</p>
-                            <h3 className="font-semibold mb-4">
-                                {steps[currentStep]?.title}
-                                <span className="text-red-500">*</span>
-                            </h3>
-                            {getCurrentStepContent()}
-                            {/* Debug section - remove this in production */}
-                            {process.env.NODE_ENV === 'development' && (
-                                <div className="mt-4 p-2 bg-gray-100 rounded text-xs">
-                                    <div>Current Step: {currentStep} / {steps.length - 1}</div>
-                                    <div>Selected Product: {selection.productSlug}</div>
-                                    <div>Selected Attributes: {JSON.stringify(selection.attributes)}</div>
-                                    <div>Can Proceed: {canProceed().toString()}</div>
-                                    <div> Total steps : {steps.length} </div>
-                                </div>
+                        {/* Back Button / Product Selection */}
+                        <div className="flex justify-between items-center">
+                            {showBackButton ? (
+                                <Button variant="ghost" size="sm" onClick={handleGoBack}>
+                                    <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                                </Button>
+                            ) : (
+                                <div className="h-8"></div> // Spacer to keep layout stable
                             )}
+                            <p className="text-sm text-muted-foreground">
+                                {selectedProduct?.description || 'Waar kunnen we u mee helpen?'}
+                            </p>
                         </div>
 
-                        {calculatedPrice > 0 && (
+                        {!productSlug ? (
+                            <div>
+                                <h3 className="font-semibold mb-4">
+                                    Categorie
+                                    <span className="text-red-500">*</span>
+                                </h3>
+                                <Select value={productSlug || ''} onValueChange={handleProductSelect}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a product" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {products.map((product) => (
+                                            <SelectItem key={product.id} value={product.slug}>
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium">{product.name}</span>
+                                                    {product.description && (
+                                                        <span className="text-sm text-muted-foreground">
+                                                            {product.description}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        ) : (
+                            <>
+                                {/* Render current unanswered step */}
+                                {currentUnansweredStep ? (
+                                    <div className="space-y-4 p-4 border rounded-lg bg-white shadow-sm">
+                                        <h3 className="font-bold text-lg mb-4 text-green-700">
+                                            Step {currentStepIndex + 1} of {visibleSteps.length}
+                                        </h3>
+
+                                        {/* Question 1 */}
+                                        {renderQuestion(currentUnansweredStep, 1, false)}
+
+                                        {/* Question 2 (only if Q1 is answered AND Q2 exists) */}
+                                        {currentUnansweredStep.question2 &&
+                                            isQuestionAnswered(currentUnansweredStep.id, 1) && (
+                                                <div className="pt-4 border-t mt-4">
+                                                    {renderQuestion(currentUnansweredStep, 2, false)}
+                                                </div>
+                                            )}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-6 bg-green-50 border border-green-200 rounded-lg">
+                                        <p className="text-xl font-bold text-green-700 mb-2">
+                                            Calculation Complete!
+                                        </p>
+                                        <p className="text-muted-foreground">
+                                            Your estimated price is ready.
+                                        </p>
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        {/* Price Display */}
+                        {(priceInfo.total > 0 || priceInfo.partial > 0) && (
                             <div className="border-t pt-4">
                                 <div className="flex justify-between items-center text-lg font-semibold">
-                                    <span>Total incl. VAT.</span>
-                                    <span className="text-green-600">€ {calculatedPrice.toFixed(2)}</span>
+                                    <span>
+                                        {priceInfo.isComplete ? 'Totaal' : 'Vanaf'} incl. btw.
+                                    </span>
+                                    <span className="text-green-600">
+                                        {!priceInfo.isComplete && '~'} €
+                                        {(priceInfo.isComplete ? priceInfo.total : priceInfo.partial).toFixed(2)}
+                                    </span>
                                 </div>
                             </div>
                         )}
 
-                        <div className="flex gap-3 pt-4">
-                            {currentStep > 0 && (
-                                <Button variant="outline" onClick={prevStep} className="flex-1">
-                                    <ChevronLeft className="w-4 h-4 mr-2" />
-                                    Back
-                                </Button>
-                            )}
-                            {(!isLastStep || steps.length - 1 === 0) ? (
-                                <Button
-                                    onClick={nextStep}
-                                    disabled={!canProceed()}
-                                    className="flex-1 bg-green-700 hover:bg-green-800 text-white"
-                                >
-                                    Next
-                                    <ChevronRight className="w-4 h-4 ml-2" />
-                                </Button>
-                            ) : (
-                                <Link
-                                    className="flex-1 bg-green-700 hover:bg-green-800 text-white text-center py-2 rounded"
-                                    href={`/products/${selection.productSlug}`}
-                                >
-                                    View Product
-                                </Link>
-                            )}
-                        </div>
+                        {/* View Details Button */}
+                        {allComplete && priceInfo.isComplete && (
+                            <Link
+                                className="w-full bg-green-700 hover:bg-green-800 text-white text-center py-2 rounded inline-flex items-center justify-center"
+                                href={`/products/${productSlug}`}
+                            >
+                                View Details
+                            </Link>
+                        )}
                     </CardContent>
                 </Card>
             </div>

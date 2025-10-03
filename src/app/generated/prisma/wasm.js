@@ -97,46 +97,58 @@ exports.Prisma.ProductScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   description: 'description',
-  basePrice: 'basePrice',
   baseImage: 'baseImage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.AttributeScalarFieldEnum = {
+exports.Prisma.FormStepScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  productId: 'productId',
+  order: 'order',
+  type1: 'type1',
+  question1: 'question1',
+  required1: 'required1',
+  type2: 'type2',
+  question2: 'question2',
+  required2: 'required2',
+  pricingImpact1: 'pricingImpact1',
+  pricePerUnit1: 'pricePerUnit1',
+  unit1: 'unit1',
+  minValue1: 'minValue1',
+  maxValue1: 'maxValue1',
+  defaultValue1: 'defaultValue1',
+  pricingImpact2: 'pricingImpact2',
+  pricePerUnit2: 'pricePerUnit2',
+  unit2: 'unit2',
+  minValue2: 'minValue2',
+  maxValue2: 'maxValue2',
+  defaultValue2: 'defaultValue2',
+  conditionalOn: 'conditionalOn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.AttributeValueScalarFieldEnum = {
+exports.Prisma.StepOptionScalarFieldEnum = {
   id: 'id',
+  stepId: 'stepId',
+  questionNum: 'questionNum',
+  label: 'label',
   value: 'value',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  attributeId: 'attributeId'
-};
-
-exports.Prisma.ProductAttributeScalarFieldEnum = {
-  id: 'id',
-  productId: 'productId',
-  attributeId: 'attributeId'
-};
-
-exports.Prisma.VariationScalarFieldEnum = {
-  id: 'id',
-  sku: 'sku',
   price: 'price',
-  image: 'image',
+  order: 'order',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  productId: 'productId'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -149,13 +161,29 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.StepType = exports.$Enums.StepType = {
+  SELECT: 'SELECT',
+  NUMBER: 'NUMBER',
+  TEXT: 'TEXT',
+  CHECKBOX: 'CHECKBOX'
+};
+
+exports.PricingImpact = exports.$Enums.PricingImpact = {
+  BASE: 'BASE',
+  MULTIPLIER: 'MULTIPLIER',
+  ADDITIVE: 'ADDITIVE',
+  NONE: 'NONE'
+};
 
 exports.Prisma.ModelName = {
   Product: 'Product',
-  Attribute: 'Attribute',
-  AttributeValue: 'AttributeValue',
-  ProductAttribute: 'ProductAttribute',
-  Variation: 'Variation'
+  FormStep: 'FormStep',
+  StepOption: 'StepOption'
 };
 /**
  * Create the Client
@@ -205,13 +233,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Product {\n  id          String   @id @default(cuid())\n  name        String\n  slug        String   @unique\n  description String?\n  basePrice   Float\n  baseImage   String?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  // Relations\n  variations Variation[]\n  attributes ProductAttribute[]\n}\n\nmodel Attribute {\n  id        String   @id @default(cuid())\n  name      String   @unique\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  values   AttributeValue[]\n  products ProductAttribute[]\n}\n\nmodel AttributeValue {\n  id        String   @id @default(cuid())\n  value     String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  attribute   Attribute   @relation(fields: [attributeId], references: [id], onDelete: Cascade)\n  attributeId String\n  variations  Variation[] @relation(\"VariationAttributeValue\")\n}\n\nmodel ProductAttribute {\n  id          String @id @default(cuid())\n  productId   String\n  attributeId String\n\n  // Relations\n  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)\n  attribute Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)\n\n  @@unique([productId, attributeId])\n}\n\nmodel Variation {\n  id        String   @id @default(cuid())\n  sku       String   @unique\n  price     Float\n  image     String?\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  productId  String\n  product    Product          @relation(fields: [productId], references: [id], onDelete: Cascade)\n  attributes AttributeValue[] @relation(\"VariationAttributeValue\")\n}\n",
-  "inlineSchemaHash": "2ba3c78e7e8146a145f507ca2bdeb7480506528f70ee00df46caf87d952dfab5",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Product {\n  id          String   @id @default(cuid())\n  name        String\n  slug        String   @unique\n  description String?\n  baseImage   String?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  // Relations\n  steps FormStep[]\n}\n\nmodel FormStep {\n  id        String @id @default(cuid())\n  productId String\n  order     Int // Order of the step in the form\n\n  // Each step can now have TWO questions\n  type1     StepType // First question type\n  question1 String // First question\n  required1 Boolean  @default(true)\n\n  type2     StepType? // Second question type (optional)\n  question2 String? // Second question (optional)\n  required2 Boolean   @default(false)\n\n  // Pricing configuration for question 1\n  pricingImpact1 PricingImpact @default(NONE)\n  pricePerUnit1  Float?\n  unit1          String?\n  minValue1      Float?\n  maxValue1      Float?\n  defaultValue1  Float?\n\n  // Pricing configuration for question 2\n  pricingImpact2 PricingImpact @default(NONE)\n  pricePerUnit2  Float?\n  unit2          String?\n  minValue2      Float?\n  maxValue2      Float?\n  defaultValue2  Float?\n\n  // Conditional logic - stored as JSON\n  // Format: { stepId: \"xxx\", value: \"yes\" }\n  conditionalOn Json?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  product Product      @relation(fields: [productId], references: [id], onDelete: Cascade)\n  options StepOption[]\n\n  @@unique([productId, order])\n}\n\nenum StepType {\n  SELECT // Dropdown/radio selection\n  NUMBER // Number input\n  TEXT // Text input (future use)\n  CHECKBOX // Multiple selection (future use)\n}\n\nenum PricingImpact {\n  BASE // Sets the base price (first step usually)\n  MULTIPLIER // Multiplies current price\n  ADDITIVE // Adds fixed amount (quantity × pricePerUnit)\n  NONE // No pricing impact\n}\n\nmodel StepOption {\n  id          String @id @default(cuid())\n  stepId      String\n  questionNum Int    @default(1) // 1 or 2 - which question this option belongs to\n  label       String // Display text\n  value       String // Internal value\n  price       Float? // Price for this option (for BASE pricing)\n  order       Int // Order in the list\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  step FormStep @relation(fields: [stepId], references: [id], onDelete: Cascade)\n\n  @@unique([stepId, questionNum, order])\n}\n",
+  "inlineSchemaHash": "0f7420c7067ff286cf3b552614142b69edfd14fe2eae431b97e74bb3f42cb60c",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Product\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"basePrice\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"baseImage\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"variations\",\"kind\":\"object\",\"type\":\"Variation\",\"relationName\":\"ProductToVariation\"},{\"name\":\"attributes\",\"kind\":\"object\",\"type\":\"ProductAttribute\",\"relationName\":\"ProductToProductAttribute\"}],\"dbName\":null},\"Attribute\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"values\",\"kind\":\"object\",\"type\":\"AttributeValue\",\"relationName\":\"AttributeToAttributeValue\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"ProductAttribute\",\"relationName\":\"AttributeToProductAttribute\"}],\"dbName\":null},\"AttributeValue\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"attribute\",\"kind\":\"object\",\"type\":\"Attribute\",\"relationName\":\"AttributeToAttributeValue\"},{\"name\":\"attributeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"variations\",\"kind\":\"object\",\"type\":\"Variation\",\"relationName\":\"VariationAttributeValue\"}],\"dbName\":null},\"ProductAttribute\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"attributeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"ProductToProductAttribute\"},{\"name\":\"attribute\",\"kind\":\"object\",\"type\":\"Attribute\",\"relationName\":\"AttributeToProductAttribute\"}],\"dbName\":null},\"Variation\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sku\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"ProductToVariation\"},{\"name\":\"attributes\",\"kind\":\"object\",\"type\":\"AttributeValue\",\"relationName\":\"VariationAttributeValue\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Product\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"baseImage\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"steps\",\"kind\":\"object\",\"type\":\"FormStep\",\"relationName\":\"FormStepToProduct\"}],\"dbName\":null},\"FormStep\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"type1\",\"kind\":\"enum\",\"type\":\"StepType\"},{\"name\":\"question1\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"required1\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"type2\",\"kind\":\"enum\",\"type\":\"StepType\"},{\"name\":\"question2\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"required2\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"pricingImpact1\",\"kind\":\"enum\",\"type\":\"PricingImpact\"},{\"name\":\"pricePerUnit1\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"unit1\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"minValue1\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"maxValue1\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"defaultValue1\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"pricingImpact2\",\"kind\":\"enum\",\"type\":\"PricingImpact\"},{\"name\":\"pricePerUnit2\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"unit2\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"minValue2\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"maxValue2\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"defaultValue2\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"conditionalOn\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"FormStepToProduct\"},{\"name\":\"options\",\"kind\":\"object\",\"type\":\"StepOption\",\"relationName\":\"FormStepToStepOption\"}],\"dbName\":null},\"StepOption\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stepId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"questionNum\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"label\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"step\",\"kind\":\"object\",\"type\":\"FormStep\",\"relationName\":\"FormStepToStepOption\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

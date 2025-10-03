@@ -19,25 +19,48 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
 /**
- * Model Attribute
+ * Model FormStep
  * 
  */
-export type Attribute = $Result.DefaultSelection<Prisma.$AttributePayload>
+export type FormStep = $Result.DefaultSelection<Prisma.$FormStepPayload>
 /**
- * Model AttributeValue
+ * Model StepOption
  * 
  */
-export type AttributeValue = $Result.DefaultSelection<Prisma.$AttributeValuePayload>
+export type StepOption = $Result.DefaultSelection<Prisma.$StepOptionPayload>
+
 /**
- * Model ProductAttribute
- * 
+ * Enums
  */
-export type ProductAttribute = $Result.DefaultSelection<Prisma.$ProductAttributePayload>
-/**
- * Model Variation
- * 
- */
-export type Variation = $Result.DefaultSelection<Prisma.$VariationPayload>
+export namespace $Enums {
+  export const StepType: {
+  SELECT: 'SELECT',
+  NUMBER: 'NUMBER',
+  TEXT: 'TEXT',
+  CHECKBOX: 'CHECKBOX'
+};
+
+export type StepType = (typeof StepType)[keyof typeof StepType]
+
+
+export const PricingImpact: {
+  BASE: 'BASE',
+  MULTIPLIER: 'MULTIPLIER',
+  ADDITIVE: 'ADDITIVE',
+  NONE: 'NONE'
+};
+
+export type PricingImpact = (typeof PricingImpact)[keyof typeof PricingImpact]
+
+}
+
+export type StepType = $Enums.StepType
+
+export const StepType: typeof $Enums.StepType
+
+export type PricingImpact = $Enums.PricingImpact
+
+export const PricingImpact: typeof $Enums.PricingImpact
 
 /**
  * ##  Prisma Client ʲˢ
@@ -168,44 +191,24 @@ export class PrismaClient<
   get product(): Prisma.ProductDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.attribute`: Exposes CRUD operations for the **Attribute** model.
+   * `prisma.formStep`: Exposes CRUD operations for the **FormStep** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Attributes
-    * const attributes = await prisma.attribute.findMany()
+    * // Fetch zero or more FormSteps
+    * const formSteps = await prisma.formStep.findMany()
     * ```
     */
-  get attribute(): Prisma.AttributeDelegate<ExtArgs, ClientOptions>;
+  get formStep(): Prisma.FormStepDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.attributeValue`: Exposes CRUD operations for the **AttributeValue** model.
+   * `prisma.stepOption`: Exposes CRUD operations for the **StepOption** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more AttributeValues
-    * const attributeValues = await prisma.attributeValue.findMany()
+    * // Fetch zero or more StepOptions
+    * const stepOptions = await prisma.stepOption.findMany()
     * ```
     */
-  get attributeValue(): Prisma.AttributeValueDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.productAttribute`: Exposes CRUD operations for the **ProductAttribute** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ProductAttributes
-    * const productAttributes = await prisma.productAttribute.findMany()
-    * ```
-    */
-  get productAttribute(): Prisma.ProductAttributeDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.variation`: Exposes CRUD operations for the **Variation** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Variations
-    * const variations = await prisma.variation.findMany()
-    * ```
-    */
-  get variation(): Prisma.VariationDelegate<ExtArgs, ClientOptions>;
+  get stepOption(): Prisma.StepOptionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -647,10 +650,8 @@ export namespace Prisma {
 
   export const ModelName: {
     Product: 'Product',
-    Attribute: 'Attribute',
-    AttributeValue: 'AttributeValue',
-    ProductAttribute: 'ProductAttribute',
-    Variation: 'Variation'
+    FormStep: 'FormStep',
+    StepOption: 'StepOption'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -669,7 +670,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "product" | "attribute" | "attributeValue" | "productAttribute" | "variation"
+      modelProps: "product" | "formStep" | "stepOption"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -747,299 +748,151 @@ export namespace Prisma {
           }
         }
       }
-      Attribute: {
-        payload: Prisma.$AttributePayload<ExtArgs>
-        fields: Prisma.AttributeFieldRefs
+      FormStep: {
+        payload: Prisma.$FormStepPayload<ExtArgs>
+        fields: Prisma.FormStepFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.AttributeFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload> | null
+            args: Prisma.FormStepFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.AttributeFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload>
+            args: Prisma.FormStepFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload>
           }
           findFirst: {
-            args: Prisma.AttributeFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload> | null
+            args: Prisma.FormStepFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.AttributeFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload>
+            args: Prisma.FormStepFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload>
           }
           findMany: {
-            args: Prisma.AttributeFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload>[]
+            args: Prisma.FormStepFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload>[]
           }
           create: {
-            args: Prisma.AttributeCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload>
+            args: Prisma.FormStepCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload>
           }
           createMany: {
-            args: Prisma.AttributeCreateManyArgs<ExtArgs>
+            args: Prisma.FormStepCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.AttributeCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload>[]
+            args: Prisma.FormStepCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload>[]
           }
           delete: {
-            args: Prisma.AttributeDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload>
+            args: Prisma.FormStepDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload>
           }
           update: {
-            args: Prisma.AttributeUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload>
+            args: Prisma.FormStepUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload>
           }
           deleteMany: {
-            args: Prisma.AttributeDeleteManyArgs<ExtArgs>
+            args: Prisma.FormStepDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.AttributeUpdateManyArgs<ExtArgs>
+            args: Prisma.FormStepUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.AttributeUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload>[]
+            args: Prisma.FormStepUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload>[]
           }
           upsert: {
-            args: Prisma.AttributeUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributePayload>
+            args: Prisma.FormStepUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormStepPayload>
           }
           aggregate: {
-            args: Prisma.AttributeAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateAttribute>
+            args: Prisma.FormStepAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFormStep>
           }
           groupBy: {
-            args: Prisma.AttributeGroupByArgs<ExtArgs>
-            result: $Utils.Optional<AttributeGroupByOutputType>[]
+            args: Prisma.FormStepGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FormStepGroupByOutputType>[]
           }
           count: {
-            args: Prisma.AttributeCountArgs<ExtArgs>
-            result: $Utils.Optional<AttributeCountAggregateOutputType> | number
+            args: Prisma.FormStepCountArgs<ExtArgs>
+            result: $Utils.Optional<FormStepCountAggregateOutputType> | number
           }
         }
       }
-      AttributeValue: {
-        payload: Prisma.$AttributeValuePayload<ExtArgs>
-        fields: Prisma.AttributeValueFieldRefs
+      StepOption: {
+        payload: Prisma.$StepOptionPayload<ExtArgs>
+        fields: Prisma.StepOptionFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.AttributeValueFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload> | null
+            args: Prisma.StepOptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.AttributeValueFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+            args: Prisma.StepOptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload>
           }
           findFirst: {
-            args: Prisma.AttributeValueFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload> | null
+            args: Prisma.StepOptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.AttributeValueFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+            args: Prisma.StepOptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload>
           }
           findMany: {
-            args: Prisma.AttributeValueFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload>[]
+            args: Prisma.StepOptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload>[]
           }
           create: {
-            args: Prisma.AttributeValueCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+            args: Prisma.StepOptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload>
           }
           createMany: {
-            args: Prisma.AttributeValueCreateManyArgs<ExtArgs>
+            args: Prisma.StepOptionCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.AttributeValueCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload>[]
+            args: Prisma.StepOptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload>[]
           }
           delete: {
-            args: Prisma.AttributeValueDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+            args: Prisma.StepOptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload>
           }
           update: {
-            args: Prisma.AttributeValueUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+            args: Prisma.StepOptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload>
           }
           deleteMany: {
-            args: Prisma.AttributeValueDeleteManyArgs<ExtArgs>
+            args: Prisma.StepOptionDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.AttributeValueUpdateManyArgs<ExtArgs>
+            args: Prisma.StepOptionUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.AttributeValueUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload>[]
+            args: Prisma.StepOptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload>[]
           }
           upsert: {
-            args: Prisma.AttributeValueUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttributeValuePayload>
+            args: Prisma.StepOptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StepOptionPayload>
           }
           aggregate: {
-            args: Prisma.AttributeValueAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateAttributeValue>
+            args: Prisma.StepOptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStepOption>
           }
           groupBy: {
-            args: Prisma.AttributeValueGroupByArgs<ExtArgs>
-            result: $Utils.Optional<AttributeValueGroupByOutputType>[]
+            args: Prisma.StepOptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StepOptionGroupByOutputType>[]
           }
           count: {
-            args: Prisma.AttributeValueCountArgs<ExtArgs>
-            result: $Utils.Optional<AttributeValueCountAggregateOutputType> | number
-          }
-        }
-      }
-      ProductAttribute: {
-        payload: Prisma.$ProductAttributePayload<ExtArgs>
-        fields: Prisma.ProductAttributeFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ProductAttributeFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ProductAttributeFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload>
-          }
-          findFirst: {
-            args: Prisma.ProductAttributeFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ProductAttributeFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload>
-          }
-          findMany: {
-            args: Prisma.ProductAttributeFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload>[]
-          }
-          create: {
-            args: Prisma.ProductAttributeCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload>
-          }
-          createMany: {
-            args: Prisma.ProductAttributeCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ProductAttributeCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload>[]
-          }
-          delete: {
-            args: Prisma.ProductAttributeDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload>
-          }
-          update: {
-            args: Prisma.ProductAttributeUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload>
-          }
-          deleteMany: {
-            args: Prisma.ProductAttributeDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ProductAttributeUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ProductAttributeUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload>[]
-          }
-          upsert: {
-            args: Prisma.ProductAttributeUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProductAttributePayload>
-          }
-          aggregate: {
-            args: Prisma.ProductAttributeAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateProductAttribute>
-          }
-          groupBy: {
-            args: Prisma.ProductAttributeGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ProductAttributeGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ProductAttributeCountArgs<ExtArgs>
-            result: $Utils.Optional<ProductAttributeCountAggregateOutputType> | number
-          }
-        }
-      }
-      Variation: {
-        payload: Prisma.$VariationPayload<ExtArgs>
-        fields: Prisma.VariationFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.VariationFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.VariationFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload>
-          }
-          findFirst: {
-            args: Prisma.VariationFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.VariationFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload>
-          }
-          findMany: {
-            args: Prisma.VariationFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload>[]
-          }
-          create: {
-            args: Prisma.VariationCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload>
-          }
-          createMany: {
-            args: Prisma.VariationCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.VariationCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload>[]
-          }
-          delete: {
-            args: Prisma.VariationDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload>
-          }
-          update: {
-            args: Prisma.VariationUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload>
-          }
-          deleteMany: {
-            args: Prisma.VariationDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.VariationUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.VariationUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload>[]
-          }
-          upsert: {
-            args: Prisma.VariationUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VariationPayload>
-          }
-          aggregate: {
-            args: Prisma.VariationAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateVariation>
-          }
-          groupBy: {
-            args: Prisma.VariationGroupByArgs<ExtArgs>
-            result: $Utils.Optional<VariationGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.VariationCountArgs<ExtArgs>
-            result: $Utils.Optional<VariationCountAggregateOutputType> | number
+            args: Prisma.StepOptionCountArgs<ExtArgs>
+            result: $Utils.Optional<StepOptionCountAggregateOutputType> | number
           }
         }
       }
@@ -1140,10 +993,8 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     product?: ProductOmit
-    attribute?: AttributeOmit
-    attributeValue?: AttributeValueOmit
-    productAttribute?: ProductAttributeOmit
-    variation?: VariationOmit
+    formStep?: FormStepOmit
+    stepOption?: StepOptionOmit
   }
 
   /* Types for Logging */
@@ -1224,13 +1075,11 @@ export namespace Prisma {
    */
 
   export type ProductCountOutputType = {
-    variations: number
-    attributes: number
+    steps: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    variations?: boolean | ProductCountOutputTypeCountVariationsArgs
-    attributes?: boolean | ProductCountOutputTypeCountAttributesArgs
+    steps?: boolean | ProductCountOutputTypeCountStepsArgs
   }
 
   // Custom InputTypes
@@ -1247,117 +1096,39 @@ export namespace Prisma {
   /**
    * ProductCountOutputType without action
    */
-  export type ProductCountOutputTypeCountVariationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: VariationWhereInput
-  }
-
-  /**
-   * ProductCountOutputType without action
-   */
-  export type ProductCountOutputTypeCountAttributesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProductAttributeWhereInput
+  export type ProductCountOutputTypeCountStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormStepWhereInput
   }
 
 
   /**
-   * Count Type AttributeCountOutputType
+   * Count Type FormStepCountOutputType
    */
 
-  export type AttributeCountOutputType = {
-    values: number
-    products: number
+  export type FormStepCountOutputType = {
+    options: number
   }
 
-  export type AttributeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    values?: boolean | AttributeCountOutputTypeCountValuesArgs
-    products?: boolean | AttributeCountOutputTypeCountProductsArgs
+  export type FormStepCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    options?: boolean | FormStepCountOutputTypeCountOptionsArgs
   }
 
   // Custom InputTypes
   /**
-   * AttributeCountOutputType without action
+   * FormStepCountOutputType without action
    */
-  export type AttributeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AttributeCountOutputType
+     * Select specific fields to fetch from the FormStepCountOutputType
      */
-    select?: AttributeCountOutputTypeSelect<ExtArgs> | null
+    select?: FormStepCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * AttributeCountOutputType without action
+   * FormStepCountOutputType without action
    */
-  export type AttributeCountOutputTypeCountValuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttributeValueWhereInput
-  }
-
-  /**
-   * AttributeCountOutputType without action
-   */
-  export type AttributeCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProductAttributeWhereInput
-  }
-
-
-  /**
-   * Count Type AttributeValueCountOutputType
-   */
-
-  export type AttributeValueCountOutputType = {
-    variations: number
-  }
-
-  export type AttributeValueCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    variations?: boolean | AttributeValueCountOutputTypeCountVariationsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * AttributeValueCountOutputType without action
-   */
-  export type AttributeValueCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValueCountOutputType
-     */
-    select?: AttributeValueCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * AttributeValueCountOutputType without action
-   */
-  export type AttributeValueCountOutputTypeCountVariationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: VariationWhereInput
-  }
-
-
-  /**
-   * Count Type VariationCountOutputType
-   */
-
-  export type VariationCountOutputType = {
-    attributes: number
-  }
-
-  export type VariationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    attributes?: boolean | VariationCountOutputTypeCountAttributesArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * VariationCountOutputType without action
-   */
-  export type VariationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the VariationCountOutputType
-     */
-    select?: VariationCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * VariationCountOutputType without action
-   */
-  export type VariationCountOutputTypeCountAttributesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttributeValueWhereInput
+  export type FormStepCountOutputTypeCountOptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StepOptionWhereInput
   }
 
 
@@ -1371,18 +1142,8 @@ export namespace Prisma {
 
   export type AggregateProduct = {
     _count: ProductCountAggregateOutputType | null
-    _avg: ProductAvgAggregateOutputType | null
-    _sum: ProductSumAggregateOutputType | null
     _min: ProductMinAggregateOutputType | null
     _max: ProductMaxAggregateOutputType | null
-  }
-
-  export type ProductAvgAggregateOutputType = {
-    basePrice: number | null
-  }
-
-  export type ProductSumAggregateOutputType = {
-    basePrice: number | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -1390,7 +1151,6 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     description: string | null
-    basePrice: number | null
     baseImage: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1401,7 +1161,6 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     description: string | null
-    basePrice: number | null
     baseImage: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1412,7 +1171,6 @@ export namespace Prisma {
     name: number
     slug: number
     description: number
-    basePrice: number
     baseImage: number
     createdAt: number
     updatedAt: number
@@ -1420,20 +1178,11 @@ export namespace Prisma {
   }
 
 
-  export type ProductAvgAggregateInputType = {
-    basePrice?: true
-  }
-
-  export type ProductSumAggregateInputType = {
-    basePrice?: true
-  }
-
   export type ProductMinAggregateInputType = {
     id?: true
     name?: true
     slug?: true
     description?: true
-    basePrice?: true
     baseImage?: true
     createdAt?: true
     updatedAt?: true
@@ -1444,7 +1193,6 @@ export namespace Prisma {
     name?: true
     slug?: true
     description?: true
-    basePrice?: true
     baseImage?: true
     createdAt?: true
     updatedAt?: true
@@ -1455,7 +1203,6 @@ export namespace Prisma {
     name?: true
     slug?: true
     description?: true
-    basePrice?: true
     baseImage?: true
     createdAt?: true
     updatedAt?: true
@@ -1500,18 +1247,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: ProductAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ProductSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: ProductMinAggregateInputType
@@ -1542,8 +1277,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ProductCountAggregateInputType | true
-    _avg?: ProductAvgAggregateInputType
-    _sum?: ProductSumAggregateInputType
     _min?: ProductMinAggregateInputType
     _max?: ProductMaxAggregateInputType
   }
@@ -1553,13 +1286,10 @@ export namespace Prisma {
     name: string
     slug: string
     description: string | null
-    basePrice: number
     baseImage: string | null
     createdAt: Date
     updatedAt: Date
     _count: ProductCountAggregateOutputType | null
-    _avg: ProductAvgAggregateOutputType | null
-    _sum: ProductSumAggregateOutputType | null
     _min: ProductMinAggregateOutputType | null
     _max: ProductMaxAggregateOutputType | null
   }
@@ -1583,12 +1313,10 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
-    basePrice?: boolean
     baseImage?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    variations?: boolean | Product$variationsArgs<ExtArgs>
-    attributes?: boolean | Product$attributesArgs<ExtArgs>
+    steps?: boolean | Product$stepsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -1597,7 +1325,6 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
-    basePrice?: boolean
     baseImage?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1608,7 +1335,6 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
-    basePrice?: boolean
     baseImage?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1619,16 +1345,14 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
-    basePrice?: boolean
     baseImage?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "basePrice" | "baseImage" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "baseImage" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    variations?: boolean | Product$variationsArgs<ExtArgs>
-    attributes?: boolean | Product$attributesArgs<ExtArgs>
+    steps?: boolean | Product$stepsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1637,15 +1361,13 @@ export namespace Prisma {
   export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Product"
     objects: {
-      variations: Prisma.$VariationPayload<ExtArgs>[]
-      attributes: Prisma.$ProductAttributePayload<ExtArgs>[]
+      steps: Prisma.$FormStepPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
       slug: string
       description: string | null
-      basePrice: number
       baseImage: string | null
       createdAt: Date
       updatedAt: Date
@@ -2043,8 +1765,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    variations<T extends Product$variationsArgs<ExtArgs> = {}>(args?: Subset<T, Product$variationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    attributes<T extends Product$attributesArgs<ExtArgs> = {}>(args?: Subset<T, Product$attributesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    steps<T extends Product$stepsArgs<ExtArgs> = {}>(args?: Subset<T, Product$stepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2078,7 +1799,6 @@ export namespace Prisma {
     readonly name: FieldRef<"Product", 'String'>
     readonly slug: FieldRef<"Product", 'String'>
     readonly description: FieldRef<"Product", 'String'>
-    readonly basePrice: FieldRef<"Product", 'Float'>
     readonly baseImage: FieldRef<"Product", 'String'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
@@ -2470,51 +2190,27 @@ export namespace Prisma {
   }
 
   /**
-   * Product.variations
+   * Product.steps
    */
-  export type Product$variationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Product$stepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
-    where?: VariationWhereInput
-    orderBy?: VariationOrderByWithRelationInput | VariationOrderByWithRelationInput[]
-    cursor?: VariationWhereUniqueInput
+    include?: FormStepInclude<ExtArgs> | null
+    where?: FormStepWhereInput
+    orderBy?: FormStepOrderByWithRelationInput | FormStepOrderByWithRelationInput[]
+    cursor?: FormStepWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: VariationScalarFieldEnum | VariationScalarFieldEnum[]
-  }
-
-  /**
-   * Product.attributes
-   */
-  export type Product$attributesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    where?: ProductAttributeWhereInput
-    orderBy?: ProductAttributeOrderByWithRelationInput | ProductAttributeOrderByWithRelationInput[]
-    cursor?: ProductAttributeWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProductAttributeScalarFieldEnum | ProductAttributeScalarFieldEnum[]
+    distinct?: FormStepScalarFieldEnum | FormStepScalarFieldEnum[]
   }
 
   /**
@@ -2537,3626 +2233,645 @@ export namespace Prisma {
 
 
   /**
-   * Model Attribute
+   * Model FormStep
    */
 
-  export type AggregateAttribute = {
-    _count: AttributeCountAggregateOutputType | null
-    _min: AttributeMinAggregateOutputType | null
-    _max: AttributeMaxAggregateOutputType | null
-  }
-
-  export type AttributeMinAggregateOutputType = {
-    id: string | null
-    name: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type AttributeMaxAggregateOutputType = {
-    id: string | null
-    name: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type AttributeCountAggregateOutputType = {
-    id: number
-    name: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type AttributeMinAggregateInputType = {
-    id?: true
-    name?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type AttributeMaxAggregateInputType = {
-    id?: true
-    name?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type AttributeCountAggregateInputType = {
-    id?: true
-    name?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type AttributeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Attribute to aggregate.
-     */
-    where?: AttributeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Attributes to fetch.
-     */
-    orderBy?: AttributeOrderByWithRelationInput | AttributeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: AttributeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Attributes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Attributes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Attributes
-    **/
-    _count?: true | AttributeCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: AttributeMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: AttributeMaxAggregateInputType
-  }
-
-  export type GetAttributeAggregateType<T extends AttributeAggregateArgs> = {
-        [P in keyof T & keyof AggregateAttribute]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateAttribute[P]>
-      : GetScalarType<T[P], AggregateAttribute[P]>
-  }
-
-
-
-
-  export type AttributeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttributeWhereInput
-    orderBy?: AttributeOrderByWithAggregationInput | AttributeOrderByWithAggregationInput[]
-    by: AttributeScalarFieldEnum[] | AttributeScalarFieldEnum
-    having?: AttributeScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: AttributeCountAggregateInputType | true
-    _min?: AttributeMinAggregateInputType
-    _max?: AttributeMaxAggregateInputType
-  }
-
-  export type AttributeGroupByOutputType = {
-    id: string
-    name: string
-    createdAt: Date
-    updatedAt: Date
-    _count: AttributeCountAggregateOutputType | null
-    _min: AttributeMinAggregateOutputType | null
-    _max: AttributeMaxAggregateOutputType | null
-  }
-
-  type GetAttributeGroupByPayload<T extends AttributeGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<AttributeGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof AttributeGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], AttributeGroupByOutputType[P]>
-            : GetScalarType<T[P], AttributeGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type AttributeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    values?: boolean | Attribute$valuesArgs<ExtArgs>
-    products?: boolean | Attribute$productsArgs<ExtArgs>
-    _count?: boolean | AttributeCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["attribute"]>
-
-  export type AttributeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["attribute"]>
-
-  export type AttributeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["attribute"]>
-
-  export type AttributeSelectScalar = {
-    id?: boolean
-    name?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type AttributeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["attribute"]>
-  export type AttributeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    values?: boolean | Attribute$valuesArgs<ExtArgs>
-    products?: boolean | Attribute$productsArgs<ExtArgs>
-    _count?: boolean | AttributeCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type AttributeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type AttributeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $AttributePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Attribute"
-    objects: {
-      values: Prisma.$AttributeValuePayload<ExtArgs>[]
-      products: Prisma.$ProductAttributePayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      name: string
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["attribute"]>
-    composites: {}
-  }
-
-  type AttributeGetPayload<S extends boolean | null | undefined | AttributeDefaultArgs> = $Result.GetResult<Prisma.$AttributePayload, S>
-
-  type AttributeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<AttributeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: AttributeCountAggregateInputType | true
-    }
-
-  export interface AttributeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Attribute'], meta: { name: 'Attribute' } }
-    /**
-     * Find zero or one Attribute that matches the filter.
-     * @param {AttributeFindUniqueArgs} args - Arguments to find a Attribute
-     * @example
-     * // Get one Attribute
-     * const attribute = await prisma.attribute.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends AttributeFindUniqueArgs>(args: SelectSubset<T, AttributeFindUniqueArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Attribute that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {AttributeFindUniqueOrThrowArgs} args - Arguments to find a Attribute
-     * @example
-     * // Get one Attribute
-     * const attribute = await prisma.attribute.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends AttributeFindUniqueOrThrowArgs>(args: SelectSubset<T, AttributeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Attribute that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeFindFirstArgs} args - Arguments to find a Attribute
-     * @example
-     * // Get one Attribute
-     * const attribute = await prisma.attribute.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends AttributeFindFirstArgs>(args?: SelectSubset<T, AttributeFindFirstArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Attribute that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeFindFirstOrThrowArgs} args - Arguments to find a Attribute
-     * @example
-     * // Get one Attribute
-     * const attribute = await prisma.attribute.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends AttributeFindFirstOrThrowArgs>(args?: SelectSubset<T, AttributeFindFirstOrThrowArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Attributes that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Attributes
-     * const attributes = await prisma.attribute.findMany()
-     * 
-     * // Get first 10 Attributes
-     * const attributes = await prisma.attribute.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const attributeWithIdOnly = await prisma.attribute.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends AttributeFindManyArgs>(args?: SelectSubset<T, AttributeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Attribute.
-     * @param {AttributeCreateArgs} args - Arguments to create a Attribute.
-     * @example
-     * // Create one Attribute
-     * const Attribute = await prisma.attribute.create({
-     *   data: {
-     *     // ... data to create a Attribute
-     *   }
-     * })
-     * 
-     */
-    create<T extends AttributeCreateArgs>(args: SelectSubset<T, AttributeCreateArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Attributes.
-     * @param {AttributeCreateManyArgs} args - Arguments to create many Attributes.
-     * @example
-     * // Create many Attributes
-     * const attribute = await prisma.attribute.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends AttributeCreateManyArgs>(args?: SelectSubset<T, AttributeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Attributes and returns the data saved in the database.
-     * @param {AttributeCreateManyAndReturnArgs} args - Arguments to create many Attributes.
-     * @example
-     * // Create many Attributes
-     * const attribute = await prisma.attribute.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Attributes and only return the `id`
-     * const attributeWithIdOnly = await prisma.attribute.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends AttributeCreateManyAndReturnArgs>(args?: SelectSubset<T, AttributeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Attribute.
-     * @param {AttributeDeleteArgs} args - Arguments to delete one Attribute.
-     * @example
-     * // Delete one Attribute
-     * const Attribute = await prisma.attribute.delete({
-     *   where: {
-     *     // ... filter to delete one Attribute
-     *   }
-     * })
-     * 
-     */
-    delete<T extends AttributeDeleteArgs>(args: SelectSubset<T, AttributeDeleteArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Attribute.
-     * @param {AttributeUpdateArgs} args - Arguments to update one Attribute.
-     * @example
-     * // Update one Attribute
-     * const attribute = await prisma.attribute.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends AttributeUpdateArgs>(args: SelectSubset<T, AttributeUpdateArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Attributes.
-     * @param {AttributeDeleteManyArgs} args - Arguments to filter Attributes to delete.
-     * @example
-     * // Delete a few Attributes
-     * const { count } = await prisma.attribute.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends AttributeDeleteManyArgs>(args?: SelectSubset<T, AttributeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Attributes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Attributes
-     * const attribute = await prisma.attribute.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends AttributeUpdateManyArgs>(args: SelectSubset<T, AttributeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Attributes and returns the data updated in the database.
-     * @param {AttributeUpdateManyAndReturnArgs} args - Arguments to update many Attributes.
-     * @example
-     * // Update many Attributes
-     * const attribute = await prisma.attribute.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Attributes and only return the `id`
-     * const attributeWithIdOnly = await prisma.attribute.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends AttributeUpdateManyAndReturnArgs>(args: SelectSubset<T, AttributeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Attribute.
-     * @param {AttributeUpsertArgs} args - Arguments to update or create a Attribute.
-     * @example
-     * // Update or create a Attribute
-     * const attribute = await prisma.attribute.upsert({
-     *   create: {
-     *     // ... data to create a Attribute
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Attribute we want to update
-     *   }
-     * })
-     */
-    upsert<T extends AttributeUpsertArgs>(args: SelectSubset<T, AttributeUpsertArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Attributes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeCountArgs} args - Arguments to filter Attributes to count.
-     * @example
-     * // Count the number of Attributes
-     * const count = await prisma.attribute.count({
-     *   where: {
-     *     // ... the filter for the Attributes we want to count
-     *   }
-     * })
-    **/
-    count<T extends AttributeCountArgs>(
-      args?: Subset<T, AttributeCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], AttributeCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Attribute.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends AttributeAggregateArgs>(args: Subset<T, AttributeAggregateArgs>): Prisma.PrismaPromise<GetAttributeAggregateType<T>>
-
-    /**
-     * Group by Attribute.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends AttributeGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AttributeGroupByArgs['orderBy'] }
-        : { orderBy?: AttributeGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, AttributeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAttributeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Attribute model
-   */
-  readonly fields: AttributeFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Attribute.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__AttributeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    values<T extends Attribute$valuesArgs<ExtArgs> = {}>(args?: Subset<T, Attribute$valuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    products<T extends Attribute$productsArgs<ExtArgs> = {}>(args?: Subset<T, Attribute$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Attribute model
-   */
-  interface AttributeFieldRefs {
-    readonly id: FieldRef<"Attribute", 'String'>
-    readonly name: FieldRef<"Attribute", 'String'>
-    readonly createdAt: FieldRef<"Attribute", 'DateTime'>
-    readonly updatedAt: FieldRef<"Attribute", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Attribute findUnique
-   */
-  export type AttributeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which Attribute to fetch.
-     */
-    where: AttributeWhereUniqueInput
-  }
-
-  /**
-   * Attribute findUniqueOrThrow
-   */
-  export type AttributeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which Attribute to fetch.
-     */
-    where: AttributeWhereUniqueInput
-  }
-
-  /**
-   * Attribute findFirst
-   */
-  export type AttributeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which Attribute to fetch.
-     */
-    where?: AttributeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Attributes to fetch.
-     */
-    orderBy?: AttributeOrderByWithRelationInput | AttributeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Attributes.
-     */
-    cursor?: AttributeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Attributes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Attributes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Attributes.
-     */
-    distinct?: AttributeScalarFieldEnum | AttributeScalarFieldEnum[]
-  }
-
-  /**
-   * Attribute findFirstOrThrow
-   */
-  export type AttributeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which Attribute to fetch.
-     */
-    where?: AttributeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Attributes to fetch.
-     */
-    orderBy?: AttributeOrderByWithRelationInput | AttributeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Attributes.
-     */
-    cursor?: AttributeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Attributes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Attributes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Attributes.
-     */
-    distinct?: AttributeScalarFieldEnum | AttributeScalarFieldEnum[]
-  }
-
-  /**
-   * Attribute findMany
-   */
-  export type AttributeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which Attributes to fetch.
-     */
-    where?: AttributeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Attributes to fetch.
-     */
-    orderBy?: AttributeOrderByWithRelationInput | AttributeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Attributes.
-     */
-    cursor?: AttributeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Attributes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Attributes.
-     */
-    skip?: number
-    distinct?: AttributeScalarFieldEnum | AttributeScalarFieldEnum[]
-  }
-
-  /**
-   * Attribute create
-   */
-  export type AttributeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Attribute.
-     */
-    data: XOR<AttributeCreateInput, AttributeUncheckedCreateInput>
-  }
-
-  /**
-   * Attribute createMany
-   */
-  export type AttributeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Attributes.
-     */
-    data: AttributeCreateManyInput | AttributeCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Attribute createManyAndReturn
-   */
-  export type AttributeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * The data used to create many Attributes.
-     */
-    data: AttributeCreateManyInput | AttributeCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Attribute update
-   */
-  export type AttributeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Attribute.
-     */
-    data: XOR<AttributeUpdateInput, AttributeUncheckedUpdateInput>
-    /**
-     * Choose, which Attribute to update.
-     */
-    where: AttributeWhereUniqueInput
-  }
-
-  /**
-   * Attribute updateMany
-   */
-  export type AttributeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Attributes.
-     */
-    data: XOR<AttributeUpdateManyMutationInput, AttributeUncheckedUpdateManyInput>
-    /**
-     * Filter which Attributes to update
-     */
-    where?: AttributeWhereInput
-    /**
-     * Limit how many Attributes to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Attribute updateManyAndReturn
-   */
-  export type AttributeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * The data used to update Attributes.
-     */
-    data: XOR<AttributeUpdateManyMutationInput, AttributeUncheckedUpdateManyInput>
-    /**
-     * Filter which Attributes to update
-     */
-    where?: AttributeWhereInput
-    /**
-     * Limit how many Attributes to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Attribute upsert
-   */
-  export type AttributeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Attribute to update in case it exists.
-     */
-    where: AttributeWhereUniqueInput
-    /**
-     * In case the Attribute found by the `where` argument doesn't exist, create a new Attribute with this data.
-     */
-    create: XOR<AttributeCreateInput, AttributeUncheckedCreateInput>
-    /**
-     * In case the Attribute was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<AttributeUpdateInput, AttributeUncheckedUpdateInput>
-  }
-
-  /**
-   * Attribute delete
-   */
-  export type AttributeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-    /**
-     * Filter which Attribute to delete.
-     */
-    where: AttributeWhereUniqueInput
-  }
-
-  /**
-   * Attribute deleteMany
-   */
-  export type AttributeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Attributes to delete
-     */
-    where?: AttributeWhereInput
-    /**
-     * Limit how many Attributes to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Attribute.values
-   */
-  export type Attribute$valuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    where?: AttributeValueWhereInput
-    orderBy?: AttributeValueOrderByWithRelationInput | AttributeValueOrderByWithRelationInput[]
-    cursor?: AttributeValueWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AttributeValueScalarFieldEnum | AttributeValueScalarFieldEnum[]
-  }
-
-  /**
-   * Attribute.products
-   */
-  export type Attribute$productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    where?: ProductAttributeWhereInput
-    orderBy?: ProductAttributeOrderByWithRelationInput | ProductAttributeOrderByWithRelationInput[]
-    cursor?: ProductAttributeWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProductAttributeScalarFieldEnum | ProductAttributeScalarFieldEnum[]
-  }
-
-  /**
-   * Attribute without action
-   */
-  export type AttributeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attribute
-     */
-    select?: AttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attribute
-     */
-    omit?: AttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model AttributeValue
-   */
-
-  export type AggregateAttributeValue = {
-    _count: AttributeValueCountAggregateOutputType | null
-    _min: AttributeValueMinAggregateOutputType | null
-    _max: AttributeValueMaxAggregateOutputType | null
-  }
-
-  export type AttributeValueMinAggregateOutputType = {
-    id: string | null
-    value: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    attributeId: string | null
-  }
-
-  export type AttributeValueMaxAggregateOutputType = {
-    id: string | null
-    value: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    attributeId: string | null
-  }
-
-  export type AttributeValueCountAggregateOutputType = {
-    id: number
-    value: number
-    createdAt: number
-    updatedAt: number
-    attributeId: number
-    _all: number
-  }
-
-
-  export type AttributeValueMinAggregateInputType = {
-    id?: true
-    value?: true
-    createdAt?: true
-    updatedAt?: true
-    attributeId?: true
-  }
-
-  export type AttributeValueMaxAggregateInputType = {
-    id?: true
-    value?: true
-    createdAt?: true
-    updatedAt?: true
-    attributeId?: true
-  }
-
-  export type AttributeValueCountAggregateInputType = {
-    id?: true
-    value?: true
-    createdAt?: true
-    updatedAt?: true
-    attributeId?: true
-    _all?: true
-  }
-
-  export type AttributeValueAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which AttributeValue to aggregate.
-     */
-    where?: AttributeValueWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of AttributeValues to fetch.
-     */
-    orderBy?: AttributeValueOrderByWithRelationInput | AttributeValueOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: AttributeValueWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` AttributeValues from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` AttributeValues.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned AttributeValues
-    **/
-    _count?: true | AttributeValueCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: AttributeValueMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: AttributeValueMaxAggregateInputType
-  }
-
-  export type GetAttributeValueAggregateType<T extends AttributeValueAggregateArgs> = {
-        [P in keyof T & keyof AggregateAttributeValue]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateAttributeValue[P]>
-      : GetScalarType<T[P], AggregateAttributeValue[P]>
-  }
-
-
-
-
-  export type AttributeValueGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttributeValueWhereInput
-    orderBy?: AttributeValueOrderByWithAggregationInput | AttributeValueOrderByWithAggregationInput[]
-    by: AttributeValueScalarFieldEnum[] | AttributeValueScalarFieldEnum
-    having?: AttributeValueScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: AttributeValueCountAggregateInputType | true
-    _min?: AttributeValueMinAggregateInputType
-    _max?: AttributeValueMaxAggregateInputType
-  }
-
-  export type AttributeValueGroupByOutputType = {
-    id: string
-    value: string
-    createdAt: Date
-    updatedAt: Date
-    attributeId: string
-    _count: AttributeValueCountAggregateOutputType | null
-    _min: AttributeValueMinAggregateOutputType | null
-    _max: AttributeValueMaxAggregateOutputType | null
-  }
-
-  type GetAttributeValueGroupByPayload<T extends AttributeValueGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<AttributeValueGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof AttributeValueGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], AttributeValueGroupByOutputType[P]>
-            : GetScalarType<T[P], AttributeValueGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type AttributeValueSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    value?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    attributeId?: boolean
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-    variations?: boolean | AttributeValue$variationsArgs<ExtArgs>
-    _count?: boolean | AttributeValueCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["attributeValue"]>
-
-  export type AttributeValueSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    value?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    attributeId?: boolean
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["attributeValue"]>
-
-  export type AttributeValueSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    value?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    attributeId?: boolean
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["attributeValue"]>
-
-  export type AttributeValueSelectScalar = {
-    id?: boolean
-    value?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    attributeId?: boolean
-  }
-
-  export type AttributeValueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "value" | "createdAt" | "updatedAt" | "attributeId", ExtArgs["result"]["attributeValue"]>
-  export type AttributeValueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-    variations?: boolean | AttributeValue$variationsArgs<ExtArgs>
-    _count?: boolean | AttributeValueCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type AttributeValueIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }
-  export type AttributeValueIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }
-
-  export type $AttributeValuePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "AttributeValue"
-    objects: {
-      attribute: Prisma.$AttributePayload<ExtArgs>
-      variations: Prisma.$VariationPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      value: string
-      createdAt: Date
-      updatedAt: Date
-      attributeId: string
-    }, ExtArgs["result"]["attributeValue"]>
-    composites: {}
-  }
-
-  type AttributeValueGetPayload<S extends boolean | null | undefined | AttributeValueDefaultArgs> = $Result.GetResult<Prisma.$AttributeValuePayload, S>
-
-  type AttributeValueCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<AttributeValueFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: AttributeValueCountAggregateInputType | true
-    }
-
-  export interface AttributeValueDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AttributeValue'], meta: { name: 'AttributeValue' } }
-    /**
-     * Find zero or one AttributeValue that matches the filter.
-     * @param {AttributeValueFindUniqueArgs} args - Arguments to find a AttributeValue
-     * @example
-     * // Get one AttributeValue
-     * const attributeValue = await prisma.attributeValue.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends AttributeValueFindUniqueArgs>(args: SelectSubset<T, AttributeValueFindUniqueArgs<ExtArgs>>): Prisma__AttributeValueClient<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one AttributeValue that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {AttributeValueFindUniqueOrThrowArgs} args - Arguments to find a AttributeValue
-     * @example
-     * // Get one AttributeValue
-     * const attributeValue = await prisma.attributeValue.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends AttributeValueFindUniqueOrThrowArgs>(args: SelectSubset<T, AttributeValueFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AttributeValueClient<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first AttributeValue that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeValueFindFirstArgs} args - Arguments to find a AttributeValue
-     * @example
-     * // Get one AttributeValue
-     * const attributeValue = await prisma.attributeValue.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends AttributeValueFindFirstArgs>(args?: SelectSubset<T, AttributeValueFindFirstArgs<ExtArgs>>): Prisma__AttributeValueClient<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first AttributeValue that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeValueFindFirstOrThrowArgs} args - Arguments to find a AttributeValue
-     * @example
-     * // Get one AttributeValue
-     * const attributeValue = await prisma.attributeValue.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends AttributeValueFindFirstOrThrowArgs>(args?: SelectSubset<T, AttributeValueFindFirstOrThrowArgs<ExtArgs>>): Prisma__AttributeValueClient<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more AttributeValues that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeValueFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all AttributeValues
-     * const attributeValues = await prisma.attributeValue.findMany()
-     * 
-     * // Get first 10 AttributeValues
-     * const attributeValues = await prisma.attributeValue.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const attributeValueWithIdOnly = await prisma.attributeValue.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends AttributeValueFindManyArgs>(args?: SelectSubset<T, AttributeValueFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a AttributeValue.
-     * @param {AttributeValueCreateArgs} args - Arguments to create a AttributeValue.
-     * @example
-     * // Create one AttributeValue
-     * const AttributeValue = await prisma.attributeValue.create({
-     *   data: {
-     *     // ... data to create a AttributeValue
-     *   }
-     * })
-     * 
-     */
-    create<T extends AttributeValueCreateArgs>(args: SelectSubset<T, AttributeValueCreateArgs<ExtArgs>>): Prisma__AttributeValueClient<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many AttributeValues.
-     * @param {AttributeValueCreateManyArgs} args - Arguments to create many AttributeValues.
-     * @example
-     * // Create many AttributeValues
-     * const attributeValue = await prisma.attributeValue.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends AttributeValueCreateManyArgs>(args?: SelectSubset<T, AttributeValueCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many AttributeValues and returns the data saved in the database.
-     * @param {AttributeValueCreateManyAndReturnArgs} args - Arguments to create many AttributeValues.
-     * @example
-     * // Create many AttributeValues
-     * const attributeValue = await prisma.attributeValue.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many AttributeValues and only return the `id`
-     * const attributeValueWithIdOnly = await prisma.attributeValue.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends AttributeValueCreateManyAndReturnArgs>(args?: SelectSubset<T, AttributeValueCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a AttributeValue.
-     * @param {AttributeValueDeleteArgs} args - Arguments to delete one AttributeValue.
-     * @example
-     * // Delete one AttributeValue
-     * const AttributeValue = await prisma.attributeValue.delete({
-     *   where: {
-     *     // ... filter to delete one AttributeValue
-     *   }
-     * })
-     * 
-     */
-    delete<T extends AttributeValueDeleteArgs>(args: SelectSubset<T, AttributeValueDeleteArgs<ExtArgs>>): Prisma__AttributeValueClient<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one AttributeValue.
-     * @param {AttributeValueUpdateArgs} args - Arguments to update one AttributeValue.
-     * @example
-     * // Update one AttributeValue
-     * const attributeValue = await prisma.attributeValue.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends AttributeValueUpdateArgs>(args: SelectSubset<T, AttributeValueUpdateArgs<ExtArgs>>): Prisma__AttributeValueClient<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more AttributeValues.
-     * @param {AttributeValueDeleteManyArgs} args - Arguments to filter AttributeValues to delete.
-     * @example
-     * // Delete a few AttributeValues
-     * const { count } = await prisma.attributeValue.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends AttributeValueDeleteManyArgs>(args?: SelectSubset<T, AttributeValueDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more AttributeValues.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeValueUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many AttributeValues
-     * const attributeValue = await prisma.attributeValue.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends AttributeValueUpdateManyArgs>(args: SelectSubset<T, AttributeValueUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more AttributeValues and returns the data updated in the database.
-     * @param {AttributeValueUpdateManyAndReturnArgs} args - Arguments to update many AttributeValues.
-     * @example
-     * // Update many AttributeValues
-     * const attributeValue = await prisma.attributeValue.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more AttributeValues and only return the `id`
-     * const attributeValueWithIdOnly = await prisma.attributeValue.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends AttributeValueUpdateManyAndReturnArgs>(args: SelectSubset<T, AttributeValueUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one AttributeValue.
-     * @param {AttributeValueUpsertArgs} args - Arguments to update or create a AttributeValue.
-     * @example
-     * // Update or create a AttributeValue
-     * const attributeValue = await prisma.attributeValue.upsert({
-     *   create: {
-     *     // ... data to create a AttributeValue
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the AttributeValue we want to update
-     *   }
-     * })
-     */
-    upsert<T extends AttributeValueUpsertArgs>(args: SelectSubset<T, AttributeValueUpsertArgs<ExtArgs>>): Prisma__AttributeValueClient<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of AttributeValues.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeValueCountArgs} args - Arguments to filter AttributeValues to count.
-     * @example
-     * // Count the number of AttributeValues
-     * const count = await prisma.attributeValue.count({
-     *   where: {
-     *     // ... the filter for the AttributeValues we want to count
-     *   }
-     * })
-    **/
-    count<T extends AttributeValueCountArgs>(
-      args?: Subset<T, AttributeValueCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], AttributeValueCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a AttributeValue.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeValueAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends AttributeValueAggregateArgs>(args: Subset<T, AttributeValueAggregateArgs>): Prisma.PrismaPromise<GetAttributeValueAggregateType<T>>
-
-    /**
-     * Group by AttributeValue.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttributeValueGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends AttributeValueGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AttributeValueGroupByArgs['orderBy'] }
-        : { orderBy?: AttributeValueGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, AttributeValueGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAttributeValueGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the AttributeValue model
-   */
-  readonly fields: AttributeValueFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for AttributeValue.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__AttributeValueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    attribute<T extends AttributeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AttributeDefaultArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    variations<T extends AttributeValue$variationsArgs<ExtArgs> = {}>(args?: Subset<T, AttributeValue$variationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the AttributeValue model
-   */
-  interface AttributeValueFieldRefs {
-    readonly id: FieldRef<"AttributeValue", 'String'>
-    readonly value: FieldRef<"AttributeValue", 'String'>
-    readonly createdAt: FieldRef<"AttributeValue", 'DateTime'>
-    readonly updatedAt: FieldRef<"AttributeValue", 'DateTime'>
-    readonly attributeId: FieldRef<"AttributeValue", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * AttributeValue findUnique
-   */
-  export type AttributeValueFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    /**
-     * Filter, which AttributeValue to fetch.
-     */
-    where: AttributeValueWhereUniqueInput
-  }
-
-  /**
-   * AttributeValue findUniqueOrThrow
-   */
-  export type AttributeValueFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    /**
-     * Filter, which AttributeValue to fetch.
-     */
-    where: AttributeValueWhereUniqueInput
-  }
-
-  /**
-   * AttributeValue findFirst
-   */
-  export type AttributeValueFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    /**
-     * Filter, which AttributeValue to fetch.
-     */
-    where?: AttributeValueWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of AttributeValues to fetch.
-     */
-    orderBy?: AttributeValueOrderByWithRelationInput | AttributeValueOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for AttributeValues.
-     */
-    cursor?: AttributeValueWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` AttributeValues from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` AttributeValues.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of AttributeValues.
-     */
-    distinct?: AttributeValueScalarFieldEnum | AttributeValueScalarFieldEnum[]
-  }
-
-  /**
-   * AttributeValue findFirstOrThrow
-   */
-  export type AttributeValueFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    /**
-     * Filter, which AttributeValue to fetch.
-     */
-    where?: AttributeValueWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of AttributeValues to fetch.
-     */
-    orderBy?: AttributeValueOrderByWithRelationInput | AttributeValueOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for AttributeValues.
-     */
-    cursor?: AttributeValueWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` AttributeValues from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` AttributeValues.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of AttributeValues.
-     */
-    distinct?: AttributeValueScalarFieldEnum | AttributeValueScalarFieldEnum[]
-  }
-
-  /**
-   * AttributeValue findMany
-   */
-  export type AttributeValueFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    /**
-     * Filter, which AttributeValues to fetch.
-     */
-    where?: AttributeValueWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of AttributeValues to fetch.
-     */
-    orderBy?: AttributeValueOrderByWithRelationInput | AttributeValueOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing AttributeValues.
-     */
-    cursor?: AttributeValueWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` AttributeValues from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` AttributeValues.
-     */
-    skip?: number
-    distinct?: AttributeValueScalarFieldEnum | AttributeValueScalarFieldEnum[]
-  }
-
-  /**
-   * AttributeValue create
-   */
-  export type AttributeValueCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    /**
-     * The data needed to create a AttributeValue.
-     */
-    data: XOR<AttributeValueCreateInput, AttributeValueUncheckedCreateInput>
-  }
-
-  /**
-   * AttributeValue createMany
-   */
-  export type AttributeValueCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many AttributeValues.
-     */
-    data: AttributeValueCreateManyInput | AttributeValueCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * AttributeValue createManyAndReturn
-   */
-  export type AttributeValueCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * The data used to create many AttributeValues.
-     */
-    data: AttributeValueCreateManyInput | AttributeValueCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * AttributeValue update
-   */
-  export type AttributeValueUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    /**
-     * The data needed to update a AttributeValue.
-     */
-    data: XOR<AttributeValueUpdateInput, AttributeValueUncheckedUpdateInput>
-    /**
-     * Choose, which AttributeValue to update.
-     */
-    where: AttributeValueWhereUniqueInput
-  }
-
-  /**
-   * AttributeValue updateMany
-   */
-  export type AttributeValueUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update AttributeValues.
-     */
-    data: XOR<AttributeValueUpdateManyMutationInput, AttributeValueUncheckedUpdateManyInput>
-    /**
-     * Filter which AttributeValues to update
-     */
-    where?: AttributeValueWhereInput
-    /**
-     * Limit how many AttributeValues to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * AttributeValue updateManyAndReturn
-   */
-  export type AttributeValueUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * The data used to update AttributeValues.
-     */
-    data: XOR<AttributeValueUpdateManyMutationInput, AttributeValueUncheckedUpdateManyInput>
-    /**
-     * Filter which AttributeValues to update
-     */
-    where?: AttributeValueWhereInput
-    /**
-     * Limit how many AttributeValues to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * AttributeValue upsert
-   */
-  export type AttributeValueUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    /**
-     * The filter to search for the AttributeValue to update in case it exists.
-     */
-    where: AttributeValueWhereUniqueInput
-    /**
-     * In case the AttributeValue found by the `where` argument doesn't exist, create a new AttributeValue with this data.
-     */
-    create: XOR<AttributeValueCreateInput, AttributeValueUncheckedCreateInput>
-    /**
-     * In case the AttributeValue was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<AttributeValueUpdateInput, AttributeValueUncheckedUpdateInput>
-  }
-
-  /**
-   * AttributeValue delete
-   */
-  export type AttributeValueDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-    /**
-     * Filter which AttributeValue to delete.
-     */
-    where: AttributeValueWhereUniqueInput
-  }
-
-  /**
-   * AttributeValue deleteMany
-   */
-  export type AttributeValueDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which AttributeValues to delete
-     */
-    where?: AttributeValueWhereInput
-    /**
-     * Limit how many AttributeValues to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * AttributeValue.variations
-   */
-  export type AttributeValue$variationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Variation
-     */
-    select?: VariationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Variation
-     */
-    omit?: VariationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: VariationInclude<ExtArgs> | null
-    where?: VariationWhereInput
-    orderBy?: VariationOrderByWithRelationInput | VariationOrderByWithRelationInput[]
-    cursor?: VariationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: VariationScalarFieldEnum | VariationScalarFieldEnum[]
-  }
-
-  /**
-   * AttributeValue without action
-   */
-  export type AttributeValueDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AttributeValue
-     */
-    select?: AttributeValueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AttributeValue
-     */
-    omit?: AttributeValueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttributeValueInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model ProductAttribute
-   */
-
-  export type AggregateProductAttribute = {
-    _count: ProductAttributeCountAggregateOutputType | null
-    _min: ProductAttributeMinAggregateOutputType | null
-    _max: ProductAttributeMaxAggregateOutputType | null
-  }
-
-  export type ProductAttributeMinAggregateOutputType = {
+  export type AggregateFormStep = {
+    _count: FormStepCountAggregateOutputType | null
+    _avg: FormStepAvgAggregateOutputType | null
+    _sum: FormStepSumAggregateOutputType | null
+    _min: FormStepMinAggregateOutputType | null
+    _max: FormStepMaxAggregateOutputType | null
+  }
+
+  export type FormStepAvgAggregateOutputType = {
+    order: number | null
+    pricePerUnit1: number | null
+    minValue1: number | null
+    maxValue1: number | null
+    defaultValue1: number | null
+    pricePerUnit2: number | null
+    minValue2: number | null
+    maxValue2: number | null
+    defaultValue2: number | null
+  }
+
+  export type FormStepSumAggregateOutputType = {
+    order: number | null
+    pricePerUnit1: number | null
+    minValue1: number | null
+    maxValue1: number | null
+    defaultValue1: number | null
+    pricePerUnit2: number | null
+    minValue2: number | null
+    maxValue2: number | null
+    defaultValue2: number | null
+  }
+
+  export type FormStepMinAggregateOutputType = {
     id: string | null
     productId: string | null
-    attributeId: string | null
+    order: number | null
+    type1: $Enums.StepType | null
+    question1: string | null
+    required1: boolean | null
+    type2: $Enums.StepType | null
+    question2: string | null
+    required2: boolean | null
+    pricingImpact1: $Enums.PricingImpact | null
+    pricePerUnit1: number | null
+    unit1: string | null
+    minValue1: number | null
+    maxValue1: number | null
+    defaultValue1: number | null
+    pricingImpact2: $Enums.PricingImpact | null
+    pricePerUnit2: number | null
+    unit2: string | null
+    minValue2: number | null
+    maxValue2: number | null
+    defaultValue2: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type ProductAttributeMaxAggregateOutputType = {
+  export type FormStepMaxAggregateOutputType = {
     id: string | null
     productId: string | null
-    attributeId: string | null
+    order: number | null
+    type1: $Enums.StepType | null
+    question1: string | null
+    required1: boolean | null
+    type2: $Enums.StepType | null
+    question2: string | null
+    required2: boolean | null
+    pricingImpact1: $Enums.PricingImpact | null
+    pricePerUnit1: number | null
+    unit1: string | null
+    minValue1: number | null
+    maxValue1: number | null
+    defaultValue1: number | null
+    pricingImpact2: $Enums.PricingImpact | null
+    pricePerUnit2: number | null
+    unit2: string | null
+    minValue2: number | null
+    maxValue2: number | null
+    defaultValue2: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type ProductAttributeCountAggregateOutputType = {
+  export type FormStepCountAggregateOutputType = {
     id: number
     productId: number
-    attributeId: number
-    _all: number
-  }
-
-
-  export type ProductAttributeMinAggregateInputType = {
-    id?: true
-    productId?: true
-    attributeId?: true
-  }
-
-  export type ProductAttributeMaxAggregateInputType = {
-    id?: true
-    productId?: true
-    attributeId?: true
-  }
-
-  export type ProductAttributeCountAggregateInputType = {
-    id?: true
-    productId?: true
-    attributeId?: true
-    _all?: true
-  }
-
-  export type ProductAttributeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ProductAttribute to aggregate.
-     */
-    where?: ProductAttributeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProductAttributes to fetch.
-     */
-    orderBy?: ProductAttributeOrderByWithRelationInput | ProductAttributeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ProductAttributeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProductAttributes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProductAttributes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ProductAttributes
-    **/
-    _count?: true | ProductAttributeCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ProductAttributeMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ProductAttributeMaxAggregateInputType
-  }
-
-  export type GetProductAttributeAggregateType<T extends ProductAttributeAggregateArgs> = {
-        [P in keyof T & keyof AggregateProductAttribute]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateProductAttribute[P]>
-      : GetScalarType<T[P], AggregateProductAttribute[P]>
-  }
-
-
-
-
-  export type ProductAttributeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProductAttributeWhereInput
-    orderBy?: ProductAttributeOrderByWithAggregationInput | ProductAttributeOrderByWithAggregationInput[]
-    by: ProductAttributeScalarFieldEnum[] | ProductAttributeScalarFieldEnum
-    having?: ProductAttributeScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ProductAttributeCountAggregateInputType | true
-    _min?: ProductAttributeMinAggregateInputType
-    _max?: ProductAttributeMaxAggregateInputType
-  }
-
-  export type ProductAttributeGroupByOutputType = {
-    id: string
-    productId: string
-    attributeId: string
-    _count: ProductAttributeCountAggregateOutputType | null
-    _min: ProductAttributeMinAggregateOutputType | null
-    _max: ProductAttributeMaxAggregateOutputType | null
-  }
-
-  type GetProductAttributeGroupByPayload<T extends ProductAttributeGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ProductAttributeGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ProductAttributeGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ProductAttributeGroupByOutputType[P]>
-            : GetScalarType<T[P], ProductAttributeGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ProductAttributeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    productId?: boolean
-    attributeId?: boolean
-    product?: boolean | ProductDefaultArgs<ExtArgs>
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["productAttribute"]>
-
-  export type ProductAttributeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    productId?: boolean
-    attributeId?: boolean
-    product?: boolean | ProductDefaultArgs<ExtArgs>
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["productAttribute"]>
-
-  export type ProductAttributeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    productId?: boolean
-    attributeId?: boolean
-    product?: boolean | ProductDefaultArgs<ExtArgs>
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["productAttribute"]>
-
-  export type ProductAttributeSelectScalar = {
-    id?: boolean
-    productId?: boolean
-    attributeId?: boolean
-  }
-
-  export type ProductAttributeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "attributeId", ExtArgs["result"]["productAttribute"]>
-  export type ProductAttributeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product?: boolean | ProductDefaultArgs<ExtArgs>
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }
-  export type ProductAttributeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product?: boolean | ProductDefaultArgs<ExtArgs>
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }
-  export type ProductAttributeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product?: boolean | ProductDefaultArgs<ExtArgs>
-    attribute?: boolean | AttributeDefaultArgs<ExtArgs>
-  }
-
-  export type $ProductAttributePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ProductAttribute"
-    objects: {
-      product: Prisma.$ProductPayload<ExtArgs>
-      attribute: Prisma.$AttributePayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      productId: string
-      attributeId: string
-    }, ExtArgs["result"]["productAttribute"]>
-    composites: {}
-  }
-
-  type ProductAttributeGetPayload<S extends boolean | null | undefined | ProductAttributeDefaultArgs> = $Result.GetResult<Prisma.$ProductAttributePayload, S>
-
-  type ProductAttributeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ProductAttributeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ProductAttributeCountAggregateInputType | true
-    }
-
-  export interface ProductAttributeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductAttribute'], meta: { name: 'ProductAttribute' } }
-    /**
-     * Find zero or one ProductAttribute that matches the filter.
-     * @param {ProductAttributeFindUniqueArgs} args - Arguments to find a ProductAttribute
-     * @example
-     * // Get one ProductAttribute
-     * const productAttribute = await prisma.productAttribute.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ProductAttributeFindUniqueArgs>(args: SelectSubset<T, ProductAttributeFindUniqueArgs<ExtArgs>>): Prisma__ProductAttributeClient<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ProductAttribute that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ProductAttributeFindUniqueOrThrowArgs} args - Arguments to find a ProductAttribute
-     * @example
-     * // Get one ProductAttribute
-     * const productAttribute = await prisma.productAttribute.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ProductAttributeFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductAttributeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductAttributeClient<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ProductAttribute that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductAttributeFindFirstArgs} args - Arguments to find a ProductAttribute
-     * @example
-     * // Get one ProductAttribute
-     * const productAttribute = await prisma.productAttribute.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ProductAttributeFindFirstArgs>(args?: SelectSubset<T, ProductAttributeFindFirstArgs<ExtArgs>>): Prisma__ProductAttributeClient<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ProductAttribute that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductAttributeFindFirstOrThrowArgs} args - Arguments to find a ProductAttribute
-     * @example
-     * // Get one ProductAttribute
-     * const productAttribute = await prisma.productAttribute.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ProductAttributeFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductAttributeFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductAttributeClient<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ProductAttributes that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductAttributeFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ProductAttributes
-     * const productAttributes = await prisma.productAttribute.findMany()
-     * 
-     * // Get first 10 ProductAttributes
-     * const productAttributes = await prisma.productAttribute.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const productAttributeWithIdOnly = await prisma.productAttribute.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ProductAttributeFindManyArgs>(args?: SelectSubset<T, ProductAttributeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ProductAttribute.
-     * @param {ProductAttributeCreateArgs} args - Arguments to create a ProductAttribute.
-     * @example
-     * // Create one ProductAttribute
-     * const ProductAttribute = await prisma.productAttribute.create({
-     *   data: {
-     *     // ... data to create a ProductAttribute
-     *   }
-     * })
-     * 
-     */
-    create<T extends ProductAttributeCreateArgs>(args: SelectSubset<T, ProductAttributeCreateArgs<ExtArgs>>): Prisma__ProductAttributeClient<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ProductAttributes.
-     * @param {ProductAttributeCreateManyArgs} args - Arguments to create many ProductAttributes.
-     * @example
-     * // Create many ProductAttributes
-     * const productAttribute = await prisma.productAttribute.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ProductAttributeCreateManyArgs>(args?: SelectSubset<T, ProductAttributeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many ProductAttributes and returns the data saved in the database.
-     * @param {ProductAttributeCreateManyAndReturnArgs} args - Arguments to create many ProductAttributes.
-     * @example
-     * // Create many ProductAttributes
-     * const productAttribute = await prisma.productAttribute.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many ProductAttributes and only return the `id`
-     * const productAttributeWithIdOnly = await prisma.productAttribute.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ProductAttributeCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductAttributeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a ProductAttribute.
-     * @param {ProductAttributeDeleteArgs} args - Arguments to delete one ProductAttribute.
-     * @example
-     * // Delete one ProductAttribute
-     * const ProductAttribute = await prisma.productAttribute.delete({
-     *   where: {
-     *     // ... filter to delete one ProductAttribute
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ProductAttributeDeleteArgs>(args: SelectSubset<T, ProductAttributeDeleteArgs<ExtArgs>>): Prisma__ProductAttributeClient<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ProductAttribute.
-     * @param {ProductAttributeUpdateArgs} args - Arguments to update one ProductAttribute.
-     * @example
-     * // Update one ProductAttribute
-     * const productAttribute = await prisma.productAttribute.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ProductAttributeUpdateArgs>(args: SelectSubset<T, ProductAttributeUpdateArgs<ExtArgs>>): Prisma__ProductAttributeClient<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ProductAttributes.
-     * @param {ProductAttributeDeleteManyArgs} args - Arguments to filter ProductAttributes to delete.
-     * @example
-     * // Delete a few ProductAttributes
-     * const { count } = await prisma.productAttribute.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ProductAttributeDeleteManyArgs>(args?: SelectSubset<T, ProductAttributeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ProductAttributes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductAttributeUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ProductAttributes
-     * const productAttribute = await prisma.productAttribute.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ProductAttributeUpdateManyArgs>(args: SelectSubset<T, ProductAttributeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ProductAttributes and returns the data updated in the database.
-     * @param {ProductAttributeUpdateManyAndReturnArgs} args - Arguments to update many ProductAttributes.
-     * @example
-     * // Update many ProductAttributes
-     * const productAttribute = await prisma.productAttribute.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more ProductAttributes and only return the `id`
-     * const productAttributeWithIdOnly = await prisma.productAttribute.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ProductAttributeUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductAttributeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one ProductAttribute.
-     * @param {ProductAttributeUpsertArgs} args - Arguments to update or create a ProductAttribute.
-     * @example
-     * // Update or create a ProductAttribute
-     * const productAttribute = await prisma.productAttribute.upsert({
-     *   create: {
-     *     // ... data to create a ProductAttribute
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ProductAttribute we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ProductAttributeUpsertArgs>(args: SelectSubset<T, ProductAttributeUpsertArgs<ExtArgs>>): Prisma__ProductAttributeClient<$Result.GetResult<Prisma.$ProductAttributePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ProductAttributes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductAttributeCountArgs} args - Arguments to filter ProductAttributes to count.
-     * @example
-     * // Count the number of ProductAttributes
-     * const count = await prisma.productAttribute.count({
-     *   where: {
-     *     // ... the filter for the ProductAttributes we want to count
-     *   }
-     * })
-    **/
-    count<T extends ProductAttributeCountArgs>(
-      args?: Subset<T, ProductAttributeCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ProductAttributeCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ProductAttribute.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductAttributeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ProductAttributeAggregateArgs>(args: Subset<T, ProductAttributeAggregateArgs>): Prisma.PrismaPromise<GetProductAttributeAggregateType<T>>
-
-    /**
-     * Group by ProductAttribute.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductAttributeGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ProductAttributeGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ProductAttributeGroupByArgs['orderBy'] }
-        : { orderBy?: ProductAttributeGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ProductAttributeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductAttributeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ProductAttribute model
-   */
-  readonly fields: ProductAttributeFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ProductAttribute.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ProductAttributeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    attribute<T extends AttributeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AttributeDefaultArgs<ExtArgs>>): Prisma__AttributeClient<$Result.GetResult<Prisma.$AttributePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ProductAttribute model
-   */
-  interface ProductAttributeFieldRefs {
-    readonly id: FieldRef<"ProductAttribute", 'String'>
-    readonly productId: FieldRef<"ProductAttribute", 'String'>
-    readonly attributeId: FieldRef<"ProductAttribute", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ProductAttribute findUnique
-   */
-  export type ProductAttributeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which ProductAttribute to fetch.
-     */
-    where: ProductAttributeWhereUniqueInput
-  }
-
-  /**
-   * ProductAttribute findUniqueOrThrow
-   */
-  export type ProductAttributeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which ProductAttribute to fetch.
-     */
-    where: ProductAttributeWhereUniqueInput
-  }
-
-  /**
-   * ProductAttribute findFirst
-   */
-  export type ProductAttributeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which ProductAttribute to fetch.
-     */
-    where?: ProductAttributeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProductAttributes to fetch.
-     */
-    orderBy?: ProductAttributeOrderByWithRelationInput | ProductAttributeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ProductAttributes.
-     */
-    cursor?: ProductAttributeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProductAttributes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProductAttributes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProductAttributes.
-     */
-    distinct?: ProductAttributeScalarFieldEnum | ProductAttributeScalarFieldEnum[]
-  }
-
-  /**
-   * ProductAttribute findFirstOrThrow
-   */
-  export type ProductAttributeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which ProductAttribute to fetch.
-     */
-    where?: ProductAttributeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProductAttributes to fetch.
-     */
-    orderBy?: ProductAttributeOrderByWithRelationInput | ProductAttributeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ProductAttributes.
-     */
-    cursor?: ProductAttributeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProductAttributes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProductAttributes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProductAttributes.
-     */
-    distinct?: ProductAttributeScalarFieldEnum | ProductAttributeScalarFieldEnum[]
-  }
-
-  /**
-   * ProductAttribute findMany
-   */
-  export type ProductAttributeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    /**
-     * Filter, which ProductAttributes to fetch.
-     */
-    where?: ProductAttributeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ProductAttributes to fetch.
-     */
-    orderBy?: ProductAttributeOrderByWithRelationInput | ProductAttributeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ProductAttributes.
-     */
-    cursor?: ProductAttributeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ProductAttributes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ProductAttributes.
-     */
-    skip?: number
-    distinct?: ProductAttributeScalarFieldEnum | ProductAttributeScalarFieldEnum[]
-  }
-
-  /**
-   * ProductAttribute create
-   */
-  export type ProductAttributeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    /**
-     * The data needed to create a ProductAttribute.
-     */
-    data: XOR<ProductAttributeCreateInput, ProductAttributeUncheckedCreateInput>
-  }
-
-  /**
-   * ProductAttribute createMany
-   */
-  export type ProductAttributeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ProductAttributes.
-     */
-    data: ProductAttributeCreateManyInput | ProductAttributeCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ProductAttribute createManyAndReturn
-   */
-  export type ProductAttributeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * The data used to create many ProductAttributes.
-     */
-    data: ProductAttributeCreateManyInput | ProductAttributeCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ProductAttribute update
-   */
-  export type ProductAttributeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    /**
-     * The data needed to update a ProductAttribute.
-     */
-    data: XOR<ProductAttributeUpdateInput, ProductAttributeUncheckedUpdateInput>
-    /**
-     * Choose, which ProductAttribute to update.
-     */
-    where: ProductAttributeWhereUniqueInput
-  }
-
-  /**
-   * ProductAttribute updateMany
-   */
-  export type ProductAttributeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ProductAttributes.
-     */
-    data: XOR<ProductAttributeUpdateManyMutationInput, ProductAttributeUncheckedUpdateManyInput>
-    /**
-     * Filter which ProductAttributes to update
-     */
-    where?: ProductAttributeWhereInput
-    /**
-     * Limit how many ProductAttributes to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ProductAttribute updateManyAndReturn
-   */
-  export type ProductAttributeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * The data used to update ProductAttributes.
-     */
-    data: XOR<ProductAttributeUpdateManyMutationInput, ProductAttributeUncheckedUpdateManyInput>
-    /**
-     * Filter which ProductAttributes to update
-     */
-    where?: ProductAttributeWhereInput
-    /**
-     * Limit how many ProductAttributes to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ProductAttribute upsert
-   */
-  export type ProductAttributeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    /**
-     * The filter to search for the ProductAttribute to update in case it exists.
-     */
-    where: ProductAttributeWhereUniqueInput
-    /**
-     * In case the ProductAttribute found by the `where` argument doesn't exist, create a new ProductAttribute with this data.
-     */
-    create: XOR<ProductAttributeCreateInput, ProductAttributeUncheckedCreateInput>
-    /**
-     * In case the ProductAttribute was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ProductAttributeUpdateInput, ProductAttributeUncheckedUpdateInput>
-  }
-
-  /**
-   * ProductAttribute delete
-   */
-  export type ProductAttributeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-    /**
-     * Filter which ProductAttribute to delete.
-     */
-    where: ProductAttributeWhereUniqueInput
-  }
-
-  /**
-   * ProductAttribute deleteMany
-   */
-  export type ProductAttributeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ProductAttributes to delete
-     */
-    where?: ProductAttributeWhereInput
-    /**
-     * Limit how many ProductAttributes to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ProductAttribute without action
-   */
-  export type ProductAttributeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProductAttribute
-     */
-    select?: ProductAttributeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProductAttribute
-     */
-    omit?: ProductAttributeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProductAttributeInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Variation
-   */
-
-  export type AggregateVariation = {
-    _count: VariationCountAggregateOutputType | null
-    _avg: VariationAvgAggregateOutputType | null
-    _sum: VariationSumAggregateOutputType | null
-    _min: VariationMinAggregateOutputType | null
-    _max: VariationMaxAggregateOutputType | null
-  }
-
-  export type VariationAvgAggregateOutputType = {
-    price: number | null
-  }
-
-  export type VariationSumAggregateOutputType = {
-    price: number | null
-  }
-
-  export type VariationMinAggregateOutputType = {
-    id: string | null
-    sku: string | null
-    price: number | null
-    image: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    productId: string | null
-  }
-
-  export type VariationMaxAggregateOutputType = {
-    id: string | null
-    sku: string | null
-    price: number | null
-    image: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    productId: string | null
-  }
-
-  export type VariationCountAggregateOutputType = {
-    id: number
-    sku: number
-    price: number
-    image: number
+    order: number
+    type1: number
+    question1: number
+    required1: number
+    type2: number
+    question2: number
+    required2: number
+    pricingImpact1: number
+    pricePerUnit1: number
+    unit1: number
+    minValue1: number
+    maxValue1: number
+    defaultValue1: number
+    pricingImpact2: number
+    pricePerUnit2: number
+    unit2: number
+    minValue2: number
+    maxValue2: number
+    defaultValue2: number
+    conditionalOn: number
     createdAt: number
     updatedAt: number
-    productId: number
     _all: number
   }
 
 
-  export type VariationAvgAggregateInputType = {
-    price?: true
+  export type FormStepAvgAggregateInputType = {
+    order?: true
+    pricePerUnit1?: true
+    minValue1?: true
+    maxValue1?: true
+    defaultValue1?: true
+    pricePerUnit2?: true
+    minValue2?: true
+    maxValue2?: true
+    defaultValue2?: true
   }
 
-  export type VariationSumAggregateInputType = {
-    price?: true
+  export type FormStepSumAggregateInputType = {
+    order?: true
+    pricePerUnit1?: true
+    minValue1?: true
+    maxValue1?: true
+    defaultValue1?: true
+    pricePerUnit2?: true
+    minValue2?: true
+    maxValue2?: true
+    defaultValue2?: true
   }
 
-  export type VariationMinAggregateInputType = {
+  export type FormStepMinAggregateInputType = {
     id?: true
-    sku?: true
-    price?: true
-    image?: true
+    productId?: true
+    order?: true
+    type1?: true
+    question1?: true
+    required1?: true
+    type2?: true
+    question2?: true
+    required2?: true
+    pricingImpact1?: true
+    pricePerUnit1?: true
+    unit1?: true
+    minValue1?: true
+    maxValue1?: true
+    defaultValue1?: true
+    pricingImpact2?: true
+    pricePerUnit2?: true
+    unit2?: true
+    minValue2?: true
+    maxValue2?: true
+    defaultValue2?: true
     createdAt?: true
     updatedAt?: true
-    productId?: true
   }
 
-  export type VariationMaxAggregateInputType = {
+  export type FormStepMaxAggregateInputType = {
     id?: true
-    sku?: true
-    price?: true
-    image?: true
+    productId?: true
+    order?: true
+    type1?: true
+    question1?: true
+    required1?: true
+    type2?: true
+    question2?: true
+    required2?: true
+    pricingImpact1?: true
+    pricePerUnit1?: true
+    unit1?: true
+    minValue1?: true
+    maxValue1?: true
+    defaultValue1?: true
+    pricingImpact2?: true
+    pricePerUnit2?: true
+    unit2?: true
+    minValue2?: true
+    maxValue2?: true
+    defaultValue2?: true
     createdAt?: true
     updatedAt?: true
-    productId?: true
   }
 
-  export type VariationCountAggregateInputType = {
+  export type FormStepCountAggregateInputType = {
     id?: true
-    sku?: true
-    price?: true
-    image?: true
+    productId?: true
+    order?: true
+    type1?: true
+    question1?: true
+    required1?: true
+    type2?: true
+    question2?: true
+    required2?: true
+    pricingImpact1?: true
+    pricePerUnit1?: true
+    unit1?: true
+    minValue1?: true
+    maxValue1?: true
+    defaultValue1?: true
+    pricingImpact2?: true
+    pricePerUnit2?: true
+    unit2?: true
+    minValue2?: true
+    maxValue2?: true
+    defaultValue2?: true
+    conditionalOn?: true
     createdAt?: true
     updatedAt?: true
-    productId?: true
     _all?: true
   }
 
-  export type VariationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Variation to aggregate.
+     * Filter which FormStep to aggregate.
      */
-    where?: VariationWhereInput
+    where?: FormStepWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Variations to fetch.
+     * Determine the order of FormSteps to fetch.
      */
-    orderBy?: VariationOrderByWithRelationInput | VariationOrderByWithRelationInput[]
+    orderBy?: FormStepOrderByWithRelationInput | FormStepOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: VariationWhereUniqueInput
+    cursor?: FormStepWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Variations from the position of the cursor.
+     * Take `±n` FormSteps from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Variations.
+     * Skip the first `n` FormSteps.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Variations
+     * Count returned FormSteps
     **/
-    _count?: true | VariationCountAggregateInputType
+    _count?: true | FormStepCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: VariationAvgAggregateInputType
+    _avg?: FormStepAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: VariationSumAggregateInputType
+    _sum?: FormStepSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: VariationMinAggregateInputType
+    _min?: FormStepMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: VariationMaxAggregateInputType
+    _max?: FormStepMaxAggregateInputType
   }
 
-  export type GetVariationAggregateType<T extends VariationAggregateArgs> = {
-        [P in keyof T & keyof AggregateVariation]: P extends '_count' | 'count'
+  export type GetFormStepAggregateType<T extends FormStepAggregateArgs> = {
+        [P in keyof T & keyof AggregateFormStep]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateVariation[P]>
-      : GetScalarType<T[P], AggregateVariation[P]>
+        : GetScalarType<T[P], AggregateFormStep[P]>
+      : GetScalarType<T[P], AggregateFormStep[P]>
   }
 
 
 
 
-  export type VariationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: VariationWhereInput
-    orderBy?: VariationOrderByWithAggregationInput | VariationOrderByWithAggregationInput[]
-    by: VariationScalarFieldEnum[] | VariationScalarFieldEnum
-    having?: VariationScalarWhereWithAggregatesInput
+  export type FormStepGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormStepWhereInput
+    orderBy?: FormStepOrderByWithAggregationInput | FormStepOrderByWithAggregationInput[]
+    by: FormStepScalarFieldEnum[] | FormStepScalarFieldEnum
+    having?: FormStepScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: VariationCountAggregateInputType | true
-    _avg?: VariationAvgAggregateInputType
-    _sum?: VariationSumAggregateInputType
-    _min?: VariationMinAggregateInputType
-    _max?: VariationMaxAggregateInputType
+    _count?: FormStepCountAggregateInputType | true
+    _avg?: FormStepAvgAggregateInputType
+    _sum?: FormStepSumAggregateInputType
+    _min?: FormStepMinAggregateInputType
+    _max?: FormStepMaxAggregateInputType
   }
 
-  export type VariationGroupByOutputType = {
+  export type FormStepGroupByOutputType = {
     id: string
-    sku: string
-    price: number
-    image: string | null
+    productId: string
+    order: number
+    type1: $Enums.StepType
+    question1: string
+    required1: boolean
+    type2: $Enums.StepType | null
+    question2: string | null
+    required2: boolean
+    pricingImpact1: $Enums.PricingImpact
+    pricePerUnit1: number | null
+    unit1: string | null
+    minValue1: number | null
+    maxValue1: number | null
+    defaultValue1: number | null
+    pricingImpact2: $Enums.PricingImpact
+    pricePerUnit2: number | null
+    unit2: string | null
+    minValue2: number | null
+    maxValue2: number | null
+    defaultValue2: number | null
+    conditionalOn: JsonValue | null
     createdAt: Date
     updatedAt: Date
-    productId: string
-    _count: VariationCountAggregateOutputType | null
-    _avg: VariationAvgAggregateOutputType | null
-    _sum: VariationSumAggregateOutputType | null
-    _min: VariationMinAggregateOutputType | null
-    _max: VariationMaxAggregateOutputType | null
+    _count: FormStepCountAggregateOutputType | null
+    _avg: FormStepAvgAggregateOutputType | null
+    _sum: FormStepSumAggregateOutputType | null
+    _min: FormStepMinAggregateOutputType | null
+    _max: FormStepMaxAggregateOutputType | null
   }
 
-  type GetVariationGroupByPayload<T extends VariationGroupByArgs> = Prisma.PrismaPromise<
+  type GetFormStepGroupByPayload<T extends FormStepGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<VariationGroupByOutputType, T['by']> &
+      PickEnumerable<FormStepGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof VariationGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof FormStepGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], VariationGroupByOutputType[P]>
-            : GetScalarType<T[P], VariationGroupByOutputType[P]>
+              : GetScalarType<T[P], FormStepGroupByOutputType[P]>
+            : GetScalarType<T[P], FormStepGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type VariationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type FormStepSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    sku?: boolean
-    price?: boolean
-    image?: boolean
+    productId?: boolean
+    order?: boolean
+    type1?: boolean
+    question1?: boolean
+    required1?: boolean
+    type2?: boolean
+    question2?: boolean
+    required2?: boolean
+    pricingImpact1?: boolean
+    pricePerUnit1?: boolean
+    unit1?: boolean
+    minValue1?: boolean
+    maxValue1?: boolean
+    defaultValue1?: boolean
+    pricingImpact2?: boolean
+    pricePerUnit2?: boolean
+    unit2?: boolean
+    minValue2?: boolean
+    maxValue2?: boolean
+    defaultValue2?: boolean
+    conditionalOn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    productId?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
-    attributes?: boolean | Variation$attributesArgs<ExtArgs>
-    _count?: boolean | VariationCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["variation"]>
+    options?: boolean | FormStep$optionsArgs<ExtArgs>
+    _count?: boolean | FormStepCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["formStep"]>
 
-  export type VariationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type FormStepSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    sku?: boolean
-    price?: boolean
-    image?: boolean
+    productId?: boolean
+    order?: boolean
+    type1?: boolean
+    question1?: boolean
+    required1?: boolean
+    type2?: boolean
+    question2?: boolean
+    required2?: boolean
+    pricingImpact1?: boolean
+    pricePerUnit1?: boolean
+    unit1?: boolean
+    minValue1?: boolean
+    maxValue1?: boolean
+    defaultValue1?: boolean
+    pricingImpact2?: boolean
+    pricePerUnit2?: boolean
+    unit2?: boolean
+    minValue2?: boolean
+    maxValue2?: boolean
+    defaultValue2?: boolean
+    conditionalOn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    productId?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["variation"]>
+  }, ExtArgs["result"]["formStep"]>
 
-  export type VariationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type FormStepSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    sku?: boolean
-    price?: boolean
-    image?: boolean
+    productId?: boolean
+    order?: boolean
+    type1?: boolean
+    question1?: boolean
+    required1?: boolean
+    type2?: boolean
+    question2?: boolean
+    required2?: boolean
+    pricingImpact1?: boolean
+    pricePerUnit1?: boolean
+    unit1?: boolean
+    minValue1?: boolean
+    maxValue1?: boolean
+    defaultValue1?: boolean
+    pricingImpact2?: boolean
+    pricePerUnit2?: boolean
+    unit2?: boolean
+    minValue2?: boolean
+    maxValue2?: boolean
+    defaultValue2?: boolean
+    conditionalOn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    productId?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["variation"]>
+  }, ExtArgs["result"]["formStep"]>
 
-  export type VariationSelectScalar = {
+  export type FormStepSelectScalar = {
     id?: boolean
-    sku?: boolean
-    price?: boolean
-    image?: boolean
+    productId?: boolean
+    order?: boolean
+    type1?: boolean
+    question1?: boolean
+    required1?: boolean
+    type2?: boolean
+    question2?: boolean
+    required2?: boolean
+    pricingImpact1?: boolean
+    pricePerUnit1?: boolean
+    unit1?: boolean
+    minValue1?: boolean
+    maxValue1?: boolean
+    defaultValue1?: boolean
+    pricingImpact2?: boolean
+    pricePerUnit2?: boolean
+    unit2?: boolean
+    minValue2?: boolean
+    maxValue2?: boolean
+    defaultValue2?: boolean
+    conditionalOn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    productId?: boolean
   }
 
-  export type VariationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sku" | "price" | "image" | "createdAt" | "updatedAt" | "productId", ExtArgs["result"]["variation"]>
-  export type VariationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "order" | "type1" | "question1" | "required1" | "type2" | "question2" | "required2" | "pricingImpact1" | "pricePerUnit1" | "unit1" | "minValue1" | "maxValue1" | "defaultValue1" | "pricingImpact2" | "pricePerUnit2" | "unit2" | "minValue2" | "maxValue2" | "defaultValue2" | "conditionalOn" | "createdAt" | "updatedAt", ExtArgs["result"]["formStep"]>
+  export type FormStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
-    attributes?: boolean | Variation$attributesArgs<ExtArgs>
-    _count?: boolean | VariationCountOutputTypeDefaultArgs<ExtArgs>
+    options?: boolean | FormStep$optionsArgs<ExtArgs>
+    _count?: boolean | FormStepCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type VariationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }
-  export type VariationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }
 
-  export type $VariationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Variation"
+  export type $FormStepPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FormStep"
     objects: {
       product: Prisma.$ProductPayload<ExtArgs>
-      attributes: Prisma.$AttributeValuePayload<ExtArgs>[]
+      options: Prisma.$StepOptionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      sku: string
-      price: number
-      image: string | null
+      productId: string
+      order: number
+      type1: $Enums.StepType
+      question1: string
+      required1: boolean
+      type2: $Enums.StepType | null
+      question2: string | null
+      required2: boolean
+      pricingImpact1: $Enums.PricingImpact
+      pricePerUnit1: number | null
+      unit1: string | null
+      minValue1: number | null
+      maxValue1: number | null
+      defaultValue1: number | null
+      pricingImpact2: $Enums.PricingImpact
+      pricePerUnit2: number | null
+      unit2: string | null
+      minValue2: number | null
+      maxValue2: number | null
+      defaultValue2: number | null
+      conditionalOn: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
-      productId: string
-    }, ExtArgs["result"]["variation"]>
+    }, ExtArgs["result"]["formStep"]>
     composites: {}
   }
 
-  type VariationGetPayload<S extends boolean | null | undefined | VariationDefaultArgs> = $Result.GetResult<Prisma.$VariationPayload, S>
+  type FormStepGetPayload<S extends boolean | null | undefined | FormStepDefaultArgs> = $Result.GetResult<Prisma.$FormStepPayload, S>
 
-  type VariationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<VariationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: VariationCountAggregateInputType | true
+  type FormStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FormStepFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FormStepCountAggregateInputType | true
     }
 
-  export interface VariationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Variation'], meta: { name: 'Variation' } }
+  export interface FormStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FormStep'], meta: { name: 'FormStep' } }
     /**
-     * Find zero or one Variation that matches the filter.
-     * @param {VariationFindUniqueArgs} args - Arguments to find a Variation
+     * Find zero or one FormStep that matches the filter.
+     * @param {FormStepFindUniqueArgs} args - Arguments to find a FormStep
      * @example
-     * // Get one Variation
-     * const variation = await prisma.variation.findUnique({
+     * // Get one FormStep
+     * const formStep = await prisma.formStep.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends VariationFindUniqueArgs>(args: SelectSubset<T, VariationFindUniqueArgs<ExtArgs>>): Prisma__VariationClient<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends FormStepFindUniqueArgs>(args: SelectSubset<T, FormStepFindUniqueArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Variation that matches the filter or throw an error with `error.code='P2025'`
+     * Find one FormStep that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {VariationFindUniqueOrThrowArgs} args - Arguments to find a Variation
+     * @param {FormStepFindUniqueOrThrowArgs} args - Arguments to find a FormStep
      * @example
-     * // Get one Variation
-     * const variation = await prisma.variation.findUniqueOrThrow({
+     * // Get one FormStep
+     * const formStep = await prisma.formStep.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends VariationFindUniqueOrThrowArgs>(args: SelectSubset<T, VariationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VariationClient<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends FormStepFindUniqueOrThrowArgs>(args: SelectSubset<T, FormStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Variation that matches the filter.
+     * Find the first FormStep that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VariationFindFirstArgs} args - Arguments to find a Variation
+     * @param {FormStepFindFirstArgs} args - Arguments to find a FormStep
      * @example
-     * // Get one Variation
-     * const variation = await prisma.variation.findFirst({
+     * // Get one FormStep
+     * const formStep = await prisma.formStep.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends VariationFindFirstArgs>(args?: SelectSubset<T, VariationFindFirstArgs<ExtArgs>>): Prisma__VariationClient<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends FormStepFindFirstArgs>(args?: SelectSubset<T, FormStepFindFirstArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Variation that matches the filter or
+     * Find the first FormStep that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VariationFindFirstOrThrowArgs} args - Arguments to find a Variation
+     * @param {FormStepFindFirstOrThrowArgs} args - Arguments to find a FormStep
      * @example
-     * // Get one Variation
-     * const variation = await prisma.variation.findFirstOrThrow({
+     * // Get one FormStep
+     * const formStep = await prisma.formStep.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends VariationFindFirstOrThrowArgs>(args?: SelectSubset<T, VariationFindFirstOrThrowArgs<ExtArgs>>): Prisma__VariationClient<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends FormStepFindFirstOrThrowArgs>(args?: SelectSubset<T, FormStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Variations that matches the filter.
+     * Find zero or more FormSteps that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VariationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {FormStepFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Variations
-     * const variations = await prisma.variation.findMany()
+     * // Get all FormSteps
+     * const formSteps = await prisma.formStep.findMany()
      * 
-     * // Get first 10 Variations
-     * const variations = await prisma.variation.findMany({ take: 10 })
+     * // Get first 10 FormSteps
+     * const formSteps = await prisma.formStep.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const variationWithIdOnly = await prisma.variation.findMany({ select: { id: true } })
+     * const formStepWithIdOnly = await prisma.formStep.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends VariationFindManyArgs>(args?: SelectSubset<T, VariationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends FormStepFindManyArgs>(args?: SelectSubset<T, FormStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Variation.
-     * @param {VariationCreateArgs} args - Arguments to create a Variation.
+     * Create a FormStep.
+     * @param {FormStepCreateArgs} args - Arguments to create a FormStep.
      * @example
-     * // Create one Variation
-     * const Variation = await prisma.variation.create({
+     * // Create one FormStep
+     * const FormStep = await prisma.formStep.create({
      *   data: {
-     *     // ... data to create a Variation
+     *     // ... data to create a FormStep
      *   }
      * })
      * 
      */
-    create<T extends VariationCreateArgs>(args: SelectSubset<T, VariationCreateArgs<ExtArgs>>): Prisma__VariationClient<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends FormStepCreateArgs>(args: SelectSubset<T, FormStepCreateArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Variations.
-     * @param {VariationCreateManyArgs} args - Arguments to create many Variations.
+     * Create many FormSteps.
+     * @param {FormStepCreateManyArgs} args - Arguments to create many FormSteps.
      * @example
-     * // Create many Variations
-     * const variation = await prisma.variation.createMany({
+     * // Create many FormSteps
+     * const formStep = await prisma.formStep.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends VariationCreateManyArgs>(args?: SelectSubset<T, VariationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends FormStepCreateManyArgs>(args?: SelectSubset<T, FormStepCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Variations and returns the data saved in the database.
-     * @param {VariationCreateManyAndReturnArgs} args - Arguments to create many Variations.
+     * Create many FormSteps and returns the data saved in the database.
+     * @param {FormStepCreateManyAndReturnArgs} args - Arguments to create many FormSteps.
      * @example
-     * // Create many Variations
-     * const variation = await prisma.variation.createManyAndReturn({
+     * // Create many FormSteps
+     * const formStep = await prisma.formStep.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Variations and only return the `id`
-     * const variationWithIdOnly = await prisma.variation.createManyAndReturn({
+     * // Create many FormSteps and only return the `id`
+     * const formStepWithIdOnly = await prisma.formStep.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -6166,28 +2881,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends VariationCreateManyAndReturnArgs>(args?: SelectSubset<T, VariationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends FormStepCreateManyAndReturnArgs>(args?: SelectSubset<T, FormStepCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Variation.
-     * @param {VariationDeleteArgs} args - Arguments to delete one Variation.
+     * Delete a FormStep.
+     * @param {FormStepDeleteArgs} args - Arguments to delete one FormStep.
      * @example
-     * // Delete one Variation
-     * const Variation = await prisma.variation.delete({
+     * // Delete one FormStep
+     * const FormStep = await prisma.formStep.delete({
      *   where: {
-     *     // ... filter to delete one Variation
+     *     // ... filter to delete one FormStep
      *   }
      * })
      * 
      */
-    delete<T extends VariationDeleteArgs>(args: SelectSubset<T, VariationDeleteArgs<ExtArgs>>): Prisma__VariationClient<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends FormStepDeleteArgs>(args: SelectSubset<T, FormStepDeleteArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Variation.
-     * @param {VariationUpdateArgs} args - Arguments to update one Variation.
+     * Update one FormStep.
+     * @param {FormStepUpdateArgs} args - Arguments to update one FormStep.
      * @example
-     * // Update one Variation
-     * const variation = await prisma.variation.update({
+     * // Update one FormStep
+     * const formStep = await prisma.formStep.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6197,30 +2912,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends VariationUpdateArgs>(args: SelectSubset<T, VariationUpdateArgs<ExtArgs>>): Prisma__VariationClient<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends FormStepUpdateArgs>(args: SelectSubset<T, FormStepUpdateArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Variations.
-     * @param {VariationDeleteManyArgs} args - Arguments to filter Variations to delete.
+     * Delete zero or more FormSteps.
+     * @param {FormStepDeleteManyArgs} args - Arguments to filter FormSteps to delete.
      * @example
-     * // Delete a few Variations
-     * const { count } = await prisma.variation.deleteMany({
+     * // Delete a few FormSteps
+     * const { count } = await prisma.formStep.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends VariationDeleteManyArgs>(args?: SelectSubset<T, VariationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends FormStepDeleteManyArgs>(args?: SelectSubset<T, FormStepDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Variations.
+     * Update zero or more FormSteps.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VariationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {FormStepUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Variations
-     * const variation = await prisma.variation.updateMany({
+     * // Update many FormSteps
+     * const formStep = await prisma.formStep.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6230,14 +2945,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends VariationUpdateManyArgs>(args: SelectSubset<T, VariationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends FormStepUpdateManyArgs>(args: SelectSubset<T, FormStepUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Variations and returns the data updated in the database.
-     * @param {VariationUpdateManyAndReturnArgs} args - Arguments to update many Variations.
+     * Update zero or more FormSteps and returns the data updated in the database.
+     * @param {FormStepUpdateManyAndReturnArgs} args - Arguments to update many FormSteps.
      * @example
-     * // Update many Variations
-     * const variation = await prisma.variation.updateManyAndReturn({
+     * // Update many FormSteps
+     * const formStep = await prisma.formStep.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6246,8 +2961,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Variations and only return the `id`
-     * const variationWithIdOnly = await prisma.variation.updateManyAndReturn({
+     * // Update zero or more FormSteps and only return the `id`
+     * const formStepWithIdOnly = await prisma.formStep.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -6260,56 +2975,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends VariationUpdateManyAndReturnArgs>(args: SelectSubset<T, VariationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends FormStepUpdateManyAndReturnArgs>(args: SelectSubset<T, FormStepUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Variation.
-     * @param {VariationUpsertArgs} args - Arguments to update or create a Variation.
+     * Create or update one FormStep.
+     * @param {FormStepUpsertArgs} args - Arguments to update or create a FormStep.
      * @example
-     * // Update or create a Variation
-     * const variation = await prisma.variation.upsert({
+     * // Update or create a FormStep
+     * const formStep = await prisma.formStep.upsert({
      *   create: {
-     *     // ... data to create a Variation
+     *     // ... data to create a FormStep
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Variation we want to update
+     *     // ... the filter for the FormStep we want to update
      *   }
      * })
      */
-    upsert<T extends VariationUpsertArgs>(args: SelectSubset<T, VariationUpsertArgs<ExtArgs>>): Prisma__VariationClient<$Result.GetResult<Prisma.$VariationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends FormStepUpsertArgs>(args: SelectSubset<T, FormStepUpsertArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Variations.
+     * Count the number of FormSteps.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VariationCountArgs} args - Arguments to filter Variations to count.
+     * @param {FormStepCountArgs} args - Arguments to filter FormSteps to count.
      * @example
-     * // Count the number of Variations
-     * const count = await prisma.variation.count({
+     * // Count the number of FormSteps
+     * const count = await prisma.formStep.count({
      *   where: {
-     *     // ... the filter for the Variations we want to count
+     *     // ... the filter for the FormSteps we want to count
      *   }
      * })
     **/
-    count<T extends VariationCountArgs>(
-      args?: Subset<T, VariationCountArgs>,
+    count<T extends FormStepCountArgs>(
+      args?: Subset<T, FormStepCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], VariationCountAggregateOutputType>
+          : GetScalarType<T['select'], FormStepCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Variation.
+     * Allows you to perform aggregations operations on a FormStep.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VariationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {FormStepAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -6329,13 +3044,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends VariationAggregateArgs>(args: Subset<T, VariationAggregateArgs>): Prisma.PrismaPromise<GetVariationAggregateType<T>>
+    aggregate<T extends FormStepAggregateArgs>(args: Subset<T, FormStepAggregateArgs>): Prisma.PrismaPromise<GetFormStepAggregateType<T>>
 
     /**
-     * Group by Variation.
+     * Group by FormStep.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VariationGroupByArgs} args - Group by arguments.
+     * @param {FormStepGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -6350,14 +3065,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends VariationGroupByArgs,
+      T extends FormStepGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: VariationGroupByArgs['orderBy'] }
-        : { orderBy?: VariationGroupByArgs['orderBy'] },
+        ? { orderBy: FormStepGroupByArgs['orderBy'] }
+        : { orderBy?: FormStepGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -6406,23 +3121,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, VariationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVariationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, FormStepGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFormStepGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Variation model
+   * Fields of the FormStep model
    */
-  readonly fields: VariationFieldRefs;
+  readonly fields: FormStepFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Variation.
+   * The delegate class that acts as a "Promise-like" for FormStep.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__VariationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__FormStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    attributes<T extends Variation$attributesArgs<ExtArgs> = {}>(args?: Subset<T, Variation$attributesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttributeValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    options<T extends FormStep$optionsArgs<ExtArgs> = {}>(args?: Subset<T, FormStep$optionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6449,451 +3164,1620 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Variation model
+   * Fields of the FormStep model
    */
-  interface VariationFieldRefs {
-    readonly id: FieldRef<"Variation", 'String'>
-    readonly sku: FieldRef<"Variation", 'String'>
-    readonly price: FieldRef<"Variation", 'Float'>
-    readonly image: FieldRef<"Variation", 'String'>
-    readonly createdAt: FieldRef<"Variation", 'DateTime'>
-    readonly updatedAt: FieldRef<"Variation", 'DateTime'>
-    readonly productId: FieldRef<"Variation", 'String'>
+  interface FormStepFieldRefs {
+    readonly id: FieldRef<"FormStep", 'String'>
+    readonly productId: FieldRef<"FormStep", 'String'>
+    readonly order: FieldRef<"FormStep", 'Int'>
+    readonly type1: FieldRef<"FormStep", 'StepType'>
+    readonly question1: FieldRef<"FormStep", 'String'>
+    readonly required1: FieldRef<"FormStep", 'Boolean'>
+    readonly type2: FieldRef<"FormStep", 'StepType'>
+    readonly question2: FieldRef<"FormStep", 'String'>
+    readonly required2: FieldRef<"FormStep", 'Boolean'>
+    readonly pricingImpact1: FieldRef<"FormStep", 'PricingImpact'>
+    readonly pricePerUnit1: FieldRef<"FormStep", 'Float'>
+    readonly unit1: FieldRef<"FormStep", 'String'>
+    readonly minValue1: FieldRef<"FormStep", 'Float'>
+    readonly maxValue1: FieldRef<"FormStep", 'Float'>
+    readonly defaultValue1: FieldRef<"FormStep", 'Float'>
+    readonly pricingImpact2: FieldRef<"FormStep", 'PricingImpact'>
+    readonly pricePerUnit2: FieldRef<"FormStep", 'Float'>
+    readonly unit2: FieldRef<"FormStep", 'String'>
+    readonly minValue2: FieldRef<"FormStep", 'Float'>
+    readonly maxValue2: FieldRef<"FormStep", 'Float'>
+    readonly defaultValue2: FieldRef<"FormStep", 'Float'>
+    readonly conditionalOn: FieldRef<"FormStep", 'Json'>
+    readonly createdAt: FieldRef<"FormStep", 'DateTime'>
+    readonly updatedAt: FieldRef<"FormStep", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Variation findUnique
+   * FormStep findUnique
    */
-  export type VariationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
     /**
-     * Filter, which Variation to fetch.
+     * Filter, which FormStep to fetch.
      */
-    where: VariationWhereUniqueInput
+    where: FormStepWhereUniqueInput
   }
 
   /**
-   * Variation findUniqueOrThrow
+   * FormStep findUniqueOrThrow
    */
-  export type VariationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
     /**
-     * Filter, which Variation to fetch.
+     * Filter, which FormStep to fetch.
      */
-    where: VariationWhereUniqueInput
+    where: FormStepWhereUniqueInput
   }
 
   /**
-   * Variation findFirst
+   * FormStep findFirst
    */
-  export type VariationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
     /**
-     * Filter, which Variation to fetch.
+     * Filter, which FormStep to fetch.
      */
-    where?: VariationWhereInput
+    where?: FormStepWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Variations to fetch.
+     * Determine the order of FormSteps to fetch.
      */
-    orderBy?: VariationOrderByWithRelationInput | VariationOrderByWithRelationInput[]
+    orderBy?: FormStepOrderByWithRelationInput | FormStepOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Variations.
+     * Sets the position for searching for FormSteps.
      */
-    cursor?: VariationWhereUniqueInput
+    cursor?: FormStepWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Variations from the position of the cursor.
+     * Take `±n` FormSteps from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Variations.
+     * Skip the first `n` FormSteps.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Variations.
+     * Filter by unique combinations of FormSteps.
      */
-    distinct?: VariationScalarFieldEnum | VariationScalarFieldEnum[]
+    distinct?: FormStepScalarFieldEnum | FormStepScalarFieldEnum[]
   }
 
   /**
-   * Variation findFirstOrThrow
+   * FormStep findFirstOrThrow
    */
-  export type VariationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
     /**
-     * Filter, which Variation to fetch.
+     * Filter, which FormStep to fetch.
      */
-    where?: VariationWhereInput
+    where?: FormStepWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Variations to fetch.
+     * Determine the order of FormSteps to fetch.
      */
-    orderBy?: VariationOrderByWithRelationInput | VariationOrderByWithRelationInput[]
+    orderBy?: FormStepOrderByWithRelationInput | FormStepOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Variations.
+     * Sets the position for searching for FormSteps.
      */
-    cursor?: VariationWhereUniqueInput
+    cursor?: FormStepWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Variations from the position of the cursor.
+     * Take `±n` FormSteps from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Variations.
+     * Skip the first `n` FormSteps.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Variations.
+     * Filter by unique combinations of FormSteps.
      */
-    distinct?: VariationScalarFieldEnum | VariationScalarFieldEnum[]
+    distinct?: FormStepScalarFieldEnum | FormStepScalarFieldEnum[]
   }
 
   /**
-   * Variation findMany
+   * FormStep findMany
    */
-  export type VariationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
     /**
-     * Filter, which Variations to fetch.
+     * Filter, which FormSteps to fetch.
      */
-    where?: VariationWhereInput
+    where?: FormStepWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Variations to fetch.
+     * Determine the order of FormSteps to fetch.
      */
-    orderBy?: VariationOrderByWithRelationInput | VariationOrderByWithRelationInput[]
+    orderBy?: FormStepOrderByWithRelationInput | FormStepOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Variations.
+     * Sets the position for listing FormSteps.
      */
-    cursor?: VariationWhereUniqueInput
+    cursor?: FormStepWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Variations from the position of the cursor.
+     * Take `±n` FormSteps from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Variations.
+     * Skip the first `n` FormSteps.
      */
     skip?: number
-    distinct?: VariationScalarFieldEnum | VariationScalarFieldEnum[]
+    distinct?: FormStepScalarFieldEnum | FormStepScalarFieldEnum[]
   }
 
   /**
-   * Variation create
+   * FormStep create
    */
-  export type VariationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
     /**
-     * The data needed to create a Variation.
+     * The data needed to create a FormStep.
      */
-    data: XOR<VariationCreateInput, VariationUncheckedCreateInput>
+    data: XOR<FormStepCreateInput, FormStepUncheckedCreateInput>
   }
 
   /**
-   * Variation createMany
+   * FormStep createMany
    */
-  export type VariationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Variations.
+     * The data used to create many FormSteps.
      */
-    data: VariationCreateManyInput | VariationCreateManyInput[]
+    data: FormStepCreateManyInput | FormStepCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Variation createManyAndReturn
+   * FormStep createManyAndReturn
    */
-  export type VariationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelectCreateManyAndReturn<ExtArgs> | null
+    select?: FormStepSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
-     * The data used to create many Variations.
+     * The data used to create many FormSteps.
      */
-    data: VariationCreateManyInput | VariationCreateManyInput[]
+    data: FormStepCreateManyInput | FormStepCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: FormStepIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Variation update
+   * FormStep update
    */
-  export type VariationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
     /**
-     * The data needed to update a Variation.
+     * The data needed to update a FormStep.
      */
-    data: XOR<VariationUpdateInput, VariationUncheckedUpdateInput>
+    data: XOR<FormStepUpdateInput, FormStepUncheckedUpdateInput>
     /**
-     * Choose, which Variation to update.
+     * Choose, which FormStep to update.
      */
-    where: VariationWhereUniqueInput
+    where: FormStepWhereUniqueInput
   }
 
   /**
-   * Variation updateMany
+   * FormStep updateMany
    */
-  export type VariationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Variations.
+     * The data used to update FormSteps.
      */
-    data: XOR<VariationUpdateManyMutationInput, VariationUncheckedUpdateManyInput>
+    data: XOR<FormStepUpdateManyMutationInput, FormStepUncheckedUpdateManyInput>
     /**
-     * Filter which Variations to update
+     * Filter which FormSteps to update
      */
-    where?: VariationWhereInput
+    where?: FormStepWhereInput
     /**
-     * Limit how many Variations to update.
+     * Limit how many FormSteps to update.
      */
     limit?: number
   }
 
   /**
-   * Variation updateManyAndReturn
+   * FormStep updateManyAndReturn
    */
-  export type VariationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: FormStepSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
-     * The data used to update Variations.
+     * The data used to update FormSteps.
      */
-    data: XOR<VariationUpdateManyMutationInput, VariationUncheckedUpdateManyInput>
+    data: XOR<FormStepUpdateManyMutationInput, FormStepUncheckedUpdateManyInput>
     /**
-     * Filter which Variations to update
+     * Filter which FormSteps to update
      */
-    where?: VariationWhereInput
+    where?: FormStepWhereInput
     /**
-     * Limit how many Variations to update.
+     * Limit how many FormSteps to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: FormStepIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Variation upsert
+   * FormStep upsert
    */
-  export type VariationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
     /**
-     * The filter to search for the Variation to update in case it exists.
+     * The filter to search for the FormStep to update in case it exists.
      */
-    where: VariationWhereUniqueInput
+    where: FormStepWhereUniqueInput
     /**
-     * In case the Variation found by the `where` argument doesn't exist, create a new Variation with this data.
+     * In case the FormStep found by the `where` argument doesn't exist, create a new FormStep with this data.
      */
-    create: XOR<VariationCreateInput, VariationUncheckedCreateInput>
+    create: XOR<FormStepCreateInput, FormStepUncheckedCreateInput>
     /**
-     * In case the Variation was found with the provided `where` argument, update it with this data.
+     * In case the FormStep was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<VariationUpdateInput, VariationUncheckedUpdateInput>
+    update: XOR<FormStepUpdateInput, FormStepUncheckedUpdateInput>
   }
 
   /**
-   * Variation delete
+   * FormStep delete
    */
-  export type VariationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
     /**
-     * Filter which Variation to delete.
+     * Filter which FormStep to delete.
      */
-    where: VariationWhereUniqueInput
+    where: FormStepWhereUniqueInput
   }
 
   /**
-   * Variation deleteMany
+   * FormStep deleteMany
    */
-  export type VariationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Variations to delete
+     * Filter which FormSteps to delete
      */
-    where?: VariationWhereInput
+    where?: FormStepWhereInput
     /**
-     * Limit how many Variations to delete.
+     * Limit how many FormSteps to delete.
      */
     limit?: number
   }
 
   /**
-   * Variation.attributes
+   * FormStep.options
    */
-  export type Variation$attributesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStep$optionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AttributeValue
+     * Select specific fields to fetch from the StepOption
      */
-    select?: AttributeValueSelect<ExtArgs> | null
+    select?: StepOptionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AttributeValue
+     * Omit specific fields from the StepOption
      */
-    omit?: AttributeValueOmit<ExtArgs> | null
+    omit?: StepOptionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AttributeValueInclude<ExtArgs> | null
-    where?: AttributeValueWhereInput
-    orderBy?: AttributeValueOrderByWithRelationInput | AttributeValueOrderByWithRelationInput[]
-    cursor?: AttributeValueWhereUniqueInput
+    include?: StepOptionInclude<ExtArgs> | null
+    where?: StepOptionWhereInput
+    orderBy?: StepOptionOrderByWithRelationInput | StepOptionOrderByWithRelationInput[]
+    cursor?: StepOptionWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AttributeValueScalarFieldEnum | AttributeValueScalarFieldEnum[]
+    distinct?: StepOptionScalarFieldEnum | StepOptionScalarFieldEnum[]
   }
 
   /**
-   * Variation without action
+   * FormStep without action
    */
-  export type VariationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Variation
+     * Select specific fields to fetch from the FormStep
      */
-    select?: VariationSelect<ExtArgs> | null
+    select?: FormStepSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Variation
+     * Omit specific fields from the FormStep
      */
-    omit?: VariationOmit<ExtArgs> | null
+    omit?: FormStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VariationInclude<ExtArgs> | null
+    include?: FormStepInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model StepOption
+   */
+
+  export type AggregateStepOption = {
+    _count: StepOptionCountAggregateOutputType | null
+    _avg: StepOptionAvgAggregateOutputType | null
+    _sum: StepOptionSumAggregateOutputType | null
+    _min: StepOptionMinAggregateOutputType | null
+    _max: StepOptionMaxAggregateOutputType | null
+  }
+
+  export type StepOptionAvgAggregateOutputType = {
+    questionNum: number | null
+    price: number | null
+    order: number | null
+  }
+
+  export type StepOptionSumAggregateOutputType = {
+    questionNum: number | null
+    price: number | null
+    order: number | null
+  }
+
+  export type StepOptionMinAggregateOutputType = {
+    id: string | null
+    stepId: string | null
+    questionNum: number | null
+    label: string | null
+    value: string | null
+    price: number | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StepOptionMaxAggregateOutputType = {
+    id: string | null
+    stepId: string | null
+    questionNum: number | null
+    label: string | null
+    value: string | null
+    price: number | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StepOptionCountAggregateOutputType = {
+    id: number
+    stepId: number
+    questionNum: number
+    label: number
+    value: number
+    price: number
+    order: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type StepOptionAvgAggregateInputType = {
+    questionNum?: true
+    price?: true
+    order?: true
+  }
+
+  export type StepOptionSumAggregateInputType = {
+    questionNum?: true
+    price?: true
+    order?: true
+  }
+
+  export type StepOptionMinAggregateInputType = {
+    id?: true
+    stepId?: true
+    questionNum?: true
+    label?: true
+    value?: true
+    price?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StepOptionMaxAggregateInputType = {
+    id?: true
+    stepId?: true
+    questionNum?: true
+    label?: true
+    value?: true
+    price?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StepOptionCountAggregateInputType = {
+    id?: true
+    stepId?: true
+    questionNum?: true
+    label?: true
+    value?: true
+    price?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type StepOptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StepOption to aggregate.
+     */
+    where?: StepOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StepOptions to fetch.
+     */
+    orderBy?: StepOptionOrderByWithRelationInput | StepOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StepOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StepOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StepOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StepOptions
+    **/
+    _count?: true | StepOptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StepOptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StepOptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StepOptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StepOptionMaxAggregateInputType
+  }
+
+  export type GetStepOptionAggregateType<T extends StepOptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateStepOption]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStepOption[P]>
+      : GetScalarType<T[P], AggregateStepOption[P]>
+  }
+
+
+
+
+  export type StepOptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StepOptionWhereInput
+    orderBy?: StepOptionOrderByWithAggregationInput | StepOptionOrderByWithAggregationInput[]
+    by: StepOptionScalarFieldEnum[] | StepOptionScalarFieldEnum
+    having?: StepOptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StepOptionCountAggregateInputType | true
+    _avg?: StepOptionAvgAggregateInputType
+    _sum?: StepOptionSumAggregateInputType
+    _min?: StepOptionMinAggregateInputType
+    _max?: StepOptionMaxAggregateInputType
+  }
+
+  export type StepOptionGroupByOutputType = {
+    id: string
+    stepId: string
+    questionNum: number
+    label: string
+    value: string
+    price: number | null
+    order: number
+    createdAt: Date
+    updatedAt: Date
+    _count: StepOptionCountAggregateOutputType | null
+    _avg: StepOptionAvgAggregateOutputType | null
+    _sum: StepOptionSumAggregateOutputType | null
+    _min: StepOptionMinAggregateOutputType | null
+    _max: StepOptionMaxAggregateOutputType | null
+  }
+
+  type GetStepOptionGroupByPayload<T extends StepOptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StepOptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StepOptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StepOptionGroupByOutputType[P]>
+            : GetScalarType<T[P], StepOptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StepOptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    stepId?: boolean
+    questionNum?: boolean
+    label?: boolean
+    value?: boolean
+    price?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["stepOption"]>
+
+  export type StepOptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    stepId?: boolean
+    questionNum?: boolean
+    label?: boolean
+    value?: boolean
+    price?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["stepOption"]>
+
+  export type StepOptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    stepId?: boolean
+    questionNum?: boolean
+    label?: boolean
+    value?: boolean
+    price?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["stepOption"]>
+
+  export type StepOptionSelectScalar = {
+    id?: boolean
+    stepId?: boolean
+    questionNum?: boolean
+    label?: boolean
+    value?: boolean
+    price?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type StepOptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "stepId" | "questionNum" | "label" | "value" | "price" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["stepOption"]>
+  export type StepOptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }
+  export type StepOptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }
+  export type StepOptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }
+
+  export type $StepOptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StepOption"
+    objects: {
+      step: Prisma.$FormStepPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      stepId: string
+      questionNum: number
+      label: string
+      value: string
+      price: number | null
+      order: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["stepOption"]>
+    composites: {}
+  }
+
+  type StepOptionGetPayload<S extends boolean | null | undefined | StepOptionDefaultArgs> = $Result.GetResult<Prisma.$StepOptionPayload, S>
+
+  type StepOptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StepOptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StepOptionCountAggregateInputType | true
+    }
+
+  export interface StepOptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StepOption'], meta: { name: 'StepOption' } }
+    /**
+     * Find zero or one StepOption that matches the filter.
+     * @param {StepOptionFindUniqueArgs} args - Arguments to find a StepOption
+     * @example
+     * // Get one StepOption
+     * const stepOption = await prisma.stepOption.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StepOptionFindUniqueArgs>(args: SelectSubset<T, StepOptionFindUniqueArgs<ExtArgs>>): Prisma__StepOptionClient<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StepOption that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StepOptionFindUniqueOrThrowArgs} args - Arguments to find a StepOption
+     * @example
+     * // Get one StepOption
+     * const stepOption = await prisma.stepOption.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StepOptionFindUniqueOrThrowArgs>(args: SelectSubset<T, StepOptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StepOptionClient<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StepOption that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepOptionFindFirstArgs} args - Arguments to find a StepOption
+     * @example
+     * // Get one StepOption
+     * const stepOption = await prisma.stepOption.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StepOptionFindFirstArgs>(args?: SelectSubset<T, StepOptionFindFirstArgs<ExtArgs>>): Prisma__StepOptionClient<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StepOption that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepOptionFindFirstOrThrowArgs} args - Arguments to find a StepOption
+     * @example
+     * // Get one StepOption
+     * const stepOption = await prisma.stepOption.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StepOptionFindFirstOrThrowArgs>(args?: SelectSubset<T, StepOptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__StepOptionClient<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StepOptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepOptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StepOptions
+     * const stepOptions = await prisma.stepOption.findMany()
+     * 
+     * // Get first 10 StepOptions
+     * const stepOptions = await prisma.stepOption.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const stepOptionWithIdOnly = await prisma.stepOption.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StepOptionFindManyArgs>(args?: SelectSubset<T, StepOptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StepOption.
+     * @param {StepOptionCreateArgs} args - Arguments to create a StepOption.
+     * @example
+     * // Create one StepOption
+     * const StepOption = await prisma.stepOption.create({
+     *   data: {
+     *     // ... data to create a StepOption
+     *   }
+     * })
+     * 
+     */
+    create<T extends StepOptionCreateArgs>(args: SelectSubset<T, StepOptionCreateArgs<ExtArgs>>): Prisma__StepOptionClient<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StepOptions.
+     * @param {StepOptionCreateManyArgs} args - Arguments to create many StepOptions.
+     * @example
+     * // Create many StepOptions
+     * const stepOption = await prisma.stepOption.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StepOptionCreateManyArgs>(args?: SelectSubset<T, StepOptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StepOptions and returns the data saved in the database.
+     * @param {StepOptionCreateManyAndReturnArgs} args - Arguments to create many StepOptions.
+     * @example
+     * // Create many StepOptions
+     * const stepOption = await prisma.stepOption.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StepOptions and only return the `id`
+     * const stepOptionWithIdOnly = await prisma.stepOption.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StepOptionCreateManyAndReturnArgs>(args?: SelectSubset<T, StepOptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StepOption.
+     * @param {StepOptionDeleteArgs} args - Arguments to delete one StepOption.
+     * @example
+     * // Delete one StepOption
+     * const StepOption = await prisma.stepOption.delete({
+     *   where: {
+     *     // ... filter to delete one StepOption
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StepOptionDeleteArgs>(args: SelectSubset<T, StepOptionDeleteArgs<ExtArgs>>): Prisma__StepOptionClient<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StepOption.
+     * @param {StepOptionUpdateArgs} args - Arguments to update one StepOption.
+     * @example
+     * // Update one StepOption
+     * const stepOption = await prisma.stepOption.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StepOptionUpdateArgs>(args: SelectSubset<T, StepOptionUpdateArgs<ExtArgs>>): Prisma__StepOptionClient<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StepOptions.
+     * @param {StepOptionDeleteManyArgs} args - Arguments to filter StepOptions to delete.
+     * @example
+     * // Delete a few StepOptions
+     * const { count } = await prisma.stepOption.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StepOptionDeleteManyArgs>(args?: SelectSubset<T, StepOptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StepOptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepOptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StepOptions
+     * const stepOption = await prisma.stepOption.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StepOptionUpdateManyArgs>(args: SelectSubset<T, StepOptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StepOptions and returns the data updated in the database.
+     * @param {StepOptionUpdateManyAndReturnArgs} args - Arguments to update many StepOptions.
+     * @example
+     * // Update many StepOptions
+     * const stepOption = await prisma.stepOption.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StepOptions and only return the `id`
+     * const stepOptionWithIdOnly = await prisma.stepOption.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StepOptionUpdateManyAndReturnArgs>(args: SelectSubset<T, StepOptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StepOption.
+     * @param {StepOptionUpsertArgs} args - Arguments to update or create a StepOption.
+     * @example
+     * // Update or create a StepOption
+     * const stepOption = await prisma.stepOption.upsert({
+     *   create: {
+     *     // ... data to create a StepOption
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StepOption we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StepOptionUpsertArgs>(args: SelectSubset<T, StepOptionUpsertArgs<ExtArgs>>): Prisma__StepOptionClient<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StepOptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepOptionCountArgs} args - Arguments to filter StepOptions to count.
+     * @example
+     * // Count the number of StepOptions
+     * const count = await prisma.stepOption.count({
+     *   where: {
+     *     // ... the filter for the StepOptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends StepOptionCountArgs>(
+      args?: Subset<T, StepOptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StepOptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StepOption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepOptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StepOptionAggregateArgs>(args: Subset<T, StepOptionAggregateArgs>): Prisma.PrismaPromise<GetStepOptionAggregateType<T>>
+
+    /**
+     * Group by StepOption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StepOptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StepOptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StepOptionGroupByArgs['orderBy'] }
+        : { orderBy?: StepOptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StepOptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStepOptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StepOption model
+   */
+  readonly fields: StepOptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StepOption.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StepOptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    step<T extends FormStepDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormStepDefaultArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StepOption model
+   */
+  interface StepOptionFieldRefs {
+    readonly id: FieldRef<"StepOption", 'String'>
+    readonly stepId: FieldRef<"StepOption", 'String'>
+    readonly questionNum: FieldRef<"StepOption", 'Int'>
+    readonly label: FieldRef<"StepOption", 'String'>
+    readonly value: FieldRef<"StepOption", 'String'>
+    readonly price: FieldRef<"StepOption", 'Float'>
+    readonly order: FieldRef<"StepOption", 'Int'>
+    readonly createdAt: FieldRef<"StepOption", 'DateTime'>
+    readonly updatedAt: FieldRef<"StepOption", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StepOption findUnique
+   */
+  export type StepOptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StepOption to fetch.
+     */
+    where: StepOptionWhereUniqueInput
+  }
+
+  /**
+   * StepOption findUniqueOrThrow
+   */
+  export type StepOptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StepOption to fetch.
+     */
+    where: StepOptionWhereUniqueInput
+  }
+
+  /**
+   * StepOption findFirst
+   */
+  export type StepOptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StepOption to fetch.
+     */
+    where?: StepOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StepOptions to fetch.
+     */
+    orderBy?: StepOptionOrderByWithRelationInput | StepOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StepOptions.
+     */
+    cursor?: StepOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StepOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StepOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StepOptions.
+     */
+    distinct?: StepOptionScalarFieldEnum | StepOptionScalarFieldEnum[]
+  }
+
+  /**
+   * StepOption findFirstOrThrow
+   */
+  export type StepOptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StepOption to fetch.
+     */
+    where?: StepOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StepOptions to fetch.
+     */
+    orderBy?: StepOptionOrderByWithRelationInput | StepOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StepOptions.
+     */
+    cursor?: StepOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StepOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StepOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StepOptions.
+     */
+    distinct?: StepOptionScalarFieldEnum | StepOptionScalarFieldEnum[]
+  }
+
+  /**
+   * StepOption findMany
+   */
+  export type StepOptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StepOptions to fetch.
+     */
+    where?: StepOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StepOptions to fetch.
+     */
+    orderBy?: StepOptionOrderByWithRelationInput | StepOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StepOptions.
+     */
+    cursor?: StepOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StepOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StepOptions.
+     */
+    skip?: number
+    distinct?: StepOptionScalarFieldEnum | StepOptionScalarFieldEnum[]
+  }
+
+  /**
+   * StepOption create
+   */
+  export type StepOptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StepOption.
+     */
+    data: XOR<StepOptionCreateInput, StepOptionUncheckedCreateInput>
+  }
+
+  /**
+   * StepOption createMany
+   */
+  export type StepOptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StepOptions.
+     */
+    data: StepOptionCreateManyInput | StepOptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StepOption createManyAndReturn
+   */
+  export type StepOptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many StepOptions.
+     */
+    data: StepOptionCreateManyInput | StepOptionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StepOption update
+   */
+  export type StepOptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StepOption.
+     */
+    data: XOR<StepOptionUpdateInput, StepOptionUncheckedUpdateInput>
+    /**
+     * Choose, which StepOption to update.
+     */
+    where: StepOptionWhereUniqueInput
+  }
+
+  /**
+   * StepOption updateMany
+   */
+  export type StepOptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StepOptions.
+     */
+    data: XOR<StepOptionUpdateManyMutationInput, StepOptionUncheckedUpdateManyInput>
+    /**
+     * Filter which StepOptions to update
+     */
+    where?: StepOptionWhereInput
+    /**
+     * Limit how many StepOptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StepOption updateManyAndReturn
+   */
+  export type StepOptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * The data used to update StepOptions.
+     */
+    data: XOR<StepOptionUpdateManyMutationInput, StepOptionUncheckedUpdateManyInput>
+    /**
+     * Filter which StepOptions to update
+     */
+    where?: StepOptionWhereInput
+    /**
+     * Limit how many StepOptions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StepOption upsert
+   */
+  export type StepOptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StepOption to update in case it exists.
+     */
+    where: StepOptionWhereUniqueInput
+    /**
+     * In case the StepOption found by the `where` argument doesn't exist, create a new StepOption with this data.
+     */
+    create: XOR<StepOptionCreateInput, StepOptionUncheckedCreateInput>
+    /**
+     * In case the StepOption was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StepOptionUpdateInput, StepOptionUncheckedUpdateInput>
+  }
+
+  /**
+   * StepOption delete
+   */
+  export type StepOptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    /**
+     * Filter which StepOption to delete.
+     */
+    where: StepOptionWhereUniqueInput
+  }
+
+  /**
+   * StepOption deleteMany
+   */
+  export type StepOptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StepOptions to delete
+     */
+    where?: StepOptionWhereInput
+    /**
+     * Limit how many StepOptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StepOption without action
+   */
+  export type StepOptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
   }
 
 
@@ -6916,7 +4800,6 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     description: 'description',
-    basePrice: 'basePrice',
     baseImage: 'baseImage',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -6925,47 +4808,49 @@ export namespace Prisma {
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
-  export const AttributeScalarFieldEnum: {
+  export const FormStepScalarFieldEnum: {
     id: 'id',
-    name: 'name',
+    productId: 'productId',
+    order: 'order',
+    type1: 'type1',
+    question1: 'question1',
+    required1: 'required1',
+    type2: 'type2',
+    question2: 'question2',
+    required2: 'required2',
+    pricingImpact1: 'pricingImpact1',
+    pricePerUnit1: 'pricePerUnit1',
+    unit1: 'unit1',
+    minValue1: 'minValue1',
+    maxValue1: 'maxValue1',
+    defaultValue1: 'defaultValue1',
+    pricingImpact2: 'pricingImpact2',
+    pricePerUnit2: 'pricePerUnit2',
+    unit2: 'unit2',
+    minValue2: 'minValue2',
+    maxValue2: 'maxValue2',
+    defaultValue2: 'defaultValue2',
+    conditionalOn: 'conditionalOn',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
-  export type AttributeScalarFieldEnum = (typeof AttributeScalarFieldEnum)[keyof typeof AttributeScalarFieldEnum]
+  export type FormStepScalarFieldEnum = (typeof FormStepScalarFieldEnum)[keyof typeof FormStepScalarFieldEnum]
 
 
-  export const AttributeValueScalarFieldEnum: {
+  export const StepOptionScalarFieldEnum: {
     id: 'id',
+    stepId: 'stepId',
+    questionNum: 'questionNum',
+    label: 'label',
     value: 'value',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    attributeId: 'attributeId'
-  };
-
-  export type AttributeValueScalarFieldEnum = (typeof AttributeValueScalarFieldEnum)[keyof typeof AttributeValueScalarFieldEnum]
-
-
-  export const ProductAttributeScalarFieldEnum: {
-    id: 'id',
-    productId: 'productId',
-    attributeId: 'attributeId'
-  };
-
-  export type ProductAttributeScalarFieldEnum = (typeof ProductAttributeScalarFieldEnum)[keyof typeof ProductAttributeScalarFieldEnum]
-
-
-  export const VariationScalarFieldEnum: {
-    id: 'id',
-    sku: 'sku',
     price: 'price',
-    image: 'image',
+    order: 'order',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    productId: 'productId'
+    updatedAt: 'updatedAt'
   };
 
-  export type VariationScalarFieldEnum = (typeof VariationScalarFieldEnum)[keyof typeof VariationScalarFieldEnum]
+  export type StepOptionScalarFieldEnum = (typeof StepOptionScalarFieldEnum)[keyof typeof StepOptionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -6974,6 +4859,14 @@ export namespace Prisma {
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -6992,6 +4885,15 @@ export namespace Prisma {
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
   /**
    * Field references
    */
@@ -7008,20 +4910,6 @@ export namespace Prisma {
    * Reference to a field of type 'String[]'
    */
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -7051,6 +4939,69 @@ export namespace Prisma {
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
+
+
+  /**
+   * Reference to a field of type 'StepType'
+   */
+  export type EnumStepTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StepType'>
+    
+
+
+  /**
+   * Reference to a field of type 'StepType[]'
+   */
+  export type ListEnumStepTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StepType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'PricingImpact'
+   */
+  export type EnumPricingImpactFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PricingImpact'>
+    
+
+
+  /**
+   * Reference to a field of type 'PricingImpact[]'
+   */
+  export type ListEnumPricingImpactFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PricingImpact[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
   /**
    * Deep Input Types
    */
@@ -7064,12 +5015,10 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
-    basePrice?: FloatFilter<"Product"> | number
     baseImage?: StringNullableFilter<"Product"> | string | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
-    variations?: VariationListRelationFilter
-    attributes?: ProductAttributeListRelationFilter
+    steps?: FormStepListRelationFilter
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -7077,12 +5026,10 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
-    basePrice?: SortOrder
     baseImage?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    variations?: VariationOrderByRelationAggregateInput
-    attributes?: ProductAttributeOrderByRelationAggregateInput
+    steps?: FormStepOrderByRelationAggregateInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -7093,12 +5040,10 @@ export namespace Prisma {
     NOT?: ProductWhereInput | ProductWhereInput[]
     name?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
-    basePrice?: FloatFilter<"Product"> | number
     baseImage?: StringNullableFilter<"Product"> | string | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
-    variations?: VariationListRelationFilter
-    attributes?: ProductAttributeListRelationFilter
+    steps?: FormStepListRelationFilter
   }, "id" | "slug">
 
   export type ProductOrderByWithAggregationInput = {
@@ -7106,15 +5051,12 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
-    basePrice?: SortOrder
     baseImage?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProductCountOrderByAggregateInput
-    _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
     _min?: ProductMinOrderByAggregateInput
-    _sum?: ProductSumOrderByAggregateInput
   }
 
   export type ProductScalarWhereWithAggregatesInput = {
@@ -7125,240 +5067,243 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Product"> | string
     slug?: StringWithAggregatesFilter<"Product"> | string
     description?: StringNullableWithAggregatesFilter<"Product"> | string | null
-    basePrice?: FloatWithAggregatesFilter<"Product"> | number
     baseImage?: StringNullableWithAggregatesFilter<"Product"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
   }
 
-  export type AttributeWhereInput = {
-    AND?: AttributeWhereInput | AttributeWhereInput[]
-    OR?: AttributeWhereInput[]
-    NOT?: AttributeWhereInput | AttributeWhereInput[]
-    id?: StringFilter<"Attribute"> | string
-    name?: StringFilter<"Attribute"> | string
-    createdAt?: DateTimeFilter<"Attribute"> | Date | string
-    updatedAt?: DateTimeFilter<"Attribute"> | Date | string
-    values?: AttributeValueListRelationFilter
-    products?: ProductAttributeListRelationFilter
-  }
-
-  export type AttributeOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    values?: AttributeValueOrderByRelationAggregateInput
-    products?: ProductAttributeOrderByRelationAggregateInput
-  }
-
-  export type AttributeWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    name?: string
-    AND?: AttributeWhereInput | AttributeWhereInput[]
-    OR?: AttributeWhereInput[]
-    NOT?: AttributeWhereInput | AttributeWhereInput[]
-    createdAt?: DateTimeFilter<"Attribute"> | Date | string
-    updatedAt?: DateTimeFilter<"Attribute"> | Date | string
-    values?: AttributeValueListRelationFilter
-    products?: ProductAttributeListRelationFilter
-  }, "id" | "name">
-
-  export type AttributeOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: AttributeCountOrderByAggregateInput
-    _max?: AttributeMaxOrderByAggregateInput
-    _min?: AttributeMinOrderByAggregateInput
-  }
-
-  export type AttributeScalarWhereWithAggregatesInput = {
-    AND?: AttributeScalarWhereWithAggregatesInput | AttributeScalarWhereWithAggregatesInput[]
-    OR?: AttributeScalarWhereWithAggregatesInput[]
-    NOT?: AttributeScalarWhereWithAggregatesInput | AttributeScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Attribute"> | string
-    name?: StringWithAggregatesFilter<"Attribute"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Attribute"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Attribute"> | Date | string
-  }
-
-  export type AttributeValueWhereInput = {
-    AND?: AttributeValueWhereInput | AttributeValueWhereInput[]
-    OR?: AttributeValueWhereInput[]
-    NOT?: AttributeValueWhereInput | AttributeValueWhereInput[]
-    id?: StringFilter<"AttributeValue"> | string
-    value?: StringFilter<"AttributeValue"> | string
-    createdAt?: DateTimeFilter<"AttributeValue"> | Date | string
-    updatedAt?: DateTimeFilter<"AttributeValue"> | Date | string
-    attributeId?: StringFilter<"AttributeValue"> | string
-    attribute?: XOR<AttributeScalarRelationFilter, AttributeWhereInput>
-    variations?: VariationListRelationFilter
-  }
-
-  export type AttributeValueOrderByWithRelationInput = {
-    id?: SortOrder
-    value?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    attributeId?: SortOrder
-    attribute?: AttributeOrderByWithRelationInput
-    variations?: VariationOrderByRelationAggregateInput
-  }
-
-  export type AttributeValueWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: AttributeValueWhereInput | AttributeValueWhereInput[]
-    OR?: AttributeValueWhereInput[]
-    NOT?: AttributeValueWhereInput | AttributeValueWhereInput[]
-    value?: StringFilter<"AttributeValue"> | string
-    createdAt?: DateTimeFilter<"AttributeValue"> | Date | string
-    updatedAt?: DateTimeFilter<"AttributeValue"> | Date | string
-    attributeId?: StringFilter<"AttributeValue"> | string
-    attribute?: XOR<AttributeScalarRelationFilter, AttributeWhereInput>
-    variations?: VariationListRelationFilter
-  }, "id">
-
-  export type AttributeValueOrderByWithAggregationInput = {
-    id?: SortOrder
-    value?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    attributeId?: SortOrder
-    _count?: AttributeValueCountOrderByAggregateInput
-    _max?: AttributeValueMaxOrderByAggregateInput
-    _min?: AttributeValueMinOrderByAggregateInput
-  }
-
-  export type AttributeValueScalarWhereWithAggregatesInput = {
-    AND?: AttributeValueScalarWhereWithAggregatesInput | AttributeValueScalarWhereWithAggregatesInput[]
-    OR?: AttributeValueScalarWhereWithAggregatesInput[]
-    NOT?: AttributeValueScalarWhereWithAggregatesInput | AttributeValueScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"AttributeValue"> | string
-    value?: StringWithAggregatesFilter<"AttributeValue"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"AttributeValue"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"AttributeValue"> | Date | string
-    attributeId?: StringWithAggregatesFilter<"AttributeValue"> | string
-  }
-
-  export type ProductAttributeWhereInput = {
-    AND?: ProductAttributeWhereInput | ProductAttributeWhereInput[]
-    OR?: ProductAttributeWhereInput[]
-    NOT?: ProductAttributeWhereInput | ProductAttributeWhereInput[]
-    id?: StringFilter<"ProductAttribute"> | string
-    productId?: StringFilter<"ProductAttribute"> | string
-    attributeId?: StringFilter<"ProductAttribute"> | string
+  export type FormStepWhereInput = {
+    AND?: FormStepWhereInput | FormStepWhereInput[]
+    OR?: FormStepWhereInput[]
+    NOT?: FormStepWhereInput | FormStepWhereInput[]
+    id?: StringFilter<"FormStep"> | string
+    productId?: StringFilter<"FormStep"> | string
+    order?: IntFilter<"FormStep"> | number
+    type1?: EnumStepTypeFilter<"FormStep"> | $Enums.StepType
+    question1?: StringFilter<"FormStep"> | string
+    required1?: BoolFilter<"FormStep"> | boolean
+    type2?: EnumStepTypeNullableFilter<"FormStep"> | $Enums.StepType | null
+    question2?: StringNullableFilter<"FormStep"> | string | null
+    required2?: BoolFilter<"FormStep"> | boolean
+    pricingImpact1?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
+    pricePerUnit1?: FloatNullableFilter<"FormStep"> | number | null
+    unit1?: StringNullableFilter<"FormStep"> | string | null
+    minValue1?: FloatNullableFilter<"FormStep"> | number | null
+    maxValue1?: FloatNullableFilter<"FormStep"> | number | null
+    defaultValue1?: FloatNullableFilter<"FormStep"> | number | null
+    pricingImpact2?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
+    pricePerUnit2?: FloatNullableFilter<"FormStep"> | number | null
+    unit2?: StringNullableFilter<"FormStep"> | string | null
+    minValue2?: FloatNullableFilter<"FormStep"> | number | null
+    maxValue2?: FloatNullableFilter<"FormStep"> | number | null
+    defaultValue2?: FloatNullableFilter<"FormStep"> | number | null
+    conditionalOn?: JsonNullableFilter<"FormStep">
+    createdAt?: DateTimeFilter<"FormStep"> | Date | string
+    updatedAt?: DateTimeFilter<"FormStep"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
-    attribute?: XOR<AttributeScalarRelationFilter, AttributeWhereInput>
+    options?: StepOptionListRelationFilter
   }
 
-  export type ProductAttributeOrderByWithRelationInput = {
+  export type FormStepOrderByWithRelationInput = {
     id?: SortOrder
     productId?: SortOrder
-    attributeId?: SortOrder
+    order?: SortOrder
+    type1?: SortOrder
+    question1?: SortOrder
+    required1?: SortOrder
+    type2?: SortOrderInput | SortOrder
+    question2?: SortOrderInput | SortOrder
+    required2?: SortOrder
+    pricingImpact1?: SortOrder
+    pricePerUnit1?: SortOrderInput | SortOrder
+    unit1?: SortOrderInput | SortOrder
+    minValue1?: SortOrderInput | SortOrder
+    maxValue1?: SortOrderInput | SortOrder
+    defaultValue1?: SortOrderInput | SortOrder
+    pricingImpact2?: SortOrder
+    pricePerUnit2?: SortOrderInput | SortOrder
+    unit2?: SortOrderInput | SortOrder
+    minValue2?: SortOrderInput | SortOrder
+    maxValue2?: SortOrderInput | SortOrder
+    defaultValue2?: SortOrderInput | SortOrder
+    conditionalOn?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     product?: ProductOrderByWithRelationInput
-    attribute?: AttributeOrderByWithRelationInput
+    options?: StepOptionOrderByRelationAggregateInput
   }
 
-  export type ProductAttributeWhereUniqueInput = Prisma.AtLeast<{
+  export type FormStepWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    productId_attributeId?: ProductAttributeProductIdAttributeIdCompoundUniqueInput
-    AND?: ProductAttributeWhereInput | ProductAttributeWhereInput[]
-    OR?: ProductAttributeWhereInput[]
-    NOT?: ProductAttributeWhereInput | ProductAttributeWhereInput[]
-    productId?: StringFilter<"ProductAttribute"> | string
-    attributeId?: StringFilter<"ProductAttribute"> | string
+    productId_order?: FormStepProductIdOrderCompoundUniqueInput
+    AND?: FormStepWhereInput | FormStepWhereInput[]
+    OR?: FormStepWhereInput[]
+    NOT?: FormStepWhereInput | FormStepWhereInput[]
+    productId?: StringFilter<"FormStep"> | string
+    order?: IntFilter<"FormStep"> | number
+    type1?: EnumStepTypeFilter<"FormStep"> | $Enums.StepType
+    question1?: StringFilter<"FormStep"> | string
+    required1?: BoolFilter<"FormStep"> | boolean
+    type2?: EnumStepTypeNullableFilter<"FormStep"> | $Enums.StepType | null
+    question2?: StringNullableFilter<"FormStep"> | string | null
+    required2?: BoolFilter<"FormStep"> | boolean
+    pricingImpact1?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
+    pricePerUnit1?: FloatNullableFilter<"FormStep"> | number | null
+    unit1?: StringNullableFilter<"FormStep"> | string | null
+    minValue1?: FloatNullableFilter<"FormStep"> | number | null
+    maxValue1?: FloatNullableFilter<"FormStep"> | number | null
+    defaultValue1?: FloatNullableFilter<"FormStep"> | number | null
+    pricingImpact2?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
+    pricePerUnit2?: FloatNullableFilter<"FormStep"> | number | null
+    unit2?: StringNullableFilter<"FormStep"> | string | null
+    minValue2?: FloatNullableFilter<"FormStep"> | number | null
+    maxValue2?: FloatNullableFilter<"FormStep"> | number | null
+    defaultValue2?: FloatNullableFilter<"FormStep"> | number | null
+    conditionalOn?: JsonNullableFilter<"FormStep">
+    createdAt?: DateTimeFilter<"FormStep"> | Date | string
+    updatedAt?: DateTimeFilter<"FormStep"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
-    attribute?: XOR<AttributeScalarRelationFilter, AttributeWhereInput>
-  }, "id" | "productId_attributeId">
+    options?: StepOptionListRelationFilter
+  }, "id" | "productId_order">
 
-  export type ProductAttributeOrderByWithAggregationInput = {
+  export type FormStepOrderByWithAggregationInput = {
     id?: SortOrder
     productId?: SortOrder
-    attributeId?: SortOrder
-    _count?: ProductAttributeCountOrderByAggregateInput
-    _max?: ProductAttributeMaxOrderByAggregateInput
-    _min?: ProductAttributeMinOrderByAggregateInput
-  }
-
-  export type ProductAttributeScalarWhereWithAggregatesInput = {
-    AND?: ProductAttributeScalarWhereWithAggregatesInput | ProductAttributeScalarWhereWithAggregatesInput[]
-    OR?: ProductAttributeScalarWhereWithAggregatesInput[]
-    NOT?: ProductAttributeScalarWhereWithAggregatesInput | ProductAttributeScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ProductAttribute"> | string
-    productId?: StringWithAggregatesFilter<"ProductAttribute"> | string
-    attributeId?: StringWithAggregatesFilter<"ProductAttribute"> | string
-  }
-
-  export type VariationWhereInput = {
-    AND?: VariationWhereInput | VariationWhereInput[]
-    OR?: VariationWhereInput[]
-    NOT?: VariationWhereInput | VariationWhereInput[]
-    id?: StringFilter<"Variation"> | string
-    sku?: StringFilter<"Variation"> | string
-    price?: FloatFilter<"Variation"> | number
-    image?: StringNullableFilter<"Variation"> | string | null
-    createdAt?: DateTimeFilter<"Variation"> | Date | string
-    updatedAt?: DateTimeFilter<"Variation"> | Date | string
-    productId?: StringFilter<"Variation"> | string
-    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
-    attributes?: AttributeValueListRelationFilter
-  }
-
-  export type VariationOrderByWithRelationInput = {
-    id?: SortOrder
-    sku?: SortOrder
-    price?: SortOrder
-    image?: SortOrderInput | SortOrder
+    order?: SortOrder
+    type1?: SortOrder
+    question1?: SortOrder
+    required1?: SortOrder
+    type2?: SortOrderInput | SortOrder
+    question2?: SortOrderInput | SortOrder
+    required2?: SortOrder
+    pricingImpact1?: SortOrder
+    pricePerUnit1?: SortOrderInput | SortOrder
+    unit1?: SortOrderInput | SortOrder
+    minValue1?: SortOrderInput | SortOrder
+    maxValue1?: SortOrderInput | SortOrder
+    defaultValue1?: SortOrderInput | SortOrder
+    pricingImpact2?: SortOrder
+    pricePerUnit2?: SortOrderInput | SortOrder
+    unit2?: SortOrderInput | SortOrder
+    minValue2?: SortOrderInput | SortOrder
+    maxValue2?: SortOrderInput | SortOrder
+    defaultValue2?: SortOrderInput | SortOrder
+    conditionalOn?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    productId?: SortOrder
-    product?: ProductOrderByWithRelationInput
-    attributes?: AttributeValueOrderByRelationAggregateInput
+    _count?: FormStepCountOrderByAggregateInput
+    _avg?: FormStepAvgOrderByAggregateInput
+    _max?: FormStepMaxOrderByAggregateInput
+    _min?: FormStepMinOrderByAggregateInput
+    _sum?: FormStepSumOrderByAggregateInput
   }
 
-  export type VariationWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    sku?: string
-    AND?: VariationWhereInput | VariationWhereInput[]
-    OR?: VariationWhereInput[]
-    NOT?: VariationWhereInput | VariationWhereInput[]
-    price?: FloatFilter<"Variation"> | number
-    image?: StringNullableFilter<"Variation"> | string | null
-    createdAt?: DateTimeFilter<"Variation"> | Date | string
-    updatedAt?: DateTimeFilter<"Variation"> | Date | string
-    productId?: StringFilter<"Variation"> | string
-    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
-    attributes?: AttributeValueListRelationFilter
-  }, "id" | "sku">
+  export type FormStepScalarWhereWithAggregatesInput = {
+    AND?: FormStepScalarWhereWithAggregatesInput | FormStepScalarWhereWithAggregatesInput[]
+    OR?: FormStepScalarWhereWithAggregatesInput[]
+    NOT?: FormStepScalarWhereWithAggregatesInput | FormStepScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FormStep"> | string
+    productId?: StringWithAggregatesFilter<"FormStep"> | string
+    order?: IntWithAggregatesFilter<"FormStep"> | number
+    type1?: EnumStepTypeWithAggregatesFilter<"FormStep"> | $Enums.StepType
+    question1?: StringWithAggregatesFilter<"FormStep"> | string
+    required1?: BoolWithAggregatesFilter<"FormStep"> | boolean
+    type2?: EnumStepTypeNullableWithAggregatesFilter<"FormStep"> | $Enums.StepType | null
+    question2?: StringNullableWithAggregatesFilter<"FormStep"> | string | null
+    required2?: BoolWithAggregatesFilter<"FormStep"> | boolean
+    pricingImpact1?: EnumPricingImpactWithAggregatesFilter<"FormStep"> | $Enums.PricingImpact
+    pricePerUnit1?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
+    unit1?: StringNullableWithAggregatesFilter<"FormStep"> | string | null
+    minValue1?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
+    maxValue1?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
+    defaultValue1?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
+    pricingImpact2?: EnumPricingImpactWithAggregatesFilter<"FormStep"> | $Enums.PricingImpact
+    pricePerUnit2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
+    unit2?: StringNullableWithAggregatesFilter<"FormStep"> | string | null
+    minValue2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
+    maxValue2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
+    defaultValue2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
+    conditionalOn?: JsonNullableWithAggregatesFilter<"FormStep">
+    createdAt?: DateTimeWithAggregatesFilter<"FormStep"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FormStep"> | Date | string
+  }
 
-  export type VariationOrderByWithAggregationInput = {
+  export type StepOptionWhereInput = {
+    AND?: StepOptionWhereInput | StepOptionWhereInput[]
+    OR?: StepOptionWhereInput[]
+    NOT?: StepOptionWhereInput | StepOptionWhereInput[]
+    id?: StringFilter<"StepOption"> | string
+    stepId?: StringFilter<"StepOption"> | string
+    questionNum?: IntFilter<"StepOption"> | number
+    label?: StringFilter<"StepOption"> | string
+    value?: StringFilter<"StepOption"> | string
+    price?: FloatNullableFilter<"StepOption"> | number | null
+    order?: IntFilter<"StepOption"> | number
+    createdAt?: DateTimeFilter<"StepOption"> | Date | string
+    updatedAt?: DateTimeFilter<"StepOption"> | Date | string
+    step?: XOR<FormStepScalarRelationFilter, FormStepWhereInput>
+  }
+
+  export type StepOptionOrderByWithRelationInput = {
     id?: SortOrder
-    sku?: SortOrder
-    price?: SortOrder
-    image?: SortOrderInput | SortOrder
+    stepId?: SortOrder
+    questionNum?: SortOrder
+    label?: SortOrder
+    value?: SortOrder
+    price?: SortOrderInput | SortOrder
+    order?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    productId?: SortOrder
-    _count?: VariationCountOrderByAggregateInput
-    _avg?: VariationAvgOrderByAggregateInput
-    _max?: VariationMaxOrderByAggregateInput
-    _min?: VariationMinOrderByAggregateInput
-    _sum?: VariationSumOrderByAggregateInput
+    step?: FormStepOrderByWithRelationInput
   }
 
-  export type VariationScalarWhereWithAggregatesInput = {
-    AND?: VariationScalarWhereWithAggregatesInput | VariationScalarWhereWithAggregatesInput[]
-    OR?: VariationScalarWhereWithAggregatesInput[]
-    NOT?: VariationScalarWhereWithAggregatesInput | VariationScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Variation"> | string
-    sku?: StringWithAggregatesFilter<"Variation"> | string
-    price?: FloatWithAggregatesFilter<"Variation"> | number
-    image?: StringNullableWithAggregatesFilter<"Variation"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Variation"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Variation"> | Date | string
-    productId?: StringWithAggregatesFilter<"Variation"> | string
+  export type StepOptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    stepId_questionNum_order?: StepOptionStepIdQuestionNumOrderCompoundUniqueInput
+    AND?: StepOptionWhereInput | StepOptionWhereInput[]
+    OR?: StepOptionWhereInput[]
+    NOT?: StepOptionWhereInput | StepOptionWhereInput[]
+    stepId?: StringFilter<"StepOption"> | string
+    questionNum?: IntFilter<"StepOption"> | number
+    label?: StringFilter<"StepOption"> | string
+    value?: StringFilter<"StepOption"> | string
+    price?: FloatNullableFilter<"StepOption"> | number | null
+    order?: IntFilter<"StepOption"> | number
+    createdAt?: DateTimeFilter<"StepOption"> | Date | string
+    updatedAt?: DateTimeFilter<"StepOption"> | Date | string
+    step?: XOR<FormStepScalarRelationFilter, FormStepWhereInput>
+  }, "id" | "stepId_questionNum_order">
+
+  export type StepOptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    questionNum?: SortOrder
+    label?: SortOrder
+    value?: SortOrder
+    price?: SortOrderInput | SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: StepOptionCountOrderByAggregateInput
+    _avg?: StepOptionAvgOrderByAggregateInput
+    _max?: StepOptionMaxOrderByAggregateInput
+    _min?: StepOptionMinOrderByAggregateInput
+    _sum?: StepOptionSumOrderByAggregateInput
+  }
+
+  export type StepOptionScalarWhereWithAggregatesInput = {
+    AND?: StepOptionScalarWhereWithAggregatesInput | StepOptionScalarWhereWithAggregatesInput[]
+    OR?: StepOptionScalarWhereWithAggregatesInput[]
+    NOT?: StepOptionScalarWhereWithAggregatesInput | StepOptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StepOption"> | string
+    stepId?: StringWithAggregatesFilter<"StepOption"> | string
+    questionNum?: IntWithAggregatesFilter<"StepOption"> | number
+    label?: StringWithAggregatesFilter<"StepOption"> | string
+    value?: StringWithAggregatesFilter<"StepOption"> | string
+    price?: FloatNullableWithAggregatesFilter<"StepOption"> | number | null
+    order?: IntWithAggregatesFilter<"StepOption"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"StepOption"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StepOption"> | Date | string
   }
 
   export type ProductCreateInput = {
@@ -7366,12 +5311,10 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
-    basePrice: number
     baseImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    variations?: VariationCreateNestedManyWithoutProductInput
-    attributes?: ProductAttributeCreateNestedManyWithoutProductInput
+    steps?: FormStepCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -7379,12 +5322,10 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
-    basePrice: number
     baseImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    variations?: VariationUncheckedCreateNestedManyWithoutProductInput
-    attributes?: ProductAttributeUncheckedCreateNestedManyWithoutProductInput
+    steps?: FormStepUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUpdateInput = {
@@ -7392,12 +5333,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    basePrice?: FloatFieldUpdateOperationsInput | number
     baseImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    variations?: VariationUpdateManyWithoutProductNestedInput
-    attributes?: ProductAttributeUpdateManyWithoutProductNestedInput
+    steps?: FormStepUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -7405,12 +5344,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    basePrice?: FloatFieldUpdateOperationsInput | number
     baseImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    variations?: VariationUncheckedUpdateManyWithoutProductNestedInput
-    attributes?: ProductAttributeUncheckedUpdateManyWithoutProductNestedInput
+    steps?: FormStepUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateManyInput = {
@@ -7418,7 +5355,6 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
-    basePrice: number
     baseImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7429,7 +5365,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    basePrice?: FloatFieldUpdateOperationsInput | number
     baseImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7440,239 +5375,284 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    basePrice?: FloatFieldUpdateOperationsInput | number
     baseImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AttributeCreateInput = {
+  export type FormStepCreateInput = {
     id?: string
-    name: string
+    order: number
+    type1: $Enums.StepType
+    question1: string
+    required1?: boolean
+    type2?: $Enums.StepType | null
+    question2?: string | null
+    required2?: boolean
+    pricingImpact1?: $Enums.PricingImpact
+    pricePerUnit1?: number | null
+    unit1?: string | null
+    minValue1?: number | null
+    maxValue1?: number | null
+    defaultValue1?: number | null
+    pricingImpact2?: $Enums.PricingImpact
+    pricePerUnit2?: number | null
+    unit2?: string | null
+    minValue2?: number | null
+    maxValue2?: number | null
+    defaultValue2?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    values?: AttributeValueCreateNestedManyWithoutAttributeInput
-    products?: ProductAttributeCreateNestedManyWithoutAttributeInput
+    product: ProductCreateNestedOneWithoutStepsInput
+    options?: StepOptionCreateNestedManyWithoutStepInput
   }
 
-  export type AttributeUncheckedCreateInput = {
+  export type FormStepUncheckedCreateInput = {
     id?: string
-    name: string
+    productId: string
+    order: number
+    type1: $Enums.StepType
+    question1: string
+    required1?: boolean
+    type2?: $Enums.StepType | null
+    question2?: string | null
+    required2?: boolean
+    pricingImpact1?: $Enums.PricingImpact
+    pricePerUnit1?: number | null
+    unit1?: string | null
+    minValue1?: number | null
+    maxValue1?: number | null
+    defaultValue1?: number | null
+    pricingImpact2?: $Enums.PricingImpact
+    pricePerUnit2?: number | null
+    unit2?: string | null
+    minValue2?: number | null
+    maxValue2?: number | null
+    defaultValue2?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    values?: AttributeValueUncheckedCreateNestedManyWithoutAttributeInput
-    products?: ProductAttributeUncheckedCreateNestedManyWithoutAttributeInput
+    options?: StepOptionUncheckedCreateNestedManyWithoutStepInput
   }
 
-  export type AttributeUpdateInput = {
+  export type FormStepUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question1?: StringFieldUpdateOperationsInput | string
+    required1?: BoolFieldUpdateOperationsInput | boolean
+    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
+    question2?: NullableStringFieldUpdateOperationsInput | string | null
+    required2?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit1?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit2?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    values?: AttributeValueUpdateManyWithoutAttributeNestedInput
-    products?: ProductAttributeUpdateManyWithoutAttributeNestedInput
+    product?: ProductUpdateOneRequiredWithoutStepsNestedInput
+    options?: StepOptionUpdateManyWithoutStepNestedInput
   }
 
-  export type AttributeUncheckedUpdateInput = {
+  export type FormStepUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question1?: StringFieldUpdateOperationsInput | string
+    required1?: BoolFieldUpdateOperationsInput | boolean
+    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
+    question2?: NullableStringFieldUpdateOperationsInput | string | null
+    required2?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit1?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit2?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    values?: AttributeValueUncheckedUpdateManyWithoutAttributeNestedInput
-    products?: ProductAttributeUncheckedUpdateManyWithoutAttributeNestedInput
+    options?: StepOptionUncheckedUpdateManyWithoutStepNestedInput
   }
 
-  export type AttributeCreateManyInput = {
+  export type FormStepCreateManyInput = {
     id?: string
-    name: string
+    productId: string
+    order: number
+    type1: $Enums.StepType
+    question1: string
+    required1?: boolean
+    type2?: $Enums.StepType | null
+    question2?: string | null
+    required2?: boolean
+    pricingImpact1?: $Enums.PricingImpact
+    pricePerUnit1?: number | null
+    unit1?: string | null
+    minValue1?: number | null
+    maxValue1?: number | null
+    defaultValue1?: number | null
+    pricingImpact2?: $Enums.PricingImpact
+    pricePerUnit2?: number | null
+    unit2?: string | null
+    minValue2?: number | null
+    maxValue2?: number | null
+    defaultValue2?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type AttributeUpdateManyMutationInput = {
+  export type FormStepUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question1?: StringFieldUpdateOperationsInput | string
+    required1?: BoolFieldUpdateOperationsInput | boolean
+    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
+    question2?: NullableStringFieldUpdateOperationsInput | string | null
+    required2?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit1?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit2?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AttributeUncheckedUpdateManyInput = {
+  export type FormStepUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question1?: StringFieldUpdateOperationsInput | string
+    required1?: BoolFieldUpdateOperationsInput | boolean
+    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
+    question2?: NullableStringFieldUpdateOperationsInput | string | null
+    required2?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit1?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit2?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AttributeValueCreateInput = {
+  export type StepOptionCreateInput = {
     id?: string
+    questionNum?: number
+    label: string
     value: string
+    price?: number | null
+    order: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    attribute: AttributeCreateNestedOneWithoutValuesInput
-    variations?: VariationCreateNestedManyWithoutAttributesInput
+    step: FormStepCreateNestedOneWithoutOptionsInput
   }
 
-  export type AttributeValueUncheckedCreateInput = {
+  export type StepOptionUncheckedCreateInput = {
     id?: string
+    stepId: string
+    questionNum?: number
+    label: string
     value: string
+    price?: number | null
+    order: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    attributeId: string
-    variations?: VariationUncheckedCreateNestedManyWithoutAttributesInput
   }
 
-  export type AttributeValueUpdateInput = {
+  export type StepOptionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    questionNum?: IntFieldUpdateOperationsInput | number
+    label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attribute?: AttributeUpdateOneRequiredWithoutValuesNestedInput
-    variations?: VariationUpdateManyWithoutAttributesNestedInput
+    step?: FormStepUpdateOneRequiredWithoutOptionsNestedInput
   }
 
-  export type AttributeValueUncheckedUpdateInput = {
+  export type StepOptionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    questionNum?: IntFieldUpdateOperationsInput | number
+    label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attributeId?: StringFieldUpdateOperationsInput | string
-    variations?: VariationUncheckedUpdateManyWithoutAttributesNestedInput
   }
 
-  export type AttributeValueCreateManyInput = {
+  export type StepOptionCreateManyInput = {
     id?: string
+    stepId: string
+    questionNum?: number
+    label: string
     value: string
+    price?: number | null
+    order: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    attributeId: string
   }
 
-  export type AttributeValueUpdateManyMutationInput = {
+  export type StepOptionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    questionNum?: IntFieldUpdateOperationsInput | number
+    label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AttributeValueUncheckedUpdateManyInput = {
+  export type StepOptionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    questionNum?: IntFieldUpdateOperationsInput | number
+    label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attributeId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProductAttributeCreateInput = {
-    id?: string
-    product: ProductCreateNestedOneWithoutAttributesInput
-    attribute: AttributeCreateNestedOneWithoutProductsInput
-  }
-
-  export type ProductAttributeUncheckedCreateInput = {
-    id?: string
-    productId: string
-    attributeId: string
-  }
-
-  export type ProductAttributeUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    product?: ProductUpdateOneRequiredWithoutAttributesNestedInput
-    attribute?: AttributeUpdateOneRequiredWithoutProductsNestedInput
-  }
-
-  export type ProductAttributeUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    productId?: StringFieldUpdateOperationsInput | string
-    attributeId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProductAttributeCreateManyInput = {
-    id?: string
-    productId: string
-    attributeId: string
-  }
-
-  export type ProductAttributeUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProductAttributeUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    productId?: StringFieldUpdateOperationsInput | string
-    attributeId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type VariationCreateInput = {
-    id?: string
-    sku: string
-    price: number
-    image?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    product: ProductCreateNestedOneWithoutVariationsInput
-    attributes?: AttributeValueCreateNestedManyWithoutVariationsInput
-  }
-
-  export type VariationUncheckedCreateInput = {
-    id?: string
-    sku: string
-    price: number
-    image?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    productId: string
-    attributes?: AttributeValueUncheckedCreateNestedManyWithoutVariationsInput
-  }
-
-  export type VariationUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    product?: ProductUpdateOneRequiredWithoutVariationsNestedInput
-    attributes?: AttributeValueUpdateManyWithoutVariationsNestedInput
-  }
-
-  export type VariationUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    productId?: StringFieldUpdateOperationsInput | string
-    attributes?: AttributeValueUncheckedUpdateManyWithoutVariationsNestedInput
-  }
-
-  export type VariationCreateManyInput = {
-    id?: string
-    sku: string
-    price: number
-    image?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    productId: string
-  }
-
-  export type VariationUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type VariationUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    productId?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -7705,17 +5685,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -7727,16 +5696,10 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type VariationListRelationFilter = {
-    every?: VariationWhereInput
-    some?: VariationWhereInput
-    none?: VariationWhereInput
-  }
-
-  export type ProductAttributeListRelationFilter = {
-    every?: ProductAttributeWhereInput
-    some?: ProductAttributeWhereInput
-    none?: ProductAttributeWhereInput
+  export type FormStepListRelationFilter = {
+    every?: FormStepWhereInput
+    some?: FormStepWhereInput
+    none?: FormStepWhereInput
   }
 
   export type SortOrderInput = {
@@ -7744,11 +5707,7 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type VariationOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ProductAttributeOrderByRelationAggregateInput = {
+  export type FormStepOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -7757,14 +5716,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
-    basePrice?: SortOrder
     baseImage?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type ProductAvgOrderByAggregateInput = {
-    basePrice?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -7772,7 +5726,6 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
-    basePrice?: SortOrder
     baseImage?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7783,14 +5736,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
-    basePrice?: SortOrder
     baseImage?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type ProductSumOrderByAggregateInput = {
-    basePrice?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -7829,22 +5777,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
-  }
-
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -7859,64 +5791,75 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type AttributeValueListRelationFilter = {
-    every?: AttributeValueWhereInput
-    some?: AttributeValueWhereInput
-    none?: AttributeValueWhereInput
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type AttributeValueOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type EnumStepTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepTypeFilter<$PrismaModel> | $Enums.StepType
   }
 
-  export type AttributeCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type AttributeMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+  export type EnumStepTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStepTypeNullableFilter<$PrismaModel> | $Enums.StepType | null
   }
 
-  export type AttributeMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+  export type EnumPricingImpactFilter<$PrismaModel = never> = {
+    equals?: $Enums.PricingImpact | EnumPricingImpactFieldRefInput<$PrismaModel>
+    in?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    not?: NestedEnumPricingImpactFilter<$PrismaModel> | $Enums.PricingImpact
   }
 
-  export type AttributeScalarRelationFilter = {
-    is?: AttributeWhereInput
-    isNot?: AttributeWhereInput
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
 
-  export type AttributeValueCountOrderByAggregateInput = {
-    id?: SortOrder
-    value?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    attributeId?: SortOrder
-  }
-
-  export type AttributeValueMaxOrderByAggregateInput = {
-    id?: SortOrder
-    value?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    attributeId?: SortOrder
-  }
-
-  export type AttributeValueMinOrderByAggregateInput = {
-    id?: SortOrder
-    value?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    attributeId?: SortOrder
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type ProductScalarRelationFilter = {
@@ -7924,93 +5867,291 @@ export namespace Prisma {
     isNot?: ProductWhereInput
   }
 
-  export type ProductAttributeProductIdAttributeIdCompoundUniqueInput = {
+  export type StepOptionListRelationFilter = {
+    every?: StepOptionWhereInput
+    some?: StepOptionWhereInput
+    none?: StepOptionWhereInput
+  }
+
+  export type StepOptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FormStepProductIdOrderCompoundUniqueInput = {
     productId: string
-    attributeId: string
+    order: number
   }
 
-  export type ProductAttributeCountOrderByAggregateInput = {
+  export type FormStepCountOrderByAggregateInput = {
     id?: SortOrder
     productId?: SortOrder
-    attributeId?: SortOrder
-  }
-
-  export type ProductAttributeMaxOrderByAggregateInput = {
-    id?: SortOrder
-    productId?: SortOrder
-    attributeId?: SortOrder
-  }
-
-  export type ProductAttributeMinOrderByAggregateInput = {
-    id?: SortOrder
-    productId?: SortOrder
-    attributeId?: SortOrder
-  }
-
-  export type VariationCountOrderByAggregateInput = {
-    id?: SortOrder
-    sku?: SortOrder
-    price?: SortOrder
-    image?: SortOrder
+    order?: SortOrder
+    type1?: SortOrder
+    question1?: SortOrder
+    required1?: SortOrder
+    type2?: SortOrder
+    question2?: SortOrder
+    required2?: SortOrder
+    pricingImpact1?: SortOrder
+    pricePerUnit1?: SortOrder
+    unit1?: SortOrder
+    minValue1?: SortOrder
+    maxValue1?: SortOrder
+    defaultValue1?: SortOrder
+    pricingImpact2?: SortOrder
+    pricePerUnit2?: SortOrder
+    unit2?: SortOrder
+    minValue2?: SortOrder
+    maxValue2?: SortOrder
+    defaultValue2?: SortOrder
+    conditionalOn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    productId?: SortOrder
   }
 
-  export type VariationAvgOrderByAggregateInput = {
-    price?: SortOrder
+  export type FormStepAvgOrderByAggregateInput = {
+    order?: SortOrder
+    pricePerUnit1?: SortOrder
+    minValue1?: SortOrder
+    maxValue1?: SortOrder
+    defaultValue1?: SortOrder
+    pricePerUnit2?: SortOrder
+    minValue2?: SortOrder
+    maxValue2?: SortOrder
+    defaultValue2?: SortOrder
   }
 
-  export type VariationMaxOrderByAggregateInput = {
+  export type FormStepMaxOrderByAggregateInput = {
     id?: SortOrder
-    sku?: SortOrder
-    price?: SortOrder
-    image?: SortOrder
+    productId?: SortOrder
+    order?: SortOrder
+    type1?: SortOrder
+    question1?: SortOrder
+    required1?: SortOrder
+    type2?: SortOrder
+    question2?: SortOrder
+    required2?: SortOrder
+    pricingImpact1?: SortOrder
+    pricePerUnit1?: SortOrder
+    unit1?: SortOrder
+    minValue1?: SortOrder
+    maxValue1?: SortOrder
+    defaultValue1?: SortOrder
+    pricingImpact2?: SortOrder
+    pricePerUnit2?: SortOrder
+    unit2?: SortOrder
+    minValue2?: SortOrder
+    maxValue2?: SortOrder
+    defaultValue2?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    productId?: SortOrder
   }
 
-  export type VariationMinOrderByAggregateInput = {
+  export type FormStepMinOrderByAggregateInput = {
     id?: SortOrder
-    sku?: SortOrder
-    price?: SortOrder
-    image?: SortOrder
+    productId?: SortOrder
+    order?: SortOrder
+    type1?: SortOrder
+    question1?: SortOrder
+    required1?: SortOrder
+    type2?: SortOrder
+    question2?: SortOrder
+    required2?: SortOrder
+    pricingImpact1?: SortOrder
+    pricePerUnit1?: SortOrder
+    unit1?: SortOrder
+    minValue1?: SortOrder
+    maxValue1?: SortOrder
+    defaultValue1?: SortOrder
+    pricingImpact2?: SortOrder
+    pricePerUnit2?: SortOrder
+    unit2?: SortOrder
+    minValue2?: SortOrder
+    maxValue2?: SortOrder
+    defaultValue2?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    productId?: SortOrder
   }
 
-  export type VariationSumOrderByAggregateInput = {
+  export type FormStepSumOrderByAggregateInput = {
+    order?: SortOrder
+    pricePerUnit1?: SortOrder
+    minValue1?: SortOrder
+    maxValue1?: SortOrder
+    defaultValue1?: SortOrder
+    pricePerUnit2?: SortOrder
+    minValue2?: SortOrder
+    maxValue2?: SortOrder
+    defaultValue2?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumStepTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepTypeWithAggregatesFilter<$PrismaModel> | $Enums.StepType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStepTypeFilter<$PrismaModel>
+    _max?: NestedEnumStepTypeFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type EnumStepTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStepTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StepType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStepTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumStepTypeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumPricingImpactWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PricingImpact | EnumPricingImpactFieldRefInput<$PrismaModel>
+    in?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    not?: NestedEnumPricingImpactWithAggregatesFilter<$PrismaModel> | $Enums.PricingImpact
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPricingImpactFilter<$PrismaModel>
+    _max?: NestedEnumPricingImpactFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type FormStepScalarRelationFilter = {
+    is?: FormStepWhereInput
+    isNot?: FormStepWhereInput
+  }
+
+  export type StepOptionStepIdQuestionNumOrderCompoundUniqueInput = {
+    stepId: string
+    questionNum: number
+    order: number
+  }
+
+  export type StepOptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    questionNum?: SortOrder
+    label?: SortOrder
+    value?: SortOrder
     price?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type VariationCreateNestedManyWithoutProductInput = {
-    create?: XOR<VariationCreateWithoutProductInput, VariationUncheckedCreateWithoutProductInput> | VariationCreateWithoutProductInput[] | VariationUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: VariationCreateOrConnectWithoutProductInput | VariationCreateOrConnectWithoutProductInput[]
-    createMany?: VariationCreateManyProductInputEnvelope
-    connect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
+  export type StepOptionAvgOrderByAggregateInput = {
+    questionNum?: SortOrder
+    price?: SortOrder
+    order?: SortOrder
   }
 
-  export type ProductAttributeCreateNestedManyWithoutProductInput = {
-    create?: XOR<ProductAttributeCreateWithoutProductInput, ProductAttributeUncheckedCreateWithoutProductInput> | ProductAttributeCreateWithoutProductInput[] | ProductAttributeUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: ProductAttributeCreateOrConnectWithoutProductInput | ProductAttributeCreateOrConnectWithoutProductInput[]
-    createMany?: ProductAttributeCreateManyProductInputEnvelope
-    connect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
+  export type StepOptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    questionNum?: SortOrder
+    label?: SortOrder
+    value?: SortOrder
+    price?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type VariationUncheckedCreateNestedManyWithoutProductInput = {
-    create?: XOR<VariationCreateWithoutProductInput, VariationUncheckedCreateWithoutProductInput> | VariationCreateWithoutProductInput[] | VariationUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: VariationCreateOrConnectWithoutProductInput | VariationCreateOrConnectWithoutProductInput[]
-    createMany?: VariationCreateManyProductInputEnvelope
-    connect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
+  export type StepOptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    questionNum?: SortOrder
+    label?: SortOrder
+    value?: SortOrder
+    price?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type ProductAttributeUncheckedCreateNestedManyWithoutProductInput = {
-    create?: XOR<ProductAttributeCreateWithoutProductInput, ProductAttributeUncheckedCreateWithoutProductInput> | ProductAttributeCreateWithoutProductInput[] | ProductAttributeUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: ProductAttributeCreateOrConnectWithoutProductInput | ProductAttributeCreateOrConnectWithoutProductInput[]
-    createMany?: ProductAttributeCreateManyProductInputEnvelope
-    connect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
+  export type StepOptionSumOrderByAggregateInput = {
+    questionNum?: SortOrder
+    price?: SortOrder
+    order?: SortOrder
+  }
+
+  export type FormStepCreateNestedManyWithoutProductInput = {
+    create?: XOR<FormStepCreateWithoutProductInput, FormStepUncheckedCreateWithoutProductInput> | FormStepCreateWithoutProductInput[] | FormStepUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: FormStepCreateOrConnectWithoutProductInput | FormStepCreateOrConnectWithoutProductInput[]
+    createMany?: FormStepCreateManyProductInputEnvelope
+    connect?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
+  }
+
+  export type FormStepUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<FormStepCreateWithoutProductInput, FormStepUncheckedCreateWithoutProductInput> | FormStepCreateWithoutProductInput[] | FormStepUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: FormStepCreateOrConnectWithoutProductInput | FormStepCreateOrConnectWithoutProductInput[]
+    createMany?: FormStepCreateManyProductInputEnvelope
+    connect?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -8021,7 +6162,59 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type FloatFieldUpdateOperationsInput = {
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type FormStepUpdateManyWithoutProductNestedInput = {
+    create?: XOR<FormStepCreateWithoutProductInput, FormStepUncheckedCreateWithoutProductInput> | FormStepCreateWithoutProductInput[] | FormStepUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: FormStepCreateOrConnectWithoutProductInput | FormStepCreateOrConnectWithoutProductInput[]
+    upsert?: FormStepUpsertWithWhereUniqueWithoutProductInput | FormStepUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: FormStepCreateManyProductInputEnvelope
+    set?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
+    disconnect?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
+    delete?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
+    connect?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
+    update?: FormStepUpdateWithWhereUniqueWithoutProductInput | FormStepUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: FormStepUpdateManyWithWhereWithoutProductInput | FormStepUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: FormStepScalarWhereInput | FormStepScalarWhereInput[]
+  }
+
+  export type FormStepUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<FormStepCreateWithoutProductInput, FormStepUncheckedCreateWithoutProductInput> | FormStepCreateWithoutProductInput[] | FormStepUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: FormStepCreateOrConnectWithoutProductInput | FormStepCreateOrConnectWithoutProductInput[]
+    upsert?: FormStepUpsertWithWhereUniqueWithoutProductInput | FormStepUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: FormStepCreateManyProductInputEnvelope
+    set?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
+    disconnect?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
+    delete?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
+    connect?: FormStepWhereUniqueInput | FormStepWhereUniqueInput[]
+    update?: FormStepUpdateWithWhereUniqueWithoutProductInput | FormStepUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: FormStepUpdateManyWithWhereWithoutProductInput | FormStepUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: FormStepScalarWhereInput | FormStepScalarWhereInput[]
+  }
+
+  export type ProductCreateNestedOneWithoutStepsInput = {
+    create?: XOR<ProductCreateWithoutStepsInput, ProductUncheckedCreateWithoutStepsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutStepsInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type StepOptionCreateNestedManyWithoutStepInput = {
+    create?: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput> | StepOptionCreateWithoutStepInput[] | StepOptionUncheckedCreateWithoutStepInput[]
+    connectOrCreate?: StepOptionCreateOrConnectWithoutStepInput | StepOptionCreateOrConnectWithoutStepInput[]
+    createMany?: StepOptionCreateManyStepInputEnvelope
+    connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+  }
+
+  export type StepOptionUncheckedCreateNestedManyWithoutStepInput = {
+    create?: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput> | StepOptionCreateWithoutStepInput[] | StepOptionUncheckedCreateWithoutStepInput[]
+    connectOrCreate?: StepOptionCreateOrConnectWithoutStepInput | StepOptionCreateOrConnectWithoutStepInput[]
+    createMany?: StepOptionCreateManyStepInputEnvelope
+    connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
@@ -8029,280 +6222,78 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type EnumStepTypeFieldUpdateOperationsInput = {
+    set?: $Enums.StepType
   }
 
-  export type VariationUpdateManyWithoutProductNestedInput = {
-    create?: XOR<VariationCreateWithoutProductInput, VariationUncheckedCreateWithoutProductInput> | VariationCreateWithoutProductInput[] | VariationUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: VariationCreateOrConnectWithoutProductInput | VariationCreateOrConnectWithoutProductInput[]
-    upsert?: VariationUpsertWithWhereUniqueWithoutProductInput | VariationUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: VariationCreateManyProductInputEnvelope
-    set?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    disconnect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    delete?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    connect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    update?: VariationUpdateWithWhereUniqueWithoutProductInput | VariationUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: VariationUpdateManyWithWhereWithoutProductInput | VariationUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: VariationScalarWhereInput | VariationScalarWhereInput[]
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
-  export type ProductAttributeUpdateManyWithoutProductNestedInput = {
-    create?: XOR<ProductAttributeCreateWithoutProductInput, ProductAttributeUncheckedCreateWithoutProductInput> | ProductAttributeCreateWithoutProductInput[] | ProductAttributeUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: ProductAttributeCreateOrConnectWithoutProductInput | ProductAttributeCreateOrConnectWithoutProductInput[]
-    upsert?: ProductAttributeUpsertWithWhereUniqueWithoutProductInput | ProductAttributeUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: ProductAttributeCreateManyProductInputEnvelope
-    set?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    disconnect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    delete?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    connect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    update?: ProductAttributeUpdateWithWhereUniqueWithoutProductInput | ProductAttributeUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: ProductAttributeUpdateManyWithWhereWithoutProductInput | ProductAttributeUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: ProductAttributeScalarWhereInput | ProductAttributeScalarWhereInput[]
+  export type NullableEnumStepTypeFieldUpdateOperationsInput = {
+    set?: $Enums.StepType | null
   }
 
-  export type VariationUncheckedUpdateManyWithoutProductNestedInput = {
-    create?: XOR<VariationCreateWithoutProductInput, VariationUncheckedCreateWithoutProductInput> | VariationCreateWithoutProductInput[] | VariationUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: VariationCreateOrConnectWithoutProductInput | VariationCreateOrConnectWithoutProductInput[]
-    upsert?: VariationUpsertWithWhereUniqueWithoutProductInput | VariationUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: VariationCreateManyProductInputEnvelope
-    set?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    disconnect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    delete?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    connect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    update?: VariationUpdateWithWhereUniqueWithoutProductInput | VariationUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: VariationUpdateManyWithWhereWithoutProductInput | VariationUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: VariationScalarWhereInput | VariationScalarWhereInput[]
+  export type EnumPricingImpactFieldUpdateOperationsInput = {
+    set?: $Enums.PricingImpact
   }
 
-  export type ProductAttributeUncheckedUpdateManyWithoutProductNestedInput = {
-    create?: XOR<ProductAttributeCreateWithoutProductInput, ProductAttributeUncheckedCreateWithoutProductInput> | ProductAttributeCreateWithoutProductInput[] | ProductAttributeUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: ProductAttributeCreateOrConnectWithoutProductInput | ProductAttributeCreateOrConnectWithoutProductInput[]
-    upsert?: ProductAttributeUpsertWithWhereUniqueWithoutProductInput | ProductAttributeUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: ProductAttributeCreateManyProductInputEnvelope
-    set?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    disconnect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    delete?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    connect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    update?: ProductAttributeUpdateWithWhereUniqueWithoutProductInput | ProductAttributeUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: ProductAttributeUpdateManyWithWhereWithoutProductInput | ProductAttributeUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: ProductAttributeScalarWhereInput | ProductAttributeScalarWhereInput[]
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
-  export type AttributeValueCreateNestedManyWithoutAttributeInput = {
-    create?: XOR<AttributeValueCreateWithoutAttributeInput, AttributeValueUncheckedCreateWithoutAttributeInput> | AttributeValueCreateWithoutAttributeInput[] | AttributeValueUncheckedCreateWithoutAttributeInput[]
-    connectOrCreate?: AttributeValueCreateOrConnectWithoutAttributeInput | AttributeValueCreateOrConnectWithoutAttributeInput[]
-    createMany?: AttributeValueCreateManyAttributeInputEnvelope
-    connect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-  }
-
-  export type ProductAttributeCreateNestedManyWithoutAttributeInput = {
-    create?: XOR<ProductAttributeCreateWithoutAttributeInput, ProductAttributeUncheckedCreateWithoutAttributeInput> | ProductAttributeCreateWithoutAttributeInput[] | ProductAttributeUncheckedCreateWithoutAttributeInput[]
-    connectOrCreate?: ProductAttributeCreateOrConnectWithoutAttributeInput | ProductAttributeCreateOrConnectWithoutAttributeInput[]
-    createMany?: ProductAttributeCreateManyAttributeInputEnvelope
-    connect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-  }
-
-  export type AttributeValueUncheckedCreateNestedManyWithoutAttributeInput = {
-    create?: XOR<AttributeValueCreateWithoutAttributeInput, AttributeValueUncheckedCreateWithoutAttributeInput> | AttributeValueCreateWithoutAttributeInput[] | AttributeValueUncheckedCreateWithoutAttributeInput[]
-    connectOrCreate?: AttributeValueCreateOrConnectWithoutAttributeInput | AttributeValueCreateOrConnectWithoutAttributeInput[]
-    createMany?: AttributeValueCreateManyAttributeInputEnvelope
-    connect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-  }
-
-  export type ProductAttributeUncheckedCreateNestedManyWithoutAttributeInput = {
-    create?: XOR<ProductAttributeCreateWithoutAttributeInput, ProductAttributeUncheckedCreateWithoutAttributeInput> | ProductAttributeCreateWithoutAttributeInput[] | ProductAttributeUncheckedCreateWithoutAttributeInput[]
-    connectOrCreate?: ProductAttributeCreateOrConnectWithoutAttributeInput | ProductAttributeCreateOrConnectWithoutAttributeInput[]
-    createMany?: ProductAttributeCreateManyAttributeInputEnvelope
-    connect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-  }
-
-  export type AttributeValueUpdateManyWithoutAttributeNestedInput = {
-    create?: XOR<AttributeValueCreateWithoutAttributeInput, AttributeValueUncheckedCreateWithoutAttributeInput> | AttributeValueCreateWithoutAttributeInput[] | AttributeValueUncheckedCreateWithoutAttributeInput[]
-    connectOrCreate?: AttributeValueCreateOrConnectWithoutAttributeInput | AttributeValueCreateOrConnectWithoutAttributeInput[]
-    upsert?: AttributeValueUpsertWithWhereUniqueWithoutAttributeInput | AttributeValueUpsertWithWhereUniqueWithoutAttributeInput[]
-    createMany?: AttributeValueCreateManyAttributeInputEnvelope
-    set?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    disconnect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    delete?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    connect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    update?: AttributeValueUpdateWithWhereUniqueWithoutAttributeInput | AttributeValueUpdateWithWhereUniqueWithoutAttributeInput[]
-    updateMany?: AttributeValueUpdateManyWithWhereWithoutAttributeInput | AttributeValueUpdateManyWithWhereWithoutAttributeInput[]
-    deleteMany?: AttributeValueScalarWhereInput | AttributeValueScalarWhereInput[]
-  }
-
-  export type ProductAttributeUpdateManyWithoutAttributeNestedInput = {
-    create?: XOR<ProductAttributeCreateWithoutAttributeInput, ProductAttributeUncheckedCreateWithoutAttributeInput> | ProductAttributeCreateWithoutAttributeInput[] | ProductAttributeUncheckedCreateWithoutAttributeInput[]
-    connectOrCreate?: ProductAttributeCreateOrConnectWithoutAttributeInput | ProductAttributeCreateOrConnectWithoutAttributeInput[]
-    upsert?: ProductAttributeUpsertWithWhereUniqueWithoutAttributeInput | ProductAttributeUpsertWithWhereUniqueWithoutAttributeInput[]
-    createMany?: ProductAttributeCreateManyAttributeInputEnvelope
-    set?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    disconnect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    delete?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    connect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    update?: ProductAttributeUpdateWithWhereUniqueWithoutAttributeInput | ProductAttributeUpdateWithWhereUniqueWithoutAttributeInput[]
-    updateMany?: ProductAttributeUpdateManyWithWhereWithoutAttributeInput | ProductAttributeUpdateManyWithWhereWithoutAttributeInput[]
-    deleteMany?: ProductAttributeScalarWhereInput | ProductAttributeScalarWhereInput[]
-  }
-
-  export type AttributeValueUncheckedUpdateManyWithoutAttributeNestedInput = {
-    create?: XOR<AttributeValueCreateWithoutAttributeInput, AttributeValueUncheckedCreateWithoutAttributeInput> | AttributeValueCreateWithoutAttributeInput[] | AttributeValueUncheckedCreateWithoutAttributeInput[]
-    connectOrCreate?: AttributeValueCreateOrConnectWithoutAttributeInput | AttributeValueCreateOrConnectWithoutAttributeInput[]
-    upsert?: AttributeValueUpsertWithWhereUniqueWithoutAttributeInput | AttributeValueUpsertWithWhereUniqueWithoutAttributeInput[]
-    createMany?: AttributeValueCreateManyAttributeInputEnvelope
-    set?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    disconnect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    delete?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    connect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    update?: AttributeValueUpdateWithWhereUniqueWithoutAttributeInput | AttributeValueUpdateWithWhereUniqueWithoutAttributeInput[]
-    updateMany?: AttributeValueUpdateManyWithWhereWithoutAttributeInput | AttributeValueUpdateManyWithWhereWithoutAttributeInput[]
-    deleteMany?: AttributeValueScalarWhereInput | AttributeValueScalarWhereInput[]
-  }
-
-  export type ProductAttributeUncheckedUpdateManyWithoutAttributeNestedInput = {
-    create?: XOR<ProductAttributeCreateWithoutAttributeInput, ProductAttributeUncheckedCreateWithoutAttributeInput> | ProductAttributeCreateWithoutAttributeInput[] | ProductAttributeUncheckedCreateWithoutAttributeInput[]
-    connectOrCreate?: ProductAttributeCreateOrConnectWithoutAttributeInput | ProductAttributeCreateOrConnectWithoutAttributeInput[]
-    upsert?: ProductAttributeUpsertWithWhereUniqueWithoutAttributeInput | ProductAttributeUpsertWithWhereUniqueWithoutAttributeInput[]
-    createMany?: ProductAttributeCreateManyAttributeInputEnvelope
-    set?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    disconnect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    delete?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    connect?: ProductAttributeWhereUniqueInput | ProductAttributeWhereUniqueInput[]
-    update?: ProductAttributeUpdateWithWhereUniqueWithoutAttributeInput | ProductAttributeUpdateWithWhereUniqueWithoutAttributeInput[]
-    updateMany?: ProductAttributeUpdateManyWithWhereWithoutAttributeInput | ProductAttributeUpdateManyWithWhereWithoutAttributeInput[]
-    deleteMany?: ProductAttributeScalarWhereInput | ProductAttributeScalarWhereInput[]
-  }
-
-  export type AttributeCreateNestedOneWithoutValuesInput = {
-    create?: XOR<AttributeCreateWithoutValuesInput, AttributeUncheckedCreateWithoutValuesInput>
-    connectOrCreate?: AttributeCreateOrConnectWithoutValuesInput
-    connect?: AttributeWhereUniqueInput
-  }
-
-  export type VariationCreateNestedManyWithoutAttributesInput = {
-    create?: XOR<VariationCreateWithoutAttributesInput, VariationUncheckedCreateWithoutAttributesInput> | VariationCreateWithoutAttributesInput[] | VariationUncheckedCreateWithoutAttributesInput[]
-    connectOrCreate?: VariationCreateOrConnectWithoutAttributesInput | VariationCreateOrConnectWithoutAttributesInput[]
-    connect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-  }
-
-  export type VariationUncheckedCreateNestedManyWithoutAttributesInput = {
-    create?: XOR<VariationCreateWithoutAttributesInput, VariationUncheckedCreateWithoutAttributesInput> | VariationCreateWithoutAttributesInput[] | VariationUncheckedCreateWithoutAttributesInput[]
-    connectOrCreate?: VariationCreateOrConnectWithoutAttributesInput | VariationCreateOrConnectWithoutAttributesInput[]
-    connect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-  }
-
-  export type AttributeUpdateOneRequiredWithoutValuesNestedInput = {
-    create?: XOR<AttributeCreateWithoutValuesInput, AttributeUncheckedCreateWithoutValuesInput>
-    connectOrCreate?: AttributeCreateOrConnectWithoutValuesInput
-    upsert?: AttributeUpsertWithoutValuesInput
-    connect?: AttributeWhereUniqueInput
-    update?: XOR<XOR<AttributeUpdateToOneWithWhereWithoutValuesInput, AttributeUpdateWithoutValuesInput>, AttributeUncheckedUpdateWithoutValuesInput>
-  }
-
-  export type VariationUpdateManyWithoutAttributesNestedInput = {
-    create?: XOR<VariationCreateWithoutAttributesInput, VariationUncheckedCreateWithoutAttributesInput> | VariationCreateWithoutAttributesInput[] | VariationUncheckedCreateWithoutAttributesInput[]
-    connectOrCreate?: VariationCreateOrConnectWithoutAttributesInput | VariationCreateOrConnectWithoutAttributesInput[]
-    upsert?: VariationUpsertWithWhereUniqueWithoutAttributesInput | VariationUpsertWithWhereUniqueWithoutAttributesInput[]
-    set?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    disconnect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    delete?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    connect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    update?: VariationUpdateWithWhereUniqueWithoutAttributesInput | VariationUpdateWithWhereUniqueWithoutAttributesInput[]
-    updateMany?: VariationUpdateManyWithWhereWithoutAttributesInput | VariationUpdateManyWithWhereWithoutAttributesInput[]
-    deleteMany?: VariationScalarWhereInput | VariationScalarWhereInput[]
-  }
-
-  export type VariationUncheckedUpdateManyWithoutAttributesNestedInput = {
-    create?: XOR<VariationCreateWithoutAttributesInput, VariationUncheckedCreateWithoutAttributesInput> | VariationCreateWithoutAttributesInput[] | VariationUncheckedCreateWithoutAttributesInput[]
-    connectOrCreate?: VariationCreateOrConnectWithoutAttributesInput | VariationCreateOrConnectWithoutAttributesInput[]
-    upsert?: VariationUpsertWithWhereUniqueWithoutAttributesInput | VariationUpsertWithWhereUniqueWithoutAttributesInput[]
-    set?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    disconnect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    delete?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    connect?: VariationWhereUniqueInput | VariationWhereUniqueInput[]
-    update?: VariationUpdateWithWhereUniqueWithoutAttributesInput | VariationUpdateWithWhereUniqueWithoutAttributesInput[]
-    updateMany?: VariationUpdateManyWithWhereWithoutAttributesInput | VariationUpdateManyWithWhereWithoutAttributesInput[]
-    deleteMany?: VariationScalarWhereInput | VariationScalarWhereInput[]
-  }
-
-  export type ProductCreateNestedOneWithoutAttributesInput = {
-    create?: XOR<ProductCreateWithoutAttributesInput, ProductUncheckedCreateWithoutAttributesInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutAttributesInput
+  export type ProductUpdateOneRequiredWithoutStepsNestedInput = {
+    create?: XOR<ProductCreateWithoutStepsInput, ProductUncheckedCreateWithoutStepsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutStepsInput
+    upsert?: ProductUpsertWithoutStepsInput
     connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutStepsInput, ProductUpdateWithoutStepsInput>, ProductUncheckedUpdateWithoutStepsInput>
   }
 
-  export type AttributeCreateNestedOneWithoutProductsInput = {
-    create?: XOR<AttributeCreateWithoutProductsInput, AttributeUncheckedCreateWithoutProductsInput>
-    connectOrCreate?: AttributeCreateOrConnectWithoutProductsInput
-    connect?: AttributeWhereUniqueInput
+  export type StepOptionUpdateManyWithoutStepNestedInput = {
+    create?: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput> | StepOptionCreateWithoutStepInput[] | StepOptionUncheckedCreateWithoutStepInput[]
+    connectOrCreate?: StepOptionCreateOrConnectWithoutStepInput | StepOptionCreateOrConnectWithoutStepInput[]
+    upsert?: StepOptionUpsertWithWhereUniqueWithoutStepInput | StepOptionUpsertWithWhereUniqueWithoutStepInput[]
+    createMany?: StepOptionCreateManyStepInputEnvelope
+    set?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+    disconnect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+    delete?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+    connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+    update?: StepOptionUpdateWithWhereUniqueWithoutStepInput | StepOptionUpdateWithWhereUniqueWithoutStepInput[]
+    updateMany?: StepOptionUpdateManyWithWhereWithoutStepInput | StepOptionUpdateManyWithWhereWithoutStepInput[]
+    deleteMany?: StepOptionScalarWhereInput | StepOptionScalarWhereInput[]
   }
 
-  export type ProductUpdateOneRequiredWithoutAttributesNestedInput = {
-    create?: XOR<ProductCreateWithoutAttributesInput, ProductUncheckedCreateWithoutAttributesInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutAttributesInput
-    upsert?: ProductUpsertWithoutAttributesInput
-    connect?: ProductWhereUniqueInput
-    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutAttributesInput, ProductUpdateWithoutAttributesInput>, ProductUncheckedUpdateWithoutAttributesInput>
+  export type StepOptionUncheckedUpdateManyWithoutStepNestedInput = {
+    create?: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput> | StepOptionCreateWithoutStepInput[] | StepOptionUncheckedCreateWithoutStepInput[]
+    connectOrCreate?: StepOptionCreateOrConnectWithoutStepInput | StepOptionCreateOrConnectWithoutStepInput[]
+    upsert?: StepOptionUpsertWithWhereUniqueWithoutStepInput | StepOptionUpsertWithWhereUniqueWithoutStepInput[]
+    createMany?: StepOptionCreateManyStepInputEnvelope
+    set?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+    disconnect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+    delete?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+    connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+    update?: StepOptionUpdateWithWhereUniqueWithoutStepInput | StepOptionUpdateWithWhereUniqueWithoutStepInput[]
+    updateMany?: StepOptionUpdateManyWithWhereWithoutStepInput | StepOptionUpdateManyWithWhereWithoutStepInput[]
+    deleteMany?: StepOptionScalarWhereInput | StepOptionScalarWhereInput[]
   }
 
-  export type AttributeUpdateOneRequiredWithoutProductsNestedInput = {
-    create?: XOR<AttributeCreateWithoutProductsInput, AttributeUncheckedCreateWithoutProductsInput>
-    connectOrCreate?: AttributeCreateOrConnectWithoutProductsInput
-    upsert?: AttributeUpsertWithoutProductsInput
-    connect?: AttributeWhereUniqueInput
-    update?: XOR<XOR<AttributeUpdateToOneWithWhereWithoutProductsInput, AttributeUpdateWithoutProductsInput>, AttributeUncheckedUpdateWithoutProductsInput>
+  export type FormStepCreateNestedOneWithoutOptionsInput = {
+    create?: XOR<FormStepCreateWithoutOptionsInput, FormStepUncheckedCreateWithoutOptionsInput>
+    connectOrCreate?: FormStepCreateOrConnectWithoutOptionsInput
+    connect?: FormStepWhereUniqueInput
   }
 
-  export type ProductCreateNestedOneWithoutVariationsInput = {
-    create?: XOR<ProductCreateWithoutVariationsInput, ProductUncheckedCreateWithoutVariationsInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutVariationsInput
-    connect?: ProductWhereUniqueInput
-  }
-
-  export type AttributeValueCreateNestedManyWithoutVariationsInput = {
-    create?: XOR<AttributeValueCreateWithoutVariationsInput, AttributeValueUncheckedCreateWithoutVariationsInput> | AttributeValueCreateWithoutVariationsInput[] | AttributeValueUncheckedCreateWithoutVariationsInput[]
-    connectOrCreate?: AttributeValueCreateOrConnectWithoutVariationsInput | AttributeValueCreateOrConnectWithoutVariationsInput[]
-    connect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-  }
-
-  export type AttributeValueUncheckedCreateNestedManyWithoutVariationsInput = {
-    create?: XOR<AttributeValueCreateWithoutVariationsInput, AttributeValueUncheckedCreateWithoutVariationsInput> | AttributeValueCreateWithoutVariationsInput[] | AttributeValueUncheckedCreateWithoutVariationsInput[]
-    connectOrCreate?: AttributeValueCreateOrConnectWithoutVariationsInput | AttributeValueCreateOrConnectWithoutVariationsInput[]
-    connect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-  }
-
-  export type ProductUpdateOneRequiredWithoutVariationsNestedInput = {
-    create?: XOR<ProductCreateWithoutVariationsInput, ProductUncheckedCreateWithoutVariationsInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutVariationsInput
-    upsert?: ProductUpsertWithoutVariationsInput
-    connect?: ProductWhereUniqueInput
-    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutVariationsInput, ProductUpdateWithoutVariationsInput>, ProductUncheckedUpdateWithoutVariationsInput>
-  }
-
-  export type AttributeValueUpdateManyWithoutVariationsNestedInput = {
-    create?: XOR<AttributeValueCreateWithoutVariationsInput, AttributeValueUncheckedCreateWithoutVariationsInput> | AttributeValueCreateWithoutVariationsInput[] | AttributeValueUncheckedCreateWithoutVariationsInput[]
-    connectOrCreate?: AttributeValueCreateOrConnectWithoutVariationsInput | AttributeValueCreateOrConnectWithoutVariationsInput[]
-    upsert?: AttributeValueUpsertWithWhereUniqueWithoutVariationsInput | AttributeValueUpsertWithWhereUniqueWithoutVariationsInput[]
-    set?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    disconnect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    delete?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    connect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    update?: AttributeValueUpdateWithWhereUniqueWithoutVariationsInput | AttributeValueUpdateWithWhereUniqueWithoutVariationsInput[]
-    updateMany?: AttributeValueUpdateManyWithWhereWithoutVariationsInput | AttributeValueUpdateManyWithWhereWithoutVariationsInput[]
-    deleteMany?: AttributeValueScalarWhereInput | AttributeValueScalarWhereInput[]
-  }
-
-  export type AttributeValueUncheckedUpdateManyWithoutVariationsNestedInput = {
-    create?: XOR<AttributeValueCreateWithoutVariationsInput, AttributeValueUncheckedCreateWithoutVariationsInput> | AttributeValueCreateWithoutVariationsInput[] | AttributeValueUncheckedCreateWithoutVariationsInput[]
-    connectOrCreate?: AttributeValueCreateOrConnectWithoutVariationsInput | AttributeValueCreateOrConnectWithoutVariationsInput[]
-    upsert?: AttributeValueUpsertWithWhereUniqueWithoutVariationsInput | AttributeValueUpsertWithWhereUniqueWithoutVariationsInput[]
-    set?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    disconnect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    delete?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    connect?: AttributeValueWhereUniqueInput | AttributeValueWhereUniqueInput[]
-    update?: AttributeValueUpdateWithWhereUniqueWithoutVariationsInput | AttributeValueUpdateWithWhereUniqueWithoutVariationsInput[]
-    updateMany?: AttributeValueUpdateManyWithWhereWithoutVariationsInput | AttributeValueUpdateManyWithWhereWithoutVariationsInput[]
-    deleteMany?: AttributeValueScalarWhereInput | AttributeValueScalarWhereInput[]
+  export type FormStepUpdateOneRequiredWithoutOptionsNestedInput = {
+    create?: XOR<FormStepCreateWithoutOptionsInput, FormStepUncheckedCreateWithoutOptionsInput>
+    connectOrCreate?: FormStepCreateOrConnectWithoutOptionsInput
+    upsert?: FormStepUpsertWithoutOptionsInput
+    connect?: FormStepWhereUniqueInput
+    update?: XOR<XOR<FormStepUpdateToOneWithWhereWithoutOptionsInput, FormStepUpdateWithoutOptionsInput>, FormStepUncheckedUpdateWithoutOptionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -8331,17 +6322,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -8411,22 +6391,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
-  }
-
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -8441,661 +6405,648 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type VariationCreateWithoutProductInput = {
+  export type NestedEnumStepTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepTypeFilter<$PrismaModel> | $Enums.StepType
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumStepTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStepTypeNullableFilter<$PrismaModel> | $Enums.StepType | null
+  }
+
+  export type NestedEnumPricingImpactFilter<$PrismaModel = never> = {
+    equals?: $Enums.PricingImpact | EnumPricingImpactFieldRefInput<$PrismaModel>
+    in?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    not?: NestedEnumPricingImpactFilter<$PrismaModel> | $Enums.PricingImpact
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumStepTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepTypeWithAggregatesFilter<$PrismaModel> | $Enums.StepType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStepTypeFilter<$PrismaModel>
+    _max?: NestedEnumStepTypeFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumStepTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStepTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StepType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStepTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumStepTypeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPricingImpactWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PricingImpact | EnumPricingImpactFieldRefInput<$PrismaModel>
+    in?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    not?: NestedEnumPricingImpactWithAggregatesFilter<$PrismaModel> | $Enums.PricingImpact
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPricingImpactFilter<$PrismaModel>
+    _max?: NestedEnumPricingImpactFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type FormStepCreateWithoutProductInput = {
     id?: string
-    sku: string
-    price: number
-    image?: string | null
+    order: number
+    type1: $Enums.StepType
+    question1: string
+    required1?: boolean
+    type2?: $Enums.StepType | null
+    question2?: string | null
+    required2?: boolean
+    pricingImpact1?: $Enums.PricingImpact
+    pricePerUnit1?: number | null
+    unit1?: string | null
+    minValue1?: number | null
+    maxValue1?: number | null
+    defaultValue1?: number | null
+    pricingImpact2?: $Enums.PricingImpact
+    pricePerUnit2?: number | null
+    unit2?: string | null
+    minValue2?: number | null
+    maxValue2?: number | null
+    defaultValue2?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    attributes?: AttributeValueCreateNestedManyWithoutVariationsInput
+    options?: StepOptionCreateNestedManyWithoutStepInput
   }
 
-  export type VariationUncheckedCreateWithoutProductInput = {
+  export type FormStepUncheckedCreateWithoutProductInput = {
     id?: string
-    sku: string
-    price: number
-    image?: string | null
+    order: number
+    type1: $Enums.StepType
+    question1: string
+    required1?: boolean
+    type2?: $Enums.StepType | null
+    question2?: string | null
+    required2?: boolean
+    pricingImpact1?: $Enums.PricingImpact
+    pricePerUnit1?: number | null
+    unit1?: string | null
+    minValue1?: number | null
+    maxValue1?: number | null
+    defaultValue1?: number | null
+    pricingImpact2?: $Enums.PricingImpact
+    pricePerUnit2?: number | null
+    unit2?: string | null
+    minValue2?: number | null
+    maxValue2?: number | null
+    defaultValue2?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    attributes?: AttributeValueUncheckedCreateNestedManyWithoutVariationsInput
+    options?: StepOptionUncheckedCreateNestedManyWithoutStepInput
   }
 
-  export type VariationCreateOrConnectWithoutProductInput = {
-    where: VariationWhereUniqueInput
-    create: XOR<VariationCreateWithoutProductInput, VariationUncheckedCreateWithoutProductInput>
+  export type FormStepCreateOrConnectWithoutProductInput = {
+    where: FormStepWhereUniqueInput
+    create: XOR<FormStepCreateWithoutProductInput, FormStepUncheckedCreateWithoutProductInput>
   }
 
-  export type VariationCreateManyProductInputEnvelope = {
-    data: VariationCreateManyProductInput | VariationCreateManyProductInput[]
+  export type FormStepCreateManyProductInputEnvelope = {
+    data: FormStepCreateManyProductInput | FormStepCreateManyProductInput[]
     skipDuplicates?: boolean
   }
 
-  export type ProductAttributeCreateWithoutProductInput = {
-    id?: string
-    attribute: AttributeCreateNestedOneWithoutProductsInput
+  export type FormStepUpsertWithWhereUniqueWithoutProductInput = {
+    where: FormStepWhereUniqueInput
+    update: XOR<FormStepUpdateWithoutProductInput, FormStepUncheckedUpdateWithoutProductInput>
+    create: XOR<FormStepCreateWithoutProductInput, FormStepUncheckedCreateWithoutProductInput>
   }
 
-  export type ProductAttributeUncheckedCreateWithoutProductInput = {
-    id?: string
-    attributeId: string
+  export type FormStepUpdateWithWhereUniqueWithoutProductInput = {
+    where: FormStepWhereUniqueInput
+    data: XOR<FormStepUpdateWithoutProductInput, FormStepUncheckedUpdateWithoutProductInput>
   }
 
-  export type ProductAttributeCreateOrConnectWithoutProductInput = {
-    where: ProductAttributeWhereUniqueInput
-    create: XOR<ProductAttributeCreateWithoutProductInput, ProductAttributeUncheckedCreateWithoutProductInput>
+  export type FormStepUpdateManyWithWhereWithoutProductInput = {
+    where: FormStepScalarWhereInput
+    data: XOR<FormStepUpdateManyMutationInput, FormStepUncheckedUpdateManyWithoutProductInput>
   }
 
-  export type ProductAttributeCreateManyProductInputEnvelope = {
-    data: ProductAttributeCreateManyProductInput | ProductAttributeCreateManyProductInput[]
-    skipDuplicates?: boolean
+  export type FormStepScalarWhereInput = {
+    AND?: FormStepScalarWhereInput | FormStepScalarWhereInput[]
+    OR?: FormStepScalarWhereInput[]
+    NOT?: FormStepScalarWhereInput | FormStepScalarWhereInput[]
+    id?: StringFilter<"FormStep"> | string
+    productId?: StringFilter<"FormStep"> | string
+    order?: IntFilter<"FormStep"> | number
+    type1?: EnumStepTypeFilter<"FormStep"> | $Enums.StepType
+    question1?: StringFilter<"FormStep"> | string
+    required1?: BoolFilter<"FormStep"> | boolean
+    type2?: EnumStepTypeNullableFilter<"FormStep"> | $Enums.StepType | null
+    question2?: StringNullableFilter<"FormStep"> | string | null
+    required2?: BoolFilter<"FormStep"> | boolean
+    pricingImpact1?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
+    pricePerUnit1?: FloatNullableFilter<"FormStep"> | number | null
+    unit1?: StringNullableFilter<"FormStep"> | string | null
+    minValue1?: FloatNullableFilter<"FormStep"> | number | null
+    maxValue1?: FloatNullableFilter<"FormStep"> | number | null
+    defaultValue1?: FloatNullableFilter<"FormStep"> | number | null
+    pricingImpact2?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
+    pricePerUnit2?: FloatNullableFilter<"FormStep"> | number | null
+    unit2?: StringNullableFilter<"FormStep"> | string | null
+    minValue2?: FloatNullableFilter<"FormStep"> | number | null
+    maxValue2?: FloatNullableFilter<"FormStep"> | number | null
+    defaultValue2?: FloatNullableFilter<"FormStep"> | number | null
+    conditionalOn?: JsonNullableFilter<"FormStep">
+    createdAt?: DateTimeFilter<"FormStep"> | Date | string
+    updatedAt?: DateTimeFilter<"FormStep"> | Date | string
   }
 
-  export type VariationUpsertWithWhereUniqueWithoutProductInput = {
-    where: VariationWhereUniqueInput
-    update: XOR<VariationUpdateWithoutProductInput, VariationUncheckedUpdateWithoutProductInput>
-    create: XOR<VariationCreateWithoutProductInput, VariationUncheckedCreateWithoutProductInput>
-  }
-
-  export type VariationUpdateWithWhereUniqueWithoutProductInput = {
-    where: VariationWhereUniqueInput
-    data: XOR<VariationUpdateWithoutProductInput, VariationUncheckedUpdateWithoutProductInput>
-  }
-
-  export type VariationUpdateManyWithWhereWithoutProductInput = {
-    where: VariationScalarWhereInput
-    data: XOR<VariationUpdateManyMutationInput, VariationUncheckedUpdateManyWithoutProductInput>
-  }
-
-  export type VariationScalarWhereInput = {
-    AND?: VariationScalarWhereInput | VariationScalarWhereInput[]
-    OR?: VariationScalarWhereInput[]
-    NOT?: VariationScalarWhereInput | VariationScalarWhereInput[]
-    id?: StringFilter<"Variation"> | string
-    sku?: StringFilter<"Variation"> | string
-    price?: FloatFilter<"Variation"> | number
-    image?: StringNullableFilter<"Variation"> | string | null
-    createdAt?: DateTimeFilter<"Variation"> | Date | string
-    updatedAt?: DateTimeFilter<"Variation"> | Date | string
-    productId?: StringFilter<"Variation"> | string
-  }
-
-  export type ProductAttributeUpsertWithWhereUniqueWithoutProductInput = {
-    where: ProductAttributeWhereUniqueInput
-    update: XOR<ProductAttributeUpdateWithoutProductInput, ProductAttributeUncheckedUpdateWithoutProductInput>
-    create: XOR<ProductAttributeCreateWithoutProductInput, ProductAttributeUncheckedCreateWithoutProductInput>
-  }
-
-  export type ProductAttributeUpdateWithWhereUniqueWithoutProductInput = {
-    where: ProductAttributeWhereUniqueInput
-    data: XOR<ProductAttributeUpdateWithoutProductInput, ProductAttributeUncheckedUpdateWithoutProductInput>
-  }
-
-  export type ProductAttributeUpdateManyWithWhereWithoutProductInput = {
-    where: ProductAttributeScalarWhereInput
-    data: XOR<ProductAttributeUpdateManyMutationInput, ProductAttributeUncheckedUpdateManyWithoutProductInput>
-  }
-
-  export type ProductAttributeScalarWhereInput = {
-    AND?: ProductAttributeScalarWhereInput | ProductAttributeScalarWhereInput[]
-    OR?: ProductAttributeScalarWhereInput[]
-    NOT?: ProductAttributeScalarWhereInput | ProductAttributeScalarWhereInput[]
-    id?: StringFilter<"ProductAttribute"> | string
-    productId?: StringFilter<"ProductAttribute"> | string
-    attributeId?: StringFilter<"ProductAttribute"> | string
-  }
-
-  export type AttributeValueCreateWithoutAttributeInput = {
-    id?: string
-    value: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    variations?: VariationCreateNestedManyWithoutAttributesInput
-  }
-
-  export type AttributeValueUncheckedCreateWithoutAttributeInput = {
-    id?: string
-    value: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    variations?: VariationUncheckedCreateNestedManyWithoutAttributesInput
-  }
-
-  export type AttributeValueCreateOrConnectWithoutAttributeInput = {
-    where: AttributeValueWhereUniqueInput
-    create: XOR<AttributeValueCreateWithoutAttributeInput, AttributeValueUncheckedCreateWithoutAttributeInput>
-  }
-
-  export type AttributeValueCreateManyAttributeInputEnvelope = {
-    data: AttributeValueCreateManyAttributeInput | AttributeValueCreateManyAttributeInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ProductAttributeCreateWithoutAttributeInput = {
-    id?: string
-    product: ProductCreateNestedOneWithoutAttributesInput
-  }
-
-  export type ProductAttributeUncheckedCreateWithoutAttributeInput = {
-    id?: string
-    productId: string
-  }
-
-  export type ProductAttributeCreateOrConnectWithoutAttributeInput = {
-    where: ProductAttributeWhereUniqueInput
-    create: XOR<ProductAttributeCreateWithoutAttributeInput, ProductAttributeUncheckedCreateWithoutAttributeInput>
-  }
-
-  export type ProductAttributeCreateManyAttributeInputEnvelope = {
-    data: ProductAttributeCreateManyAttributeInput | ProductAttributeCreateManyAttributeInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AttributeValueUpsertWithWhereUniqueWithoutAttributeInput = {
-    where: AttributeValueWhereUniqueInput
-    update: XOR<AttributeValueUpdateWithoutAttributeInput, AttributeValueUncheckedUpdateWithoutAttributeInput>
-    create: XOR<AttributeValueCreateWithoutAttributeInput, AttributeValueUncheckedCreateWithoutAttributeInput>
-  }
-
-  export type AttributeValueUpdateWithWhereUniqueWithoutAttributeInput = {
-    where: AttributeValueWhereUniqueInput
-    data: XOR<AttributeValueUpdateWithoutAttributeInput, AttributeValueUncheckedUpdateWithoutAttributeInput>
-  }
-
-  export type AttributeValueUpdateManyWithWhereWithoutAttributeInput = {
-    where: AttributeValueScalarWhereInput
-    data: XOR<AttributeValueUpdateManyMutationInput, AttributeValueUncheckedUpdateManyWithoutAttributeInput>
-  }
-
-  export type AttributeValueScalarWhereInput = {
-    AND?: AttributeValueScalarWhereInput | AttributeValueScalarWhereInput[]
-    OR?: AttributeValueScalarWhereInput[]
-    NOT?: AttributeValueScalarWhereInput | AttributeValueScalarWhereInput[]
-    id?: StringFilter<"AttributeValue"> | string
-    value?: StringFilter<"AttributeValue"> | string
-    createdAt?: DateTimeFilter<"AttributeValue"> | Date | string
-    updatedAt?: DateTimeFilter<"AttributeValue"> | Date | string
-    attributeId?: StringFilter<"AttributeValue"> | string
-  }
-
-  export type ProductAttributeUpsertWithWhereUniqueWithoutAttributeInput = {
-    where: ProductAttributeWhereUniqueInput
-    update: XOR<ProductAttributeUpdateWithoutAttributeInput, ProductAttributeUncheckedUpdateWithoutAttributeInput>
-    create: XOR<ProductAttributeCreateWithoutAttributeInput, ProductAttributeUncheckedCreateWithoutAttributeInput>
-  }
-
-  export type ProductAttributeUpdateWithWhereUniqueWithoutAttributeInput = {
-    where: ProductAttributeWhereUniqueInput
-    data: XOR<ProductAttributeUpdateWithoutAttributeInput, ProductAttributeUncheckedUpdateWithoutAttributeInput>
-  }
-
-  export type ProductAttributeUpdateManyWithWhereWithoutAttributeInput = {
-    where: ProductAttributeScalarWhereInput
-    data: XOR<ProductAttributeUpdateManyMutationInput, ProductAttributeUncheckedUpdateManyWithoutAttributeInput>
-  }
-
-  export type AttributeCreateWithoutValuesInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    products?: ProductAttributeCreateNestedManyWithoutAttributeInput
-  }
-
-  export type AttributeUncheckedCreateWithoutValuesInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    products?: ProductAttributeUncheckedCreateNestedManyWithoutAttributeInput
-  }
-
-  export type AttributeCreateOrConnectWithoutValuesInput = {
-    where: AttributeWhereUniqueInput
-    create: XOR<AttributeCreateWithoutValuesInput, AttributeUncheckedCreateWithoutValuesInput>
-  }
-
-  export type VariationCreateWithoutAttributesInput = {
-    id?: string
-    sku: string
-    price: number
-    image?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    product: ProductCreateNestedOneWithoutVariationsInput
-  }
-
-  export type VariationUncheckedCreateWithoutAttributesInput = {
-    id?: string
-    sku: string
-    price: number
-    image?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    productId: string
-  }
-
-  export type VariationCreateOrConnectWithoutAttributesInput = {
-    where: VariationWhereUniqueInput
-    create: XOR<VariationCreateWithoutAttributesInput, VariationUncheckedCreateWithoutAttributesInput>
-  }
-
-  export type AttributeUpsertWithoutValuesInput = {
-    update: XOR<AttributeUpdateWithoutValuesInput, AttributeUncheckedUpdateWithoutValuesInput>
-    create: XOR<AttributeCreateWithoutValuesInput, AttributeUncheckedCreateWithoutValuesInput>
-    where?: AttributeWhereInput
-  }
-
-  export type AttributeUpdateToOneWithWhereWithoutValuesInput = {
-    where?: AttributeWhereInput
-    data: XOR<AttributeUpdateWithoutValuesInput, AttributeUncheckedUpdateWithoutValuesInput>
-  }
-
-  export type AttributeUpdateWithoutValuesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    products?: ProductAttributeUpdateManyWithoutAttributeNestedInput
-  }
-
-  export type AttributeUncheckedUpdateWithoutValuesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    products?: ProductAttributeUncheckedUpdateManyWithoutAttributeNestedInput
-  }
-
-  export type VariationUpsertWithWhereUniqueWithoutAttributesInput = {
-    where: VariationWhereUniqueInput
-    update: XOR<VariationUpdateWithoutAttributesInput, VariationUncheckedUpdateWithoutAttributesInput>
-    create: XOR<VariationCreateWithoutAttributesInput, VariationUncheckedCreateWithoutAttributesInput>
-  }
-
-  export type VariationUpdateWithWhereUniqueWithoutAttributesInput = {
-    where: VariationWhereUniqueInput
-    data: XOR<VariationUpdateWithoutAttributesInput, VariationUncheckedUpdateWithoutAttributesInput>
-  }
-
-  export type VariationUpdateManyWithWhereWithoutAttributesInput = {
-    where: VariationScalarWhereInput
-    data: XOR<VariationUpdateManyMutationInput, VariationUncheckedUpdateManyWithoutAttributesInput>
-  }
-
-  export type ProductCreateWithoutAttributesInput = {
+  export type ProductCreateWithoutStepsInput = {
     id?: string
     name: string
     slug: string
     description?: string | null
-    basePrice: number
     baseImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    variations?: VariationCreateNestedManyWithoutProductInput
   }
 
-  export type ProductUncheckedCreateWithoutAttributesInput = {
+  export type ProductUncheckedCreateWithoutStepsInput = {
     id?: string
     name: string
     slug: string
     description?: string | null
-    basePrice: number
     baseImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    variations?: VariationUncheckedCreateNestedManyWithoutProductInput
   }
 
-  export type ProductCreateOrConnectWithoutAttributesInput = {
+  export type ProductCreateOrConnectWithoutStepsInput = {
     where: ProductWhereUniqueInput
-    create: XOR<ProductCreateWithoutAttributesInput, ProductUncheckedCreateWithoutAttributesInput>
+    create: XOR<ProductCreateWithoutStepsInput, ProductUncheckedCreateWithoutStepsInput>
   }
 
-  export type AttributeCreateWithoutProductsInput = {
+  export type StepOptionCreateWithoutStepInput = {
     id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    values?: AttributeValueCreateNestedManyWithoutAttributeInput
-  }
-
-  export type AttributeUncheckedCreateWithoutProductsInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    values?: AttributeValueUncheckedCreateNestedManyWithoutAttributeInput
-  }
-
-  export type AttributeCreateOrConnectWithoutProductsInput = {
-    where: AttributeWhereUniqueInput
-    create: XOR<AttributeCreateWithoutProductsInput, AttributeUncheckedCreateWithoutProductsInput>
-  }
-
-  export type ProductUpsertWithoutAttributesInput = {
-    update: XOR<ProductUpdateWithoutAttributesInput, ProductUncheckedUpdateWithoutAttributesInput>
-    create: XOR<ProductCreateWithoutAttributesInput, ProductUncheckedCreateWithoutAttributesInput>
-    where?: ProductWhereInput
-  }
-
-  export type ProductUpdateToOneWithWhereWithoutAttributesInput = {
-    where?: ProductWhereInput
-    data: XOR<ProductUpdateWithoutAttributesInput, ProductUncheckedUpdateWithoutAttributesInput>
-  }
-
-  export type ProductUpdateWithoutAttributesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    basePrice?: FloatFieldUpdateOperationsInput | number
-    baseImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    variations?: VariationUpdateManyWithoutProductNestedInput
-  }
-
-  export type ProductUncheckedUpdateWithoutAttributesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    basePrice?: FloatFieldUpdateOperationsInput | number
-    baseImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    variations?: VariationUncheckedUpdateManyWithoutProductNestedInput
-  }
-
-  export type AttributeUpsertWithoutProductsInput = {
-    update: XOR<AttributeUpdateWithoutProductsInput, AttributeUncheckedUpdateWithoutProductsInput>
-    create: XOR<AttributeCreateWithoutProductsInput, AttributeUncheckedCreateWithoutProductsInput>
-    where?: AttributeWhereInput
-  }
-
-  export type AttributeUpdateToOneWithWhereWithoutProductsInput = {
-    where?: AttributeWhereInput
-    data: XOR<AttributeUpdateWithoutProductsInput, AttributeUncheckedUpdateWithoutProductsInput>
-  }
-
-  export type AttributeUpdateWithoutProductsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    values?: AttributeValueUpdateManyWithoutAttributeNestedInput
-  }
-
-  export type AttributeUncheckedUpdateWithoutProductsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    values?: AttributeValueUncheckedUpdateManyWithoutAttributeNestedInput
-  }
-
-  export type ProductCreateWithoutVariationsInput = {
-    id?: string
-    name: string
-    slug: string
-    description?: string | null
-    basePrice: number
-    baseImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    attributes?: ProductAttributeCreateNestedManyWithoutProductInput
-  }
-
-  export type ProductUncheckedCreateWithoutVariationsInput = {
-    id?: string
-    name: string
-    slug: string
-    description?: string | null
-    basePrice: number
-    baseImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    attributes?: ProductAttributeUncheckedCreateNestedManyWithoutProductInput
-  }
-
-  export type ProductCreateOrConnectWithoutVariationsInput = {
-    where: ProductWhereUniqueInput
-    create: XOR<ProductCreateWithoutVariationsInput, ProductUncheckedCreateWithoutVariationsInput>
-  }
-
-  export type AttributeValueCreateWithoutVariationsInput = {
-    id?: string
+    questionNum?: number
+    label: string
     value: string
+    price?: number | null
+    order: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    attribute: AttributeCreateNestedOneWithoutValuesInput
   }
 
-  export type AttributeValueUncheckedCreateWithoutVariationsInput = {
+  export type StepOptionUncheckedCreateWithoutStepInput = {
     id?: string
+    questionNum?: number
+    label: string
     value: string
+    price?: number | null
+    order: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    attributeId: string
   }
 
-  export type AttributeValueCreateOrConnectWithoutVariationsInput = {
-    where: AttributeValueWhereUniqueInput
-    create: XOR<AttributeValueCreateWithoutVariationsInput, AttributeValueUncheckedCreateWithoutVariationsInput>
+  export type StepOptionCreateOrConnectWithoutStepInput = {
+    where: StepOptionWhereUniqueInput
+    create: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput>
   }
 
-  export type ProductUpsertWithoutVariationsInput = {
-    update: XOR<ProductUpdateWithoutVariationsInput, ProductUncheckedUpdateWithoutVariationsInput>
-    create: XOR<ProductCreateWithoutVariationsInput, ProductUncheckedCreateWithoutVariationsInput>
+  export type StepOptionCreateManyStepInputEnvelope = {
+    data: StepOptionCreateManyStepInput | StepOptionCreateManyStepInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductUpsertWithoutStepsInput = {
+    update: XOR<ProductUpdateWithoutStepsInput, ProductUncheckedUpdateWithoutStepsInput>
+    create: XOR<ProductCreateWithoutStepsInput, ProductUncheckedCreateWithoutStepsInput>
     where?: ProductWhereInput
   }
 
-  export type ProductUpdateToOneWithWhereWithoutVariationsInput = {
+  export type ProductUpdateToOneWithWhereWithoutStepsInput = {
     where?: ProductWhereInput
-    data: XOR<ProductUpdateWithoutVariationsInput, ProductUncheckedUpdateWithoutVariationsInput>
+    data: XOR<ProductUpdateWithoutStepsInput, ProductUncheckedUpdateWithoutStepsInput>
   }
 
-  export type ProductUpdateWithoutVariationsInput = {
+  export type ProductUpdateWithoutStepsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    basePrice?: FloatFieldUpdateOperationsInput | number
     baseImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attributes?: ProductAttributeUpdateManyWithoutProductNestedInput
   }
 
-  export type ProductUncheckedUpdateWithoutVariationsInput = {
+  export type ProductUncheckedUpdateWithoutStepsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    basePrice?: FloatFieldUpdateOperationsInput | number
     baseImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attributes?: ProductAttributeUncheckedUpdateManyWithoutProductNestedInput
   }
 
-  export type AttributeValueUpsertWithWhereUniqueWithoutVariationsInput = {
-    where: AttributeValueWhereUniqueInput
-    update: XOR<AttributeValueUpdateWithoutVariationsInput, AttributeValueUncheckedUpdateWithoutVariationsInput>
-    create: XOR<AttributeValueCreateWithoutVariationsInput, AttributeValueUncheckedCreateWithoutVariationsInput>
+  export type StepOptionUpsertWithWhereUniqueWithoutStepInput = {
+    where: StepOptionWhereUniqueInput
+    update: XOR<StepOptionUpdateWithoutStepInput, StepOptionUncheckedUpdateWithoutStepInput>
+    create: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput>
   }
 
-  export type AttributeValueUpdateWithWhereUniqueWithoutVariationsInput = {
-    where: AttributeValueWhereUniqueInput
-    data: XOR<AttributeValueUpdateWithoutVariationsInput, AttributeValueUncheckedUpdateWithoutVariationsInput>
+  export type StepOptionUpdateWithWhereUniqueWithoutStepInput = {
+    where: StepOptionWhereUniqueInput
+    data: XOR<StepOptionUpdateWithoutStepInput, StepOptionUncheckedUpdateWithoutStepInput>
   }
 
-  export type AttributeValueUpdateManyWithWhereWithoutVariationsInput = {
-    where: AttributeValueScalarWhereInput
-    data: XOR<AttributeValueUpdateManyMutationInput, AttributeValueUncheckedUpdateManyWithoutVariationsInput>
+  export type StepOptionUpdateManyWithWhereWithoutStepInput = {
+    where: StepOptionScalarWhereInput
+    data: XOR<StepOptionUpdateManyMutationInput, StepOptionUncheckedUpdateManyWithoutStepInput>
   }
 
-  export type VariationCreateManyProductInput = {
+  export type StepOptionScalarWhereInput = {
+    AND?: StepOptionScalarWhereInput | StepOptionScalarWhereInput[]
+    OR?: StepOptionScalarWhereInput[]
+    NOT?: StepOptionScalarWhereInput | StepOptionScalarWhereInput[]
+    id?: StringFilter<"StepOption"> | string
+    stepId?: StringFilter<"StepOption"> | string
+    questionNum?: IntFilter<"StepOption"> | number
+    label?: StringFilter<"StepOption"> | string
+    value?: StringFilter<"StepOption"> | string
+    price?: FloatNullableFilter<"StepOption"> | number | null
+    order?: IntFilter<"StepOption"> | number
+    createdAt?: DateTimeFilter<"StepOption"> | Date | string
+    updatedAt?: DateTimeFilter<"StepOption"> | Date | string
+  }
+
+  export type FormStepCreateWithoutOptionsInput = {
     id?: string
-    sku: string
-    price: number
-    image?: string | null
+    order: number
+    type1: $Enums.StepType
+    question1: string
+    required1?: boolean
+    type2?: $Enums.StepType | null
+    question2?: string | null
+    required2?: boolean
+    pricingImpact1?: $Enums.PricingImpact
+    pricePerUnit1?: number | null
+    unit1?: string | null
+    minValue1?: number | null
+    maxValue1?: number | null
+    defaultValue1?: number | null
+    pricingImpact2?: $Enums.PricingImpact
+    pricePerUnit2?: number | null
+    unit2?: string | null
+    minValue2?: number | null
+    maxValue2?: number | null
+    defaultValue2?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutStepsInput
   }
 
-  export type ProductAttributeCreateManyProductInput = {
-    id?: string
-    attributeId: string
-  }
-
-  export type VariationUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attributes?: AttributeValueUpdateManyWithoutVariationsNestedInput
-  }
-
-  export type VariationUncheckedUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attributes?: AttributeValueUncheckedUpdateManyWithoutVariationsNestedInput
-  }
-
-  export type VariationUncheckedUpdateManyWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProductAttributeUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    attribute?: AttributeUpdateOneRequiredWithoutProductsNestedInput
-  }
-
-  export type ProductAttributeUncheckedUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    attributeId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProductAttributeUncheckedUpdateManyWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    attributeId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type AttributeValueCreateManyAttributeInput = {
-    id?: string
-    value: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ProductAttributeCreateManyAttributeInput = {
+  export type FormStepUncheckedCreateWithoutOptionsInput = {
     id?: string
     productId: string
+    order: number
+    type1: $Enums.StepType
+    question1: string
+    required1?: boolean
+    type2?: $Enums.StepType | null
+    question2?: string | null
+    required2?: boolean
+    pricingImpact1?: $Enums.PricingImpact
+    pricePerUnit1?: number | null
+    unit1?: string | null
+    minValue1?: number | null
+    maxValue1?: number | null
+    defaultValue1?: number | null
+    pricingImpact2?: $Enums.PricingImpact
+    pricePerUnit2?: number | null
+    unit2?: string | null
+    minValue2?: number | null
+    maxValue2?: number | null
+    defaultValue2?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type AttributeValueUpdateWithoutAttributeInput = {
+  export type FormStepCreateOrConnectWithoutOptionsInput = {
+    where: FormStepWhereUniqueInput
+    create: XOR<FormStepCreateWithoutOptionsInput, FormStepUncheckedCreateWithoutOptionsInput>
+  }
+
+  export type FormStepUpsertWithoutOptionsInput = {
+    update: XOR<FormStepUpdateWithoutOptionsInput, FormStepUncheckedUpdateWithoutOptionsInput>
+    create: XOR<FormStepCreateWithoutOptionsInput, FormStepUncheckedCreateWithoutOptionsInput>
+    where?: FormStepWhereInput
+  }
+
+  export type FormStepUpdateToOneWithWhereWithoutOptionsInput = {
+    where?: FormStepWhereInput
+    data: XOR<FormStepUpdateWithoutOptionsInput, FormStepUncheckedUpdateWithoutOptionsInput>
+  }
+
+  export type FormStepUpdateWithoutOptionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question1?: StringFieldUpdateOperationsInput | string
+    required1?: BoolFieldUpdateOperationsInput | boolean
+    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
+    question2?: NullableStringFieldUpdateOperationsInput | string | null
+    required2?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit1?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit2?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    variations?: VariationUpdateManyWithoutAttributesNestedInput
+    product?: ProductUpdateOneRequiredWithoutStepsNestedInput
   }
 
-  export type AttributeValueUncheckedUpdateWithoutAttributeInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    value?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    variations?: VariationUncheckedUpdateManyWithoutAttributesNestedInput
-  }
-
-  export type AttributeValueUncheckedUpdateManyWithoutAttributeInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    value?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProductAttributeUpdateWithoutAttributeInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    product?: ProductUpdateOneRequiredWithoutAttributesNestedInput
-  }
-
-  export type ProductAttributeUncheckedUpdateWithoutAttributeInput = {
+  export type FormStepUncheckedUpdateWithoutOptionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ProductAttributeUncheckedUpdateManyWithoutAttributeInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    productId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type VariationUpdateWithoutAttributesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question1?: StringFieldUpdateOperationsInput | string
+    required1?: BoolFieldUpdateOperationsInput | boolean
+    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
+    question2?: NullableStringFieldUpdateOperationsInput | string | null
+    required2?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit1?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit2?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    product?: ProductUpdateOneRequiredWithoutVariationsNestedInput
   }
 
-  export type VariationUncheckedUpdateWithoutAttributesInput = {
+  export type FormStepCreateManyProductInput = {
+    id?: string
+    order: number
+    type1: $Enums.StepType
+    question1: string
+    required1?: boolean
+    type2?: $Enums.StepType | null
+    question2?: string | null
+    required2?: boolean
+    pricingImpact1?: $Enums.PricingImpact
+    pricePerUnit1?: number | null
+    unit1?: string | null
+    minValue1?: number | null
+    maxValue1?: number | null
+    defaultValue1?: number | null
+    pricingImpact2?: $Enums.PricingImpact
+    pricePerUnit2?: number | null
+    unit2?: string | null
+    minValue2?: number | null
+    maxValue2?: number | null
+    defaultValue2?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormStepUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question1?: StringFieldUpdateOperationsInput | string
+    required1?: BoolFieldUpdateOperationsInput | boolean
+    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
+    question2?: NullableStringFieldUpdateOperationsInput | string | null
+    required2?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit1?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit2?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    productId?: StringFieldUpdateOperationsInput | string
+    options?: StepOptionUpdateManyWithoutStepNestedInput
   }
 
-  export type VariationUncheckedUpdateManyWithoutAttributesInput = {
+  export type FormStepUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question1?: StringFieldUpdateOperationsInput | string
+    required1?: BoolFieldUpdateOperationsInput | boolean
+    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
+    question2?: NullableStringFieldUpdateOperationsInput | string | null
+    required2?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit1?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit2?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    productId?: StringFieldUpdateOperationsInput | string
+    options?: StepOptionUncheckedUpdateManyWithoutStepNestedInput
   }
 
-  export type AttributeValueUpdateWithoutVariationsInput = {
+  export type FormStepUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question1?: StringFieldUpdateOperationsInput | string
+    required1?: BoolFieldUpdateOperationsInput | boolean
+    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
+    question2?: NullableStringFieldUpdateOperationsInput | string | null
+    required2?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit1?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit2?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepOptionCreateManyStepInput = {
+    id?: string
+    questionNum?: number
+    label: string
+    value: string
+    price?: number | null
+    order: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepOptionUpdateWithoutStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    questionNum?: IntFieldUpdateOperationsInput | number
+    label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attribute?: AttributeUpdateOneRequiredWithoutValuesNestedInput
   }
 
-  export type AttributeValueUncheckedUpdateWithoutVariationsInput = {
+  export type StepOptionUncheckedUpdateWithoutStepInput = {
     id?: StringFieldUpdateOperationsInput | string
+    questionNum?: IntFieldUpdateOperationsInput | number
+    label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attributeId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type AttributeValueUncheckedUpdateManyWithoutVariationsInput = {
+  export type StepOptionUncheckedUpdateManyWithoutStepInput = {
     id?: StringFieldUpdateOperationsInput | string
+    questionNum?: IntFieldUpdateOperationsInput | number
+    label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attributeId?: StringFieldUpdateOperationsInput | string
   }
 
 

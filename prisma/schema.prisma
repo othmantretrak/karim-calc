@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/app/generated/prisma"
@@ -19,61 +16,86 @@ model Product {
   name        String
   slug        String   @unique
   description String?
-  basePrice   Float
   baseImage   String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   // Relations
-  variations Variation[]
-  attributes ProductAttribute[]
+  steps FormStep[]
 }
 
-model Attribute {
-  id        String   @id @default(cuid())
-  name      String   @unique
+model FormStep {
+  id        String @id @default(cuid())
+  productId String
+  order     Int // Order of the step in the form
+
+  // Each step can now have TWO questions
+  type1     StepType // First question type
+  question1 String // First question
+  required1 Boolean  @default(true)
+
+  type2     StepType? // Second question type (optional)
+  question2 String? // Second question (optional)
+  required2 Boolean   @default(false)
+
+  // Pricing configuration for question 1
+  pricingImpact1 PricingImpact @default(NONE)
+  pricePerUnit1  Float?
+  unit1          String?
+  minValue1      Float?
+  maxValue1      Float?
+  defaultValue1  Float?
+
+  // Pricing configuration for question 2
+  pricingImpact2 PricingImpact @default(NONE)
+  pricePerUnit2  Float?
+  unit2          String?
+  minValue2      Float?
+  maxValue2      Float?
+  defaultValue2  Float?
+
+  // Conditional logic - stored as JSON
+  // Format: { stepId: "xxx", value: "yes" }
+  conditionalOn Json?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  values   AttributeValue[]
-  products ProductAttribute[]
+  product Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  options StepOption[]
+
+  @@unique([productId, order])
 }
 
-model AttributeValue {
-  id        String   @id @default(cuid())
-  value     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  attribute   Attribute   @relation(fields: [attributeId], references: [id], onDelete: Cascade)
-  attributeId String
-  variations  Variation[] @relation("VariationAttributeValue")
+enum StepType {
+  SELECT // Dropdown/radio selection
+  NUMBER // Number input
+  TEXT // Text input (future use)
+  CHECKBOX // Multiple selection (future use)
 }
 
-model ProductAttribute {
+enum PricingImpact {
+  BASE // Sets the base price (first step usually)
+  MULTIPLIER // Multiplies current price
+  ADDITIVE // Adds fixed amount (quantity × pricePerUnit)
+  NONE // No pricing impact
+}
+
+model StepOption {
   id          String @id @default(cuid())
-  productId   String
-  attributeId String
+  stepId      String
+  questionNum Int    @default(1) // 1 or 2 - which question this option belongs to
+  label       String // Display text
+  value       String // Internal value
+  price       Float? // Price for this option (for BASE pricing)
+  order       Int // Order in the list
 
-  // Relations
-  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  attribute Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
-
-  @@unique([productId, attributeId])
-}
-
-model Variation {
-  id        String   @id @default(cuid())
-  sku       String   @unique
-  price     Float
-  image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  productId  String
-  product    Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
-  attributes AttributeValue[] @relation("VariationAttributeValue")
+  step FormStep @relation(fields: [stepId], references: [id], onDelete: Cascade)
+
+  @@unique([stepId, questionNum, order])
 }

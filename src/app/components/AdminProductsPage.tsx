@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { X, Plus } from 'lucide-react'
 import { createAttribute } from '@/app/actions/attributeActions'
 import { toast } from 'sonner'
@@ -24,6 +25,8 @@ interface Product {
         attribute: {
             id: string
             name: string
+            type: 'SELECT' | 'NUMBER'
+            unit?: string | null
         }
     }>
 }
@@ -38,6 +41,8 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
 
     // Attribute form state
     const [attributeName, setAttributeName] = useState('')
+    const [attributeType, setAttributeType] = useState<'SELECT' | 'NUMBER'>('SELECT')
+    const [attributeUnit, setAttributeUnit] = useState('')
     const [attributeValues, setAttributeValues] = useState<string[]>([''])
 
     // Add new value input
@@ -60,6 +65,8 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
     // Reset form
     const resetForm = () => {
         setAttributeName('')
+        setAttributeType('SELECT')
+        setAttributeUnit('')
         setAttributeValues([''])
     }
 
@@ -72,23 +79,33 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
             return
         }
 
-        const validValues = attributeValues.filter(v => v.trim() !== '')
-        if (validValues.length === 0) {
-            toast.error('Please enter at least one attribute value')
-            return
+        if (attributeType === 'SELECT') {
+            const validValues = attributeValues.filter(v => v.trim() !== '')
+            if (validValues.length === 0) {
+                toast.error('Please enter at least one attribute value')
+                return
+            }
+        } else if (attributeType === 'NUMBER') {
+            if (!attributeUnit.trim()) {
+                toast.error('Please enter a unit for the number attribute (e.g., m², meters, pieces)')
+                return
+            }
         }
 
         startTransition(async () => {
             try {
                 await createAttribute({
                     name: attributeName.trim(),
-                    values: validValues.map(v => v.trim())
+                    type: attributeType,
+                    unit: attributeType === 'NUMBER' ? attributeUnit.trim() : undefined,
+                    values: attributeType === 'SELECT'
+                        ? attributeValues.filter(v => v.trim() !== '').map(v => v.trim())
+                        : []
                 })
 
                 toast.success('Attribute created successfully!')
                 setIsModalOpen(false)
                 resetForm()
-                // The page will automatically revalidate due to server action
             } catch (error) {
                 toast.error('Failed to create attribute')
                 console.error(error)
@@ -113,7 +130,7 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
                                     Create Attribute
                                 </Button>
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-md">
+                            <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
                                 <DialogHeader>
                                     <DialogTitle>Create New Attribute</DialogTitle>
                                 </DialogHeader>
@@ -124,45 +141,78 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
                                             id="attributeName"
                                             value={attributeName}
                                             onChange={(e) => setAttributeName(e.target.value)}
-                                            placeholder="e.g., Color, Size, Material"
+                                            placeholder="e.g., Color, Area, Length"
                                         />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label>Attribute Values *</Label>
-                                        <div className="space-y-2 max-h-48 overflow-y-auto">
-                                            {attributeValues.map((value, index) => (
-                                                <div key={index} className="flex gap-2">
-                                                    <Input
-                                                        value={value}
-                                                        onChange={(e) => updateValue(index, e.target.value)}
-                                                        placeholder={`Value ${index + 1}`}
-                                                        className="flex-1"
-                                                    />
-                                                    {attributeValues.length > 1 && (
-                                                        <Button
-                                                            type="button"
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => removeValueInput(index)}
-                                                        >
-                                                            <X className="w-4 h-4" />
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={addValueInput}
-                                            className="w-full"
-                                        >
-                                            <Plus className="w-4 h-4 mr-2" />
-                                            Add Value
-                                        </Button>
+                                        <Label>Attribute Type *</Label>
+                                        <RadioGroup value={attributeType} onValueChange={(value) => setAttributeType(value as 'SELECT' | 'NUMBER')}>
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="SELECT" id="select" />
+                                                <Label htmlFor="select" className="cursor-pointer font-normal">
+                                                    SELECT - Multiple choice options (e.g., Color, Size)
+                                                </Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="NUMBER" id="number" />
+                                                <Label htmlFor="number" className="cursor-pointer font-normal">
+                                                    NUMBER - Quantity-based pricing (e.g., Area, Length)
+                                                </Label>
+                                            </div>
+                                        </RadioGroup>
                                     </div>
+
+                                    {attributeType === 'SELECT' ? (
+                                        <div className="space-y-2">
+                                            <Label>Attribute Values *</Label>
+                                            <div className="space-y-2 max-h-48 overflow-y-auto">
+                                                {attributeValues.map((value, index) => (
+                                                    <div key={index} className="flex gap-2">
+                                                        <Input
+                                                            value={value}
+                                                            onChange={(e) => updateValue(index, e.target.value)}
+                                                            placeholder={`Value ${index + 1}`}
+                                                            className="flex-1"
+                                                        />
+                                                        {attributeValues.length > 1 && (
+                                                            <Button
+                                                                type="button"
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={() => removeValueInput(index)}
+                                                            >
+                                                                <X className="w-4 h-4" />
+                                                            </Button>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={addValueInput}
+                                                className="w-full"
+                                            >
+                                                <Plus className="w-4 h-4 mr-2" />
+                                                Add Value
+                                            </Button>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            <Label htmlFor="attributeUnit">Unit of Measurement *</Label>
+                                            <Input
+                                                id="attributeUnit"
+                                                value={attributeUnit}
+                                                onChange={(e) => setAttributeUnit(e.target.value)}
+                                                placeholder="e.g., m², meters, pieces, kg"
+                                            />
+                                            <p className="text-xs text-muted-foreground">
+                                                This will be displayed alongside the number input (e.g., &quot;Area (m²)&quot;)
+                                            </p>
+                                        </div>
+                                    )}
 
                                     <div className="flex justify-end gap-2 pt-4">
                                         <Button
@@ -228,8 +278,13 @@ export default function AdminProductsPage({ products }: AdminProductsPageProps) 
                                             <p className="text-sm text-muted-foreground">Attributes</p>
                                             <div className="flex flex-wrap gap-1 mt-1">
                                                 {product.attributes.map(({ attribute }) => (
-                                                    <Badge key={attribute.id} variant="secondary" className="text-xs">
+                                                    <Badge
+                                                        key={attribute.id}
+                                                        variant={attribute.type === 'NUMBER' ? 'default' : 'secondary'}
+                                                        className="text-xs"
+                                                    >
                                                         {attribute.name}
+                                                        {attribute.type === 'NUMBER' && attribute.unit && ` (${attribute.unit})`}
                                                     </Badge>
                                                 ))}
                                             </div>

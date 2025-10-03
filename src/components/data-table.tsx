@@ -1,5 +1,4 @@
 "use client"
-
 import * as React from "react"
 import {
   closestCenter,
@@ -21,16 +20,8 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconChevronsLeft,
-  IconChevronsRight,
-  IconCircleCheckFilled,
-  IconDotsVertical,
   IconGripVertical,
-  IconLoader,
   IconPlus,
-  IconTrendingUp,
 } from "@tabler/icons-react"
 import {
   ColumnDef,
@@ -47,47 +38,9 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-import { toast } from "sonner"
 import { z } from "zod"
-
-import { useIsMobile } from "@/hooks/use-mobile"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
 import {
   Table,
   TableBody,
@@ -100,10 +53,7 @@ import {
   Tabs,
   TabsContent,
 } from "@/components/ui/tabs"
-import AttributeDialog from "@/app/components/dialogs/AttributeDialog"
 import Link from "next/link"
-import VariationDialog from "@/app/components/dialogs/VariationDialog"
-
 export const schema = z.object({
   id: z.number(),
   header: z.string(),
@@ -113,13 +63,11 @@ export const schema = z.object({
   limit: z.string(),
   reviewer: z.string(),
 })
-
 // Create a separate component for the drag handle
 export function DragHandle({ id }: { id: UniqueIdentifier }) { // Modified type: number -> UniqueIdentifier
   const { attributes, listeners } = useSortable({
     id,
   })
-
   return (
     <Button
       {...attributes}
@@ -133,15 +81,11 @@ export function DragHandle({ id }: { id: UniqueIdentifier }) { // Modified type:
     </Button>
   )
 }
-
-
 // DataTable is now generic and accepts columns as a prop
-
 function DraggableRow({ row }: { row: Row<any> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id,
   })
-
   return (
     <TableRow
       data-state={row.getIsSelected() && "selected"}
@@ -161,7 +105,6 @@ function DraggableRow({ row }: { row: Row<any> }) {
     </TableRow>
   )
 }
-
 export function DataTable(props: { data: any[]; columns: ColumnDef<any>[], label: string }) {
   const { data, columns } = props;
   const [tableData, setTableData] = React.useState(() => data);
@@ -169,19 +112,17 @@ export function DataTable(props: { data: any[]; columns: ColumnDef<any>[], label
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 });
+  const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 100 });
   const sortableId = React.useId();
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   );
-
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => tableData?.map(({ id }) => id) || [],
     [tableData]
   );
-
   const table = useReactTable({
     data: tableData,
     columns,
@@ -204,7 +145,6 @@ export function DataTable(props: { data: any[]; columns: ColumnDef<any>[], label
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active && over && active.id !== over.id) {
@@ -215,16 +155,15 @@ export function DataTable(props: { data: any[]; columns: ColumnDef<any>[], label
       });
     }
   }
-
   return (
     <Tabs defaultValue="outline" className="w-full flex-col justify-start gap-6">
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Label htmlFor="view-selector" className="sr-only">View</Label>
         <div className="flex items-center gap-2">
           <IconPlus />
-          {props.label === "product" ? <Link href="/dashboard/products/new">
+          <Link href="/dashboard/products/new">
             <Button>Create New Product</Button>
-          </Link> : props.label === "variation" ? <VariationDialog /> : <AttributeDialog />}
+          </Link>
         </div>
       </div>
       <TabsContent
@@ -277,12 +216,8 @@ export function DataTable(props: { data: any[]; columns: ColumnDef<any>[], label
             </Table>
           </DndContext>
         </div>
-
       </TabsContent>
 
     </Tabs>
   )
 }
-
-
-

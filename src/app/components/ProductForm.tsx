@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { createProductWithVariations } from '@/app/actions/productActions'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
@@ -16,6 +16,8 @@ import { useRouter } from 'next/navigation'
 interface Attribute {
     id: string
     name: string
+    type: 'SELECT' | 'NUMBER'
+    unit?: string | null
     values: Array<{
         id: string
         value: string
@@ -34,6 +36,12 @@ interface Variation {
     image?: string
 }
 
+interface UnitPriceConfig {
+    attributeId: string
+    pricePerUnit: number
+    defaultQuantity: number
+}
+
 interface ProductFormProps {
     attributes: Attribute[]
 }
@@ -41,6 +49,10 @@ interface ProductFormProps {
 export default function ProductForm({ attributes }: ProductFormProps) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
+
+    // Separate SELECT and NUMBER attributes
+    const selectAttributes = attributes.filter(attr => attr.type === 'SELECT')
+    const numberAttributes = attributes.filter(attr => attr.type === 'NUMBER')
 
     // Product form state
     const [productData, setProductData] = useState({
@@ -51,8 +63,14 @@ export default function ProductForm({ attributes }: ProductFormProps) {
         baseImage: ''
     })
 
-    // Selected attribute values
+    // Selected attribute values (only for SELECT type)
     const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({})
+
+    // Selected NUMBER attributes
+    const [selectedNumberAttributes, setSelectedNumberAttributes] = useState<string[]>([])
+
+    // Unit price configurations for NUMBER attributes
+    const [unitPrices, setUnitPrices] = useState<Record<string, UnitPriceConfig>>({})
 
     // Generated variations
     const [variations, setVariations] = useState<Variation[]>([])
@@ -68,7 +86,7 @@ export default function ProductForm({ attributes }: ProductFormProps) {
         }
     }
 
-    // Handle attribute value selection
+    // Handle SELECT attribute value selection
     const handleValueSelect = (attributeId: string, valueId: string, checked: boolean) => {
         setSelectedValues(prev => {
             const current = prev[attributeId] || []
@@ -80,12 +98,46 @@ export default function ProductForm({ attributes }: ProductFormProps) {
         })
     }
 
-    // Generate variations using Cartesian product
+    // Handle NUMBER attribute selection
+    const handleNumberAttributeToggle = (attributeId: string, checked: boolean) => {
+        if (checked) {
+            setSelectedNumberAttributes(prev => [...prev, attributeId])
+            // Initialize with default values
+            setUnitPrices(prev => ({
+                ...prev,
+                [attributeId]: {
+                    attributeId,
+                    pricePerUnit: 0,
+                    defaultQuantity: 1
+                }
+            }))
+        } else {
+            setSelectedNumberAttributes(prev => prev.filter(id => id !== attributeId))
+            setUnitPrices(prev => {
+                const newPrices = { ...prev }
+                delete newPrices[attributeId]
+                return newPrices
+            })
+        }
+    }
+
+    // Handle unit price configuration
+    const handleUnitPriceChange = (attributeId: string, field: 'pricePerUnit' | 'defaultQuantity', value: number) => {
+        setUnitPrices(prev => ({
+            ...prev,
+            [attributeId]: {
+                ...prev[attributeId],
+                [field]: value
+            }
+        }))
+    }
+
+    // Generate variations using Cartesian product (only for SELECT attributes)
     const generateVariations = () => {
         const selectedGroups = Object.entries(selectedValues)
             .filter(([_, valueIds]) => valueIds.length > 0)
             .map(([attributeId, valueIds]) => {
-                const attribute = attributes.find(a => a.id === attributeId)!
+                const attribute = selectAttributes.find(a => a.id === attributeId)!
                 return valueIds.map(valueId => {
                     const value = attribute.values.find(v => v.id === valueId)!
                     return {
@@ -97,27 +149,41 @@ export default function ProductForm({ attributes }: ProductFormProps) {
                 })
             })
 
-        if (selectedGroups.length === 0) {
-            toast.error('Please select at least one attribute value')
+        if (selectedGroups.length === 0 && selectedNumberAttributes.length === 0) {
+            toast.error('Please select at least one SELECT attribute value or NUMBER attribute')
             return
         }
 
-        // Calculate Cartesian product
-        const cartesianProduct = selectedGroups.reduce<{ attributeId: string, attributeName: string, valueId: string, value: string }[][]>((acc, group) => {
-            return acc.flatMap(accItem => group.map(groupItem => [...accItem, groupItem]))
-        }, [[]])
+        // Calculate Cartesian product for SELECT attributes
+        let cartesianProduct: Array<Array<{ attributeId: string, attributeName: string, valueId: string, value: string }>>
+
+        if (selectedGroups.length > 0) {
+            cartesianProduct = selectedGroups.reduce<Array<Array<{ attributeId: string, attributeName: string, valueId: string, value: string }>>>((acc, group) => {
+                if (acc.length === 0) return group.map(item => [item])
+                return acc.flatMap(accItem => group.map(groupItem => [...accItem, groupItem]))
+            }, [])
+        } else {
+            // If no SELECT attributes, create a single empty combination
+            cartesianProduct = [[]]
+        }
+
+        // Calculate base price including default quantities of NUMBER attributes
+        const baseWithDefaults = productData.basePrice +
+            selectedNumberAttributes.reduce((sum, attrId) => {
+                const config = unitPrices[attrId]
+                return sum + (config.defaultQuantity * config.pricePerUnit)
+            }, 0)
 
         // Create variation objects
-        const newVariations = cartesianProduct.map(combination => ({
+        const newVariations = cartesianProduct.map((combination, index) => ({
             combination,
-            price: productData.basePrice || 0,
-            //add unique sku for each variation
-            sku: `SKU-${combination.map(c => c.valueId).join('-')}`,
+            price: baseWithDefaults,
+            sku: `SKU-${productData.slug}-${index + 1}`,
             image: productData.baseImage || undefined
         }))
 
         setVariations(newVariations)
-        toast.success(`Generated ${newVariations.length} variations`)
+        toast.success(`Generated ${newVariations.length} variation${newVariations.length > 1 ? 's' : ''}`)
     }
 
     // Handle variation change
@@ -148,6 +214,16 @@ export default function ProductForm({ attributes }: ProductFormProps) {
             return
         }
 
+        // Validate unit prices for NUMBER attributes
+        const invalidUnitPrices = selectedNumberAttributes.filter(attrId => {
+            const config = unitPrices[attrId]
+            return !config || config.pricePerUnit <= 0 || config.defaultQuantity <= 0
+        })
+        if (invalidUnitPrices.length > 0) {
+            toast.error('All NUMBER attributes must have valid price per unit and default quantity')
+            return
+        }
+
         startTransition(async () => {
             try {
                 await createProductWithVariations({
@@ -155,7 +231,12 @@ export default function ProductForm({ attributes }: ProductFormProps) {
                     variations: variations.map(v => ({
                         ...v,
                         attributeValueIds: v.combination.map(c => c.valueId)
-                    }))
+                    })),
+                    selectedAttributes: [
+                        ...Object.keys(selectedValues),
+                        ...selectedNumberAttributes
+                    ],
+                    unitPrices: Object.values(unitPrices)
                 })
 
                 toast.success('Product created successfully!')
@@ -211,7 +292,7 @@ export default function ProductForm({ attributes }: ProductFormProps) {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="basePrice">Base Price</Label>
+                            <Label htmlFor="basePrice">Base Price (labor/setup cost)</Label>
                             <Input
                                 id="basePrice"
                                 type="number"
@@ -221,6 +302,9 @@ export default function ProductForm({ attributes }: ProductFormProps) {
                                 onChange={(e) => handleProductChange('basePrice', parseFloat(e.target.value) || 0)}
                                 placeholder="0.00"
                             />
+                            <p className="text-xs text-muted-foreground">
+                                This is the base cost before adding default quantities of NUMBER attributes
+                            </p>
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="baseImage">Base Image URL</Label>
@@ -235,65 +319,164 @@ export default function ProductForm({ attributes }: ProductFormProps) {
                 </CardContent>
             </Card>
 
-            {/* Attribute Selection */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Attributes</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    {attributes.map((attribute) => (
-                        <div key={attribute.id} className="space-y-3">
-                            <h3 className="text-lg font-semibold">{attribute.name}</h3>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                                {attribute.values.map((value) => (
-                                    <div key={value.id} className="flex items-center space-x-2">
-                                        <Checkbox
-                                            id={`${attribute.id}-${value.id}`}
-                                            checked={selectedValues[attribute.id]?.includes(value.id) || false}
-                                            onCheckedChange={(checked) =>
-                                                handleValueSelect(attribute.id, value.id, checked as boolean)
-                                            }
-                                        />
-                                        <Label
-                                            htmlFor={`${attribute.id}-${value.id}`}
-                                            className="text-sm cursor-pointer"
-                                        >
-                                            {value.value}
-                                        </Label>
-                                    </div>
-                                ))}
+            {/* SELECT Attributes */}
+            {selectAttributes.length > 0 && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Select Attributes (Variations)</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        {selectAttributes.map((attribute) => (
+                            <div key={attribute.id} className="space-y-3">
+                                <h3 className="text-lg font-semibold">{attribute.name}</h3>
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                    {attribute.values.map((value) => (
+                                        <div key={value.id} className="flex items-center space-x-2">
+                                            <Checkbox
+                                                id={`${attribute.id}-${value.id}`}
+                                                checked={selectedValues[attribute.id]?.includes(value.id) || false}
+                                                onCheckedChange={(checked) =>
+                                                    handleValueSelect(attribute.id, value.id, checked as boolean)
+                                                }
+                                            />
+                                            <Label
+                                                htmlFor={`${attribute.id}-${value.id}`}
+                                                className="text-sm cursor-pointer"
+                                            >
+                                                {value.value}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </CardContent>
+                </Card>
+            )}
 
-                    <div className="pt-4">
-                        <Button
-                            type="button"
-                            onClick={generateVariations}
-                            disabled={Object.keys(selectedValues).length === 0}
-                        >
-                            Generate Variations
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
+            {/* NUMBER Attributes */}
+            {numberAttributes.length > 0 && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Number Attributes (Unit-Based Pricing)</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        {numberAttributes.map((attribute) => (
+                            <div key={attribute.id} className="space-y-4 border-b pb-6 last:border-b-0">
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id={`number-${attribute.id}`}
+                                        checked={selectedNumberAttributes.includes(attribute.id)}
+                                        onCheckedChange={(checked) =>
+                                            handleNumberAttributeToggle(attribute.id, checked as boolean)
+                                        }
+                                    />
+                                    <Label
+                                        htmlFor={`number-${attribute.id}`}
+                                        className="text-lg font-semibold cursor-pointer"
+                                    >
+                                        {attribute.name} {attribute.unit && `(${attribute.unit})`}
+                                    </Label>
+                                </div>
+
+                                {selectedNumberAttributes.includes(attribute.id) && (
+                                    <div className="ml-6 grid grid-cols-1 md:grid-cols-2 gap-4 bg-muted p-4 rounded-md">
+                                        <div className="space-y-2">
+                                            <Label htmlFor={`price-${attribute.id}`}>
+                                                Price per {attribute.unit || 'unit'} *
+                                            </Label>
+                                            <Input
+                                                id={`price-${attribute.id}`}
+                                                type="number"
+                                                step="0.01"
+                                                min="0"
+                                                value={unitPrices[attribute.id]?.pricePerUnit || 0}
+                                                onChange={(e) =>
+                                                    handleUnitPriceChange(
+                                                        attribute.id,
+                                                        'pricePerUnit',
+                                                        parseFloat(e.target.value) || 0
+                                                    )
+                                                }
+                                                placeholder="0.00"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor={`default-${attribute.id}`}>
+                                                Default Quantity (minimum) *
+                                            </Label>
+                                            <Input
+                                                id={`default-${attribute.id}`}
+                                                type="number"
+                                                step="1"
+                                                min="1"
+                                                value={unitPrices[attribute.id]?.defaultQuantity || 1}
+                                                onChange={(e) =>
+                                                    handleUnitPriceChange(
+                                                        attribute.id,
+                                                        'defaultQuantity',
+                                                        parseInt(e.target.value) || 1
+                                                    )
+                                                }
+                                                placeholder="1"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="md:col-span-2 text-sm text-muted-foreground bg-blue-50 p-3 rounded">
+                                            Default cost included in variation price: €
+                                            {((unitPrices[attribute.id]?.pricePerUnit || 0) *
+                                                (unitPrices[attribute.id]?.defaultQuantity || 1)).toFixed(2)}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </CardContent>
+                </Card>
+            )}
+
+            {/* Generate Variations Button */}
+            <div className="flex justify-center">
+                <Button
+                    type="button"
+                    onClick={generateVariations}
+                    disabled={Object.keys(selectedValues).length === 0 && selectedNumberAttributes.length === 0}
+                    size="lg"
+                >
+                    Generate Variations
+                </Button>
+            </div>
 
             {/* Generated Variations */}
             {variations.length > 0 && (
                 <Card>
                     <CardHeader>
                         <CardTitle>Generated Variations ({variations.length})</CardTitle>
+                        {selectedNumberAttributes.length > 0 && (
+                            <p className="text-sm text-muted-foreground">
+                                Prices include default quantities: {selectedNumberAttributes.map(attrId => {
+                                    const attr = numberAttributes.find(a => a.id === attrId)
+                                    const config = unitPrices[attrId]
+                                    return `${attr?.name}: ${config.defaultQuantity} ${attr?.unit || 'units'}`
+                                }).join(', ')}
+                            </p>
+                        )}
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4 max-h-96 overflow-y-auto">
                             {variations.map((variation, index) => (
                                 <div key={index} className="border rounded-lg p-4 space-y-3">
                                     <div className="flex flex-wrap gap-2">
-                                        {variation.combination.map((item) => (
-                                            <Badge key={item.valueId} variant="secondary">
-                                                {item.attributeName}: {item.value}
-                                            </Badge>
-                                        ))}
+                                        {variation.combination.length > 0 ? (
+                                            variation.combination.map((item) => (
+                                                <Badge key={item.valueId} variant="secondary">
+                                                    {item.attributeName}: {item.value}
+                                                </Badge>
+                                            ))
+                                        ) : (
+                                            <Badge variant="outline">Base Product</Badge>
+                                        )}
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -308,7 +491,9 @@ export default function ProductForm({ attributes }: ProductFormProps) {
                                             />
                                         </div>
                                         <div className="space-y-1">
-                                            <Label htmlFor={`-${index}`}>Price *</Label>
+                                            <Label htmlFor={`price-${index}`}>
+                                                Price * (includes defaults)
+                                            </Label>
                                             <Input
                                                 id={`price-${index}`}
                                                 type="number"
@@ -320,17 +505,15 @@ export default function ProductForm({ attributes }: ProductFormProps) {
                                                 required
                                             />
                                         </div>
-
-                                    </div>
-
-                                    <div className="space-y-1">
-                                        <Label htmlFor={`image-${index}`}>Image URL (Optional)</Label>
-                                        <Input
-                                            id={`image-${index}`}
-                                            value={variation.image || ''}
-                                            onChange={(e) => handleVariationChange(index, 'image', e.target.value)}
-                                            placeholder="https://example.com/variation-image.jpg"
-                                        />
+                                        <div className="space-y-1">
+                                            <Label htmlFor={`image-${index}`}>Image URL</Label>
+                                            <Input
+                                                id={`image-${index}`}
+                                                value={variation.image || ''}
+                                                onChange={(e) => handleVariationChange(index, 'image', e.target.value)}
+                                                placeholder="https://example.com/image.jpg"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -345,6 +528,7 @@ export default function ProductForm({ attributes }: ProductFormProps) {
                     type="submit"
                     disabled={isPending || variations.length === 0}
                     className="min-w-[120px]"
+                    size="lg"
                 >
                     {isPending ? 'Creating...' : 'Create Product'}
                 </Button>
