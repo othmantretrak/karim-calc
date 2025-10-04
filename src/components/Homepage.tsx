@@ -252,6 +252,12 @@ export default function HomePage({ products }: HomePageProps) {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
+
+            <div className="absolute top-4 left-4">
+                <Link href="/dashboard" className="inline-flex items-center text-sm text-green-700 hover:text-green-900">
+                    <ArrowLeft className="w-4 h-4 mr-2" /> Dashboard
+                </Link>
+            </div>
             <div className="w-full max-w-md mx-auto">
                 <Card className="overflow-hidden shadow-xl py-0">
                     <CardHeader className="bg-gradient-to-r from-green-700 to-green-800 text-white text-center">
