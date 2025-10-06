@@ -114,7 +114,7 @@ function ActionsCell({ row }: { row: { original: ProductTableData } }) {
     return (
         <>
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger asChild className="justify-self-end">
                     <Button
                         variant="ghost"
                         className="data-[state=open]:bg-muted text-muted-foreground flex size-8"

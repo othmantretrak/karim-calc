@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { useSortable } from '@dnd-kit/sortable'
 import { Trash2, GripVertical, ChevronUp, ChevronDown } from 'lucide-react'
 import { QuestionFields } from './QuestionFields'
 import {
@@ -43,6 +44,21 @@ export function FormStepEditor({
     deleteOption,
 }: FormStepEditorProps) {
 
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: step.tempId });
+
+    const style = {
+        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+        transition,
+        zIndex: isDragging ? 10 : undefined,
+    };
+
     const handleUpdate = (key: keyof StepFormData, value: any) => {
         updateStep(step.tempId, { [key]: value })
     }
@@ -53,11 +69,11 @@ export function FormStepEditor({
     );
 
     return (
-        <Card className="border-2">
+        <Card ref={setNodeRef} style={style} className="border-2 relative">
             <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <GripVertical className="w-5 h-5 text-muted-foreground" />
+                    <div className="flex items-center gap-2" {...attributes} {...listeners}>
+                        <GripVertical className="w-5 h-5 text-muted-foreground cursor-grab" />
                         <span className="font-semibold">Step {index + 1}</span>
                     </div>
                     <div className="flex items-center gap-2">

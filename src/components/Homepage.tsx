@@ -324,9 +324,7 @@ export default function HomePage({ products }: HomePageProps) {
                                 {/* Render current unanswered step */}
                                 {currentUnansweredStep ? (
                                     <div className="space-y-4 p-4 border rounded-lg bg-white shadow-sm">
-                                        <h3 className="font-bold text-lg mb-4 text-green-700">
-                                            Step {currentStepIndex + 1} of {visibleSteps.length}
-                                        </h3>
+
 
                                         {/* Question 1 */}
                                         {renderQuestion(currentUnansweredStep, 1, false)}

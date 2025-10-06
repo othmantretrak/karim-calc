@@ -3,6 +3,21 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import {
+    DndContext,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    DragEndEvent,
+} from '@dnd-kit/core'
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Plus, Loader2 } from 'lucide-react'
@@ -29,6 +44,13 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
     const [productDescription, setProductDescription] = useState(initialData?.description || '')
     const [steps, setSteps] = useState<StepFormData[]>(initialData?.steps || [])
     const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(!!initialData?.slug)
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    )
 
     // Auto-generate slug from product name
     useEffect(() => {
@@ -139,6 +161,20 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
         }))
     }
 
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event
+
+        if (over && active.id !== over.id) {
+            setSteps((currentSteps) => {
+                const oldIndex = currentSteps.findIndex(s => s.tempId === active.id)
+                const newIndex = currentSteps.findIndex(s => s.tempId === over.id)
+
+                const newOrder = arrayMove(currentSteps, oldIndex, newIndex)
+                return newOrder.map((step, index) => ({ ...step, order: index }))
+            })
+        }
+    }
+
     // --- SUBMISSION LOGIC ---
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -200,6 +236,25 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
+            {/* 3. Submission Header */}
+            <div className="flex justify-end gap-4">
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => router.back()}
+                    disabled={isSubmitting}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    type="submit"
+                    className="bg-green-700 hover:bg-green-800"
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                    {isSubmitting ? 'Saving...' : isEdit ? 'Update Product' : 'Save Product'}
+                </Button>
+            </div>
             {/* 1. Product Information */}
             <ProductInfoForm
                 productName={productName}
@@ -228,23 +283,29 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
                             No steps added yet. Click &quot;Add Step&quot; to create your first form step.
                         </p>
                     ) : (
-                        steps.map((step, index) => (
-                            <FormStepEditor
-                                key={step.tempId}
-                                step={step}
-                                index={index}
-                                totalSteps={steps.length}
-                                allSteps={steps} // Pass all steps for conditional logic options
-                                updateStep={updateStep}
-                                deleteStep={deleteStep}
-                                moveStep={moveStep}
-                                addOption={addOption}
-                                updateOption={updateOption}
-                                deleteOption={deleteOption}
-                            />
-                        ))
+                        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                            <SortableContext items={steps.map(s => s.tempId)} strategy={verticalListSortingStrategy}>
+                                {steps.map((step, index) => (
+                                    <FormStepEditor
+                                        key={step.tempId}
+                                        step={step}
+                                        index={index}
+                                        totalSteps={steps.length}
+                                        allSteps={steps} // Pass all steps for conditional logic options
+                                        updateStep={updateStep}
+                                        deleteStep={deleteStep}
+                                        moveStep={moveStep}
+                                        addOption={addOption}
+                                        updateOption={updateOption}
+                                        deleteOption={deleteOption}
+                                    />
+                                ))
+                                }
+                            </SortableContext>
+                        </DndContext>
                     )}
-                    <div className="flex justify-between items-center">
+                    {/* This seems to be a duplicate of the header button, you might want to remove it */}
+                    <div className="flex justify-between items-center pt-4 border-t">
                         <CardTitle>Form Steps (Each step can have 1-2 questions)</CardTitle>
                         <Button type="button" onClick={addStep} size="sm">
                             <Plus className="w-4 h-4 mr-2" />
