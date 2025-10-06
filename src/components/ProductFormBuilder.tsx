@@ -244,6 +244,13 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
                             />
                         ))
                     )}
+                    <div className="flex justify-between items-center">
+                        <CardTitle>Form Steps (Each step can have 1-2 questions)</CardTitle>
+                        <Button type="button" onClick={addStep} size="sm">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add Step
+                        </Button>
+                    </div>
                 </CardContent>
             </Card>
 
