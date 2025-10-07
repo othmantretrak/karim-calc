@@ -45,7 +45,8 @@ function mapProductToInitialData(product: Awaited<ReturnType<typeof getProductBy
             defaultValue2: step.defaultValue2,
 
             // Conditional Logic (already transformed by action to JSON object)
-            conditionalOn: step.conditionalOn,
+            conditionalOn1: step.conditionalOn1,
+            conditionalOn2: step.conditionalOn2,
 
             options: step.options.map(option => ({
                 tempId: option.id, // Use the real ID as temp ID

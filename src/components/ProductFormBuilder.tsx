@@ -87,7 +87,8 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
             minValue2: null,
             maxValue2: null,
             defaultValue2: null,
-            conditionalOn: null,
+            conditionalOn1: null,
+            conditionalOn2: null,
             options: [],
         }
         setSteps([...steps, newStep])
@@ -189,28 +190,29 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
                 name: productName,
                 slug,
                 description: productDescription,
-                steps: steps.map(({ tempId, options, conditionalOn, ...step }) => {
-
-                    // Map conditionalOn stepId from tempId back to the real ID (if editing existing steps)
-                    // If it's a new step referencing another new step, the tempId will be used for mapping in the action.
-                    let processedConditionalOn = conditionalOn;
-
-                    if (conditionalOn && conditionalOn.stepId) {
-                        const originalStep = initialData?.steps?.find((s: StepFormData) => s.tempId === conditionalOn.stepId);
-
+                steps: steps.map(({ tempId, options, conditionalOn1, conditionalOn2, ...step }) => {
+                    const processConditional = (conditional: any) => {
+                        if (!conditional || !conditional.stepId) {
+                            return conditional;
+                        }
+                        const originalStep = initialData?.steps?.find((s: StepFormData) => s.tempId === conditional.stepId);
                         if (originalStep && originalStep.id) {
-                            // If we are referencing an existing step, use its actual ID
-                            processedConditionalOn = {
-                                ...conditionalOn,
-                                stepId: originalStep.id
+                            return {
+                                ...conditional,
+                                stepId: originalStep.id,
                             };
                         }
-                    }
+                        return conditional;
+                    };
+
+                    const processedConditionalOn1 = processConditional(conditionalOn1);
+                    const processedConditionalOn2 = processConditional(conditionalOn2);
 
                     return {
                         ...step,
                         tempId, // Keep tempId for conditional logic mapping in server action
-                        conditionalOn: processedConditionalOn,
+                        conditionalOn1: processedConditionalOn1,
+                        conditionalOn2: processedConditionalOn2,
                         options: options.map(({ tempId, ...option }) => option)
                     }
                 })
@@ -222,7 +224,7 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
 
             if (result.success) {
                 toast.success(`Product ${isEdit ? 'updated' : 'created'} successfully!`)
-                router.push(`/products/${result.slug}`)
+                router.push(`/dashboard`)
             } else {
                 toast.error(result.error || "Failed to save product")
             }

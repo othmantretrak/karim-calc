@@ -46,7 +46,8 @@ interface StepData {
     maxValue2?: number | null
     defaultValue2?: number | null
 
-    conditionalOn?: ConditionalData | null
+    conditionalOn1?: ConditionalData | null
+    conditionalOn2?: ConditionalData | null
     options?: StepOptionData[]
 }
 
@@ -113,7 +114,8 @@ export async function createProduct(formData: ProductFormData) {
                             maxValue2: stepData.maxValue2 ?? null,
                             defaultValue2: stepData.defaultValue2 ?? null,
 
-                            conditionalOn: undefined,
+                            conditionalOn1: undefined,
+                            conditionalOn2: undefined,
                         },
                     })
 
@@ -127,21 +129,32 @@ export async function createProduct(formData: ProductFormData) {
 
             // Second pass: Update conditional logic and create options
             for (const { step, stepData } of createdSteps) {
-                if (stepData.conditionalOn) {
-                    const conditional = stepData.conditionalOn;
+                const updateData: { conditionalOn1?: any, conditionalOn2?: any } = {};
 
-                    // Look up the actual new ID if the referenced step was new (used tempId)
-                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId
+                if (stepData.conditionalOn1) {
+                    const conditional = stepData.conditionalOn1;
+                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId;
+                    updateData.conditionalOn1 = {
+                        stepId: referencedStepId,
+                        value: conditional.value,
+                        questionNum: conditional.questionNum,
+                    };
+                }
 
+                if (stepData.conditionalOn2) {
+                    const conditional = stepData.conditionalOn2;
+                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId;
+                    updateData.conditionalOn2 = {
+                        stepId: referencedStepId,
+                        value: conditional.value,
+                        questionNum: conditional.questionNum,
+                    };
+                }
+
+                if (Object.keys(updateData).length > 0) {
                     await tx.formStep.update({
                         where: { id: step.id },
-                        data: {
-                            conditionalOn: {
-                                stepId: referencedStepId,
-                                value: conditional.value,
-                                questionNum: conditional.questionNum, // Store questionNum
-                            },
-                        },
+                        data: updateData,
                     })
                 }
 
@@ -246,7 +259,8 @@ export async function updateProduct(productId: string, formData: ProductFormData
                             maxValue2: stepData.maxValue2 ?? null,
                             defaultValue2: stepData.defaultValue2 ?? null,
 
-                            conditionalOn: undefined,
+                            conditionalOn1: undefined,
+                            conditionalOn2: undefined,
                         },
                     })
 
@@ -262,22 +276,32 @@ export async function updateProduct(productId: string, formData: ProductFormData
 
             // Update conditional logic and create options
             for (const { step, stepData } of createdSteps) {
-                if (stepData.conditionalOn) {
-                    const conditional = stepData.conditionalOn;
+                const updateData: { conditionalOn1?: any, conditionalOn2?: any } = {};
 
-                    // Look up the actual new ID using the map. This works whether the referenced step
-                    // was new (tempId mapped) or existing (old ID mapped to new ID).
-                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId
+                if (stepData.conditionalOn1) {
+                    const conditional = stepData.conditionalOn1;
+                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId;
+                    updateData.conditionalOn1 = {
+                        stepId: referencedStepId,
+                        value: conditional.value,
+                        questionNum: conditional.questionNum,
+                    };
+                }
 
+                if (stepData.conditionalOn2) {
+                    const conditional = stepData.conditionalOn2;
+                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId;
+                    updateData.conditionalOn2 = {
+                        stepId: referencedStepId,
+                        value: conditional.value,
+                        questionNum: conditional.questionNum,
+                    };
+                }
+
+                if (Object.keys(updateData).length > 0) {
                     await tx.formStep.update({
                         where: { id: step.id },
-                        data: {
-                            conditionalOn: {
-                                stepId: referencedStepId,
-                                value: conditional.value,
-                                questionNum: conditional.questionNum, // Store questionNum
-                            },
-                        },
+                        data: updateData,
                     })
                 }
 
@@ -332,7 +356,12 @@ export async function deleteProduct(productId: string) {
 }
 
 // Type definition for the conditional logic stored in JSON
-type ConditionalLogic = { stepId: string; value: string; questionNum: 1 | 2 } | null
+type ConditionalLogic = {
+    stepId: string;
+    value: string;
+    questionNum: 1 | 2;
+} | null;
+
 
 export async function getAllProducts() {
     try {
@@ -355,7 +384,8 @@ export async function getAllProducts() {
             ...product,
             steps: product.steps.map(step => ({
                 ...step,
-                conditionalOn: step.conditionalOn as ConditionalLogic
+                conditionalOn1: step.conditionalOn1 as ConditionalLogic,
+                conditionalOn2: step.conditionalOn2 as ConditionalLogic,
             }))
         }))
 
@@ -391,7 +421,8 @@ export async function getProductBySlug(slug: string) {
             ...product,
             steps: product.steps.map(step => ({
                 ...step,
-                conditionalOn: step.conditionalOn as ConditionalLogic
+                conditionalOn1: step.conditionalOn1 as ConditionalLogic,
+                conditionalOn2: step.conditionalOn2 as ConditionalLogic,
             }))
         }
     } catch (error) {
@@ -425,7 +456,8 @@ export async function getProductById(id: string) {
             ...product,
             steps: product.steps.map(step => ({
                 ...step,
-                conditionalOn: step.conditionalOn as ConditionalLogic
+                conditionalOn1: step.conditionalOn1 as ConditionalLogic,
+                conditionalOn2: step.conditionalOn2 as ConditionalLogic,
             }))
         }
     } catch (error) {

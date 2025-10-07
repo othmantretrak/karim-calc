@@ -14,6 +14,7 @@ import {
     calculatePrice,
     calculatePartialPrice,
     getVisibleSteps,
+    getVisibleQuestionsForStep,
     areAllStepsComplete,
 } from '@/app/utils/priceCalculator'
 
@@ -24,6 +25,20 @@ interface HomePageProps {
 export default function HomePage({ products }: HomePageProps) {
     const { productSlug, answers, setProductSlug, setAnswer } = useStore()
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    const [showImageUpload, setShowImageUpload] = useState(false)
+    const [showComments, setShowComments] = useState(false);
+    const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+
+    const [comments, setComments] = useState('')
+    const [showThankYou, setShowThankYou] = useState(false)
+    const [contactInfo, setContactInfo] = useState({
+        email: '',
+        telephone: '',
+        surname: '',
+        zipCode: '',
+        street: '',
+        residence: ''
+    })
 
     // When the product slug changes (e.g., on first selection or reset), reset the step index.
     useEffect(() => {
@@ -82,14 +97,18 @@ export default function HomePage({ products }: HomePageProps) {
     }
 
     const isStepComplete = (step: FormStep) => {
-        const q1Complete = !step.required1 || isQuestionAnswered(step.id, 1);
-        if (!q1Complete) return false;
+        if (!selectedProduct) return false;
+        const visibleQuestions = getVisibleQuestionsForStep(step, selectedProduct, answers);
 
-        if (step.question2) {
-            const q2Complete = !step.required2 || isQuestionAnswered(step.id, 2);
-            return q2Complete;
+        if (visibleQuestions.includes(1) && step.required1 && !isQuestionAnswered(step.id, 1)) {
+            return false;
         }
 
+        if (visibleQuestions.includes(2) && step.required2 && !isQuestionAnswered(step.id, 2)) {
+            return false;
+        }
+
+        // The step is complete if all its *visible and required* questions are answered.
         return true;
     };
 
@@ -104,6 +123,37 @@ export default function HomePage({ products }: HomePageProps) {
             setProductSlug(''); // Go back to product selection
         }
     };
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files ? Array.from(e.target.files) : [];
+        if (files.length === 0) return;
+        const imageUrls = files.map(file => URL.createObjectURL(file));
+        setUploadedImages((prev: string[]) => [...prev, ...imageUrls]);
+    }
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        const files = Array.from(e.dataTransfer.files)
+        const imageUrls = files.map(file => URL.createObjectURL(file))
+        setUploadedImages((prev: string[]) => [...prev, ...imageUrls])
+    }
+    const handleContactSubmit = (e: any) => {
+        e.preventDefault()
+        // Here you would typically send the data to your backend
+        setShowThankYou(true)
+    }
+
+    const handleContactChange = (field: string, value: string) => {
+        setContactInfo(prev => ({ ...prev, [field]: value }))
+    }
+
+    const isContactFormValid = () => {
+        return contactInfo.email &&
+            contactInfo.telephone &&
+            contactInfo.surname &&
+            contactInfo.zipCode &&
+            contactInfo.street &&
+            contactInfo.residence
+    }
 
     const isNextDisabled = useMemo(() => {
         if (!productSlug) return true;
@@ -282,31 +332,162 @@ export default function HomePage({ products }: HomePageProps) {
                         {visibleSteps.map((step, index) => {
                             if (index !== currentStepIndex) return null;
 
+                            const visibleQuestions = selectedProduct ? getVisibleQuestionsForStep(step, selectedProduct, answers) : [];
+
                             return (
                                 <div key={step.id} className="space-y-4 p-4 border rounded-lg bg-white shadow-sm">
-                                    {renderQuestion(step, 1)}
-                                    {step.question2 && (
+                                    {visibleQuestions.includes(1) && renderQuestion(step, 1)}
+                                    {visibleQuestions.includes(2) && step.question2 && (
                                         <div className="pt-4 border-t mt-4">
                                             {renderQuestion(step, 2)}
                                         </div>
                                     )}
+                                    {visibleQuestions.length === 0 && <p className="text-muted-foreground">This step is currently hidden by conditional logic.</p>}
                                 </div>
                             )
                         })}
 
-                        {allComplete && (
-                            <div className="text-center py-6 bg-green-50 border border-green-200 rounded-lg">
-                                <p className="text-xl font-bold text-green-700 mb-2">
-                                    Calculation Complete!
+                        {/* Complete Screen with Links */}
+                        {currentStepIndex === visibleSteps.length - 1 && (
+                            <div className="space-y-4">
+                                <div className="flex gap-4 text-sm">
+                                    <button
+                                        onClick={() => setShowImageUpload(true)}
+                                        className="text-green-700 hover:text-green-900 font-medium"
+                                    >
+                                        Add image
+                                    </button>
+                                    <span className="text-gray-400">|</span>
+                                    <button
+                                        onClick={() => setShowComments(true)}
+                                        className="text-green-700 hover:text-green-900 font-medium"
+                                    >
+                                        Add comments
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        {/* Contact Form */}
+                        {allComplete && !showThankYou && (
+                            <div className="space-y-4">
+                                <button
+                                    onClick={handleGoBack}
+                                    className="flex items-center text-sm text-gray-600 hover:text-gray-900"
+                                >
+                                    <ArrowLeft className="w-4 h-4 mr-2" />
+                                    Contact
+                                </button>
+
+                                <form onSubmit={handleContactSubmit} className="space-y-4">
+                                    <div>
+                                        <label className="block font-medium mb-2">
+                                            Email address<span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="email"
+                                            placeholder="Enter here"
+                                            value={contactInfo.email}
+                                            onChange={(e) => handleContactChange('email', e.target.value)}
+                                            required
+                                            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block font-medium mb-2">
+                                            Telephone number<span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            placeholder="Enter here"
+                                            value={contactInfo.telephone}
+                                            onChange={(e) => handleContactChange('telephone', e.target.value)}
+                                            required
+                                            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block font-medium mb-2">
+                                                Surname<span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter here"
+                                                value={contactInfo.surname}
+                                                onChange={(e) => handleContactChange('surname', e.target.value)}
+                                                required
+                                                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block font-medium mb-2">
+                                                Zip code<span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter here"
+                                                value={contactInfo.zipCode}
+                                                onChange={(e) => handleContactChange('zipCode', e.target.value)}
+                                                required
+                                                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block font-medium mb-2">
+                                                Street / House number<span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter here"
+                                                value={contactInfo.street}
+                                                onChange={(e) => handleContactChange('street', e.target.value)}
+                                                required
+                                                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block font-medium mb-2">
+                                                Residence<span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter here"
+                                                value={contactInfo.residence}
+                                                onChange={(e) => handleContactChange('residence', e.target.value)}
+                                                required
+                                                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                            />
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        )}
+
+                        {/* Thank You Screen */}
+                        {showThankYou && (
+                            <div className="text-center py-12 space-y-4">
+                                <h2 className="text-2xl font-bold text-green-700">Thank you!</h2>
+                                <p className="text-gray-700">
+                                    We have received your request and<br />
+                                    will get back to you within 6 hours during our<br />
+                                    regular working hours!
                                 </p>
-                                <p className="text-muted-foreground">
-                                    Your estimated price is ready.
-                                </p>
+                                <div className="pt-4">
+                                    <p className="font-medium">Kind regards</p>
+                                    <p className="font-medium">GreenTeam</p>
+                                </div>
                             </div>
                         )}
 
                         {/* Price Display */}
-                        {(priceInfo.total > 0 || priceInfo.partial > 0) && (
+                        {(priceInfo.total > 0 || priceInfo.partial > 0) && !showThankYou && (
                             <div className="border-t pt-4">
                                 <div className="flex justify-between items-center text-lg font-semibold">
                                     <span>
@@ -321,24 +502,28 @@ export default function HomePage({ products }: HomePageProps) {
                         )}
 
                         {/* Navigation */}
-                        <div className="border-t pt-4 flex justify-between items-center">
-                            <Button variant="ghost" onClick={handleGoBack} disabled={!productSlug && currentStepIndex === 0}>
-                                <ArrowLeft className="w-4 h-4 mr-2" /> Back
-                            </Button>
+                        {!showThankYou && (
+                            <div className="border-t pt-4 flex justify-between items-center">
+                                {!showThankYou && <Button variant="ghost" onClick={handleGoBack} disabled={!productSlug && currentStepIndex === 0}>
+                                    <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                                </Button>}
 
-                            {!allComplete ? (
-                                <Button onClick={handleNext} disabled={isNextDisabled}>
-                                    Next
-                                </Button>
-                            ) : (
-                                <Link
-                                    className="w-auto bg-green-700 hover:bg-green-800 text-white text-center py-2 px-4 rounded inline-flex items-center justify-center"
-                                    href={`/products/${productSlug}`}
-                                >
-                                    View Details
-                                </Link>
-                            )}
-                        </div>
+                                {!allComplete ? (
+                                    <Button onClick={handleNext} disabled={isNextDisabled}>
+                                        Next
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        onClick={handleContactSubmit}
+                                        disabled={!isContactFormValid()}
+                                    >
+                                        Next
+                                    </Button>
+                                )}
+                            </div>
+                        )
+                        }
+
 
                         {/* View Details Button - This is now part of the navigation footer */}
                         {/* {allComplete && priceInfo.isComplete && (
@@ -354,6 +539,100 @@ export default function HomePage({ products }: HomePageProps) {
                     </CardContent>
                 </Card>
             </div>
+            {/* Image Upload Modal */}
+            {showImageUpload && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+                        <div className="bg-gradient-to-r from-green-700 to-green-800 text-white text-center py-6 rounded-t-lg">
+                            <h2 className="text-lg font-semibold">Calculate your price quickly!</h2>
+                        </div>
+
+                        <div className="p-6 space-y-4">
+                            <button
+                                onClick={() => setShowImageUpload(false)}
+                                className="flex items-center text-sm text-gray-600 hover:text-gray-900"
+                            >
+                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                Go back
+                            </button>
+
+                            <div
+                                onDrop={handleDrop}
+                                onDragOver={(e) => e.preventDefault()}
+                                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center"
+                            >
+                                <p className="text-gray-700 mb-2">Drag and drop files here or upload</p>
+                                <p className="text-sm text-gray-500 mb-4">Accepted file types: JPEG, PNG</p>
+                                <label className="inline-block">
+                                    <input
+                                        type="file"
+                                        accept="image/jpeg,image/png"
+                                        multiple
+                                        onChange={handleFileUpload}
+                                        className="hidden"
+                                    />
+                                    <span className="border-2 border-orange-500 text-orange-500 px-6 py-2 rounded cursor-pointer hover:bg-orange-50">
+                                        Upload
+                                    </span>
+                                </label>
+                            </div>
+
+                            {uploadedImages.length > 0 && (
+                                <div className="grid grid-cols-3 gap-2">
+                                    {uploadedImages.map((img, idx) => (
+                                        <img key={idx} src={img} alt="" className="w-full h-24 object-cover rounded" />
+                                    ))}
+                                </div>
+                            )}
+
+                            <button
+                                onClick={() => setShowImageUpload(false)}
+                                className="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded font-medium"
+                            >
+                                Upload
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Comments Modal */}
+            {showComments && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+                        <div className="bg-gradient-to-r from-green-700 to-green-800 text-white text-center py-6 rounded-t-lg">
+                            <h2 className="text-lg font-semibold">Calculate your price quickly!</h2>
+                        </div>
+
+                        <div className="p-6 space-y-4">
+                            <button
+                                onClick={() => setShowComments(false)}
+                                className="flex items-center text-sm text-gray-600 hover:text-gray-900"
+                            >
+                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                Go back
+                            </button>
+
+                            <div>
+                                <label className="block font-medium mb-2">Comments</label>
+                                <textarea
+                                    value={comments}
+                                    onChange={(e) => setComments(e.target.value)}
+                                    placeholder="Leave your comment(s) here"
+                                    className="w-full border border-gray-300 rounded-lg p-3 h-32 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                                />
+                            </div>
+
+                            <button
+                                onClick={() => setShowComments(false)}
+                                className="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded font-medium"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

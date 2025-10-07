@@ -1,10 +1,10 @@
 // components/product/FormStepEditor.tsx
 
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { useSortable } from '@dnd-kit/sortable'
-import { Trash2, GripVertical, ChevronUp, ChevronDown } from 'lucide-react'
-import { QuestionFields } from './QuestionFields'
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useSortable } from '@dnd-kit/sortable';
+import { Trash2, GripVertical, ChevronUp, ChevronDown } from 'lucide-react';
+import { QuestionFields } from './QuestionFields';
 import {
     StepFormData,
     UpdateStepHandler,
@@ -13,15 +13,12 @@ import {
     AddOptionHandler,
     UpdateOptionHandler,
     DeleteOptionHandler
-} from '@/app/types/productFormTypes'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+} from '@/app/types/productFormTypes';
 
 interface FormStepEditorProps {
-    step: StepFormData
-    index: number
-    totalSteps: number
-    // Pass all steps to render conditional logic options
+    step: StepFormData;
+    index: number;
+    totalSteps: number;
     allSteps: StepFormData[]
     updateStep: UpdateStepHandler
     deleteStep: DeleteStepHandler
@@ -35,7 +32,7 @@ export function FormStepEditor({
     step,
     index,
     totalSteps,
-    allSteps, // New prop
+    allSteps,
     updateStep,
     deleteStep,
     moveStep,
@@ -58,15 +55,6 @@ export function FormStepEditor({
         transition,
         zIndex: isDragging ? 10 : undefined,
     };
-
-    const handleUpdate = (key: keyof StepFormData, value: any) => {
-        updateStep(step.tempId, { [key]: value })
-    }
-
-    // Filter potential parent steps for conditional logic
-    const availableParentSteps = allSteps.filter(s =>
-        s.order < step.order && (s.type1 === 'SELECT' || s.type2 === 'SELECT')
-    );
 
     return (
         <Card ref={setNodeRef} style={style} className="border-2 relative">
@@ -114,6 +102,8 @@ export function FormStepEditor({
                 <QuestionFields
                     step={step}
                     questionNum={1}
+                    allSteps={allSteps}
+                    index={index}
                     updateStep={updateStep}
                     addOption={addOption}
                     updateOption={updateOption}
@@ -124,59 +114,13 @@ export function FormStepEditor({
                 <QuestionFields
                     step={step}
                     questionNum={2}
+                    allSteps={allSteps}
+                    index={index}
                     updateStep={updateStep}
                     addOption={addOption}
                     updateOption={updateOption}
                     deleteOption={deleteOption}
                 />
-
-                {/* Conditional Logic Selector */}
-                <div className="space-y-2 p-4 border rounded-lg bg-white shadow-sm">
-                    <Label className="font-semibold">Conditional Logic (Optional)</Label>
-                    <Select
-                        value={step.conditionalOn ? JSON.stringify(step.conditionalOn) : 'none'}
-                        onValueChange={(value) => {
-                            if (value === 'none') {
-                                handleUpdate('conditionalOn', null)
-                            } else {
-                                handleUpdate('conditionalOn', JSON.parse(value))
-                            }
-                        }}
-                        disabled={index === 0} // First step cannot be conditional
-                    >
-                        <SelectTrigger>
-                            <SelectValue placeholder={index === 0 ? "Cannot be conditional" : "Always show (Default)"} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="none">Always show (Default)</SelectItem>
-                            {availableParentSteps.map(s => (
-                                s.options.filter(o => o.questionNum === 1).map(opt => (
-                                    <SelectItem
-                                        key={`${s.tempId}-${opt.tempId}_q1`}
-                                        value={JSON.stringify({ stepId: s.tempId, value: opt.value, questionNum: 1 })}
-                                    >
-                                        Show if Step {s.order + 1} Q1 = {opt.label}
-                                    </SelectItem>
-                                ))
-                            ))}
-                            {/* Option to condition on Question 2 of previous steps */}
-                            {availableParentSteps.map(s => (
-                                s.type2 === 'SELECT' && s.options.filter(o => o.questionNum === 2).map(opt => (
-                                    <SelectItem
-                                        key={`${s.tempId}-${opt.tempId}_q2`}
-                                        value={JSON.stringify({ stepId: s.tempId, value: opt.value, questionNum: 2 })}
-                                    >
-                                        Show if Step {s.order + 1} Q2 = {opt.label}
-                                    </SelectItem>
-                                ))
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <p className="text-xs text-muted-foreground">
-                        Only show this step if a specific option was selected in a previous &apos;Dropdown Selection&apos; step.
-                    </p>
-                </div>
-
             </CardContent>
         </Card>
     )

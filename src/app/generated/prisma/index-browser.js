@@ -152,7 +152,8 @@ exports.Prisma.FormStepScalarFieldEnum = {
   minValue2: 'minValue2',
   maxValue2: 'maxValue2',
   defaultValue2: 'defaultValue2',
-  conditionalOn: 'conditionalOn',
+  conditionalOn1: 'conditionalOn1',
+  conditionalOn2: 'conditionalOn2',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

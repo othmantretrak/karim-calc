@@ -14,7 +14,7 @@ export function calculatePrice(
     let baseSet = false // This variable is correctly closed over
 
     // 1. Determine which steps are visible and should be included in calculation
-    const stepsToProcess = getVisibleSteps(product, answers);
+    const stepsToProcess = product.steps.sort((a, b) => a.order - b.order);
 
     function processAnswer(
         step: FormStep,
@@ -71,17 +71,21 @@ export function calculatePrice(
 
     // 2. Iterate only over visible steps
     for (const step of stepsToProcess) {
+        const visibleQuestions = getVisibleQuestionsForStep(step, product, answers);
+
         // Process Question 1
-        const answer1 = answers[`${step.id}_q1`]
-        if (answer1 !== undefined && answer1 !== '' && answer1 !== null) {
-            processAnswer(step, answer1, 1, multipliers, additions)
+        if (visibleQuestions.includes(1)) {
+            const answer1 = answers[`${step.id}_q1`];
+            if (answer1 !== undefined && answer1 !== '' && answer1 !== null) {
+                processAnswer(step, answer1, 1, multipliers, additions);
+            }
         }
 
         // Process Question 2 if exists
-        if (step.question2) {
-            const answer2 = answers[`${step.id}_q2`]
+        if (visibleQuestions.includes(2)) {
+            const answer2 = answers[`${step.id}_q2`];
             if (answer2 !== undefined && answer2 !== '' && answer2 !== null) {
-                processAnswer(step, answer2, 2, multipliers, additions)
+                processAnswer(step, answer2, 2, multipliers, additions);
             }
         }
     }
@@ -106,31 +110,52 @@ export function calculatePrice(
  * Get all visible steps for the current answers
  */
 export function getVisibleSteps(product: Product, answers: Record<string, string | number>): FormStep[] {
-    if (!product || !product.steps) return [];
+    if (!product || !product.steps) return []
 
-    const visibleSteps: FormStep[] = [];
+    // A step is visible if at least one of its questions is visible.
+    return product.steps
+        .filter(step => getVisibleQuestionsForStep(step, product, answers).length > 0)
+        .sort((a, b) => a.order - b.order)
+}
 
-    // We iterate over all steps (which should be sorted by order initially)
-    for (const step of product.steps) {
-        if (!step.conditionalOn) {
-            visibleSteps.push(step);
-            continue;
-        }
+/**
+ * Get visible questions (1 or 2) for a given step.
+ */
+export function getVisibleQuestionsForStep(
+    step: FormStep,
+    product: Product,
+    answers: Record<string, string | number>
+): (1 | 2)[] {
+    const visible: (1 | 2)[] = [];
 
-        const condition = step.conditionalOn as { stepId: string; questionNum: number | 1 | 2; value: string };
-
-        // Construct the answer key based on the stored conditional logic
-        const conditionKey = `${condition.stepId}_q${condition.questionNum}`;
+    // Check visibility for Question 1
+    const condition1 = step.conditionalOn1 as { stepId: string; questionNum: 1 | 2; value: string } | null;
+    let isQ1Visible = true;
+    if (condition1) {
+        const conditionKey = `${condition1.stepId}_q${condition1.questionNum}`;
         const actualAnswer = answers[conditionKey];
+        isQ1Visible = actualAnswer === condition1.value;
+    }
 
-        // Check if the condition is met
-        if (actualAnswer === condition.value) {
-            visibleSteps.push(step);
+    if (isQ1Visible) {
+        visible.push(1);
+
+        // Check visibility for Question 2 (only if Q1 is visible and Q2 exists)
+        if (step.question2) {
+            const condition2 = step.conditionalOn2 as { stepId: string; questionNum: 1 | 2; value: string } | null;
+            let isQ2Visible = true;
+            if (condition2) {
+                const conditionKey = `${condition2.stepId}_q${condition2.questionNum}`;
+                const actualAnswer = answers[conditionKey];
+                isQ2Visible = actualAnswer === condition2.value;
+            }
+            if (isQ2Visible) {
+                visible.push(2);
+            }
         }
     }
 
-    // Sort by order to ensure consistent progression (necessary if product.steps wasn't sorted)
-    return visibleSteps.sort((a, b) => a.order - b.order);
+    return visible;
 }
 
 /**
@@ -165,11 +190,17 @@ export function areAllStepsComplete(
     product: Product,
     answers: Record<string, string | number>
 ): boolean {
-    const visibleSteps = getVisibleSteps(product, answers)
-
-    return visibleSteps
-        .filter(step => step.required1 || (step.question2 && step.required2))
-        .every(step => isStepComplete(step, answers))
+    const allSteps = product.steps.sort((a, b) => a.order - b.order);
+    for (const step of allSteps) {
+        const visibleQuestions = getVisibleQuestionsForStep(step, product, answers);
+        if (visibleQuestions.includes(1) && step.required1 && !isStepComplete(step, answers)) {
+            return false;
+        }
+        if (visibleQuestions.includes(2) && step.required2 && !isStepComplete(step, answers)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /**
@@ -185,7 +216,7 @@ export function calculatePartialPrice(
     let baseSet = false
 
     // 1. Determine which steps are visible and should be included in calculation
-    const stepsToProcess = getVisibleSteps(product, answers);
+    const stepsToProcess = product.steps.sort((a, b) => a.order - b.order);
 
     function processPartialAnswer(
         step: FormStep,
@@ -235,17 +266,21 @@ export function calculatePartialPrice(
 
     // 2. Iterate only over visible steps
     for (const step of stepsToProcess) {
+        const visibleQuestions = getVisibleQuestionsForStep(step, product, answers);
+
         // Process Question 1
-        const answer1 = answers[`${step.id}_q1`]
-        if (answer1 !== undefined && answer1 !== '' && answer1 !== null) {
-            processPartialAnswer(step, answer1, 1, multipliers, additions)
+        if (visibleQuestions.includes(1)) {
+            const answer1 = answers[`${step.id}_q1`];
+            if (answer1 !== undefined && answer1 !== '' && answer1 !== null) {
+                processPartialAnswer(step, answer1, 1, multipliers, additions);
+            }
         }
 
         // Process Question 2 if exists
-        if (step.question2) {
-            const answer2 = answers[`${step.id}_q2`]
+        if (visibleQuestions.includes(2)) {
+            const answer2 = answers[`${step.id}_q2`];
             if (answer2 !== undefined && answer2 !== '' && answer2 !== null) {
-                processPartialAnswer(step, answer2, 2, multipliers, additions)
+                processPartialAnswer(step, answer2, 2, multipliers, additions);
             }
         }
     }

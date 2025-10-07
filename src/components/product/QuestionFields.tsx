@@ -1,12 +1,18 @@
 // components/product/QuestionFields.tsx
 
-import { AddOptionHandler, DeleteOptionHandler, StepFormData, UpdateOptionHandler, UpdateStepHandler } from '@/app/types/productFormTypes'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Plus, Trash2 } from 'lucide-react'
-
+import {
+    AddOptionHandler,
+    DeleteOptionHandler,
+    StepFormData,
+    UpdateOptionHandler,
+    UpdateStepHandler
+} from '@/app/types/productFormTypes';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Plus, Trash2 } from 'lucide-react';
+import { ConditionalLogicSelector } from './ConditionalLogicSelector';
 
 interface QuestionFieldsProps {
     step: StepFormData
@@ -15,6 +21,8 @@ interface QuestionFieldsProps {
     addOption: AddOptionHandler
     updateOption: UpdateOptionHandler
     deleteOption: DeleteOptionHandler
+    allSteps: StepFormData[]
+    index: number
 }
 
 export function QuestionFields({
@@ -24,6 +32,8 @@ export function QuestionFields({
     addOption,
     updateOption,
     deleteOption,
+    allSteps,
+    index,
 }: QuestionFieldsProps) {
     // Determine which field keys to use based on questionNum
     const typeKey = `type${questionNum}` as keyof StepFormData
@@ -255,6 +265,15 @@ export function QuestionFields({
                     )}
                 </div>
             )}
+
+            {/* Conditional Logic Selector for this question */}
+            <ConditionalLogicSelector
+                step={step}
+                questionNum={questionNum}
+                allSteps={allSteps}
+                index={index}
+                updateStep={updateStep}
+            />
         </div>
     )
 }

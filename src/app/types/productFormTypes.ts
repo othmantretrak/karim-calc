@@ -35,7 +35,8 @@ export interface StepFormData {
     maxValue2: number | null
     defaultValue2: number | null
 
-    conditionalOn: any
+    conditionalOn1: any,
+    conditionalOn2: any,
     options: OptionData[]
 }
 

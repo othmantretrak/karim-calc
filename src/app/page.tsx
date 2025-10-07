@@ -31,10 +31,16 @@ export default async function Page() {
     ...product,
     steps: product.steps.map((step): FormStep => ({
       ...step,
-      conditionalOn: step.conditionalOn
+      conditionalOn1: step.conditionalOn1
         ? {
-          ...(step.conditionalOn as { stepId: string; value: string }),
-          questionNum: (step.conditionalOn as { questionNum?: 1 | 2 }).questionNum || 1
+          ...(step.conditionalOn1 as { stepId: string; value: string }),
+          questionNum: (step.conditionalOn1 as { questionNum?: 1 | 2 }).questionNum || 1
+        }
+        : null,
+      conditionalOn2: step.conditionalOn2
+        ? {
+          ...(step.conditionalOn2 as { stepId: string; value: string }),
+          questionNum: (step.conditionalOn2 as { questionNum?: 1 | 2 }).questionNum || 1
         }
         : null
     }))

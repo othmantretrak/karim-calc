@@ -40,7 +40,8 @@ export interface FormStep {
     maxValue2: number | null
     defaultValue2: number | null
 
-    conditionalOn: { stepId: string; value: string, questionNum: 1 | 2 } | null
+    conditionalOn1: { stepId: string; value: string, questionNum: 1 | 2 } | null
+    conditionalOn2: { stepId: string; value: string, questionNum: 1 | 2 } | null
     options: StepOption[]
 }
 

@@ -2342,7 +2342,8 @@ export namespace Prisma {
     minValue2: number
     maxValue2: number
     defaultValue2: number
-    conditionalOn: number
+    conditionalOn1: number
+    conditionalOn2: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2447,7 +2448,8 @@ export namespace Prisma {
     minValue2?: true
     maxValue2?: true
     defaultValue2?: true
-    conditionalOn?: true
+    conditionalOn1?: true
+    conditionalOn2?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2561,7 +2563,8 @@ export namespace Prisma {
     minValue2: number | null
     maxValue2: number | null
     defaultValue2: number | null
-    conditionalOn: JsonValue | null
+    conditionalOn1: JsonValue | null
+    conditionalOn2: JsonValue | null
     createdAt: Date
     updatedAt: Date
     _count: FormStepCountAggregateOutputType | null
@@ -2607,7 +2610,8 @@ export namespace Prisma {
     minValue2?: boolean
     maxValue2?: boolean
     defaultValue2?: boolean
-    conditionalOn?: boolean
+    conditionalOn1?: boolean
+    conditionalOn2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -2637,7 +2641,8 @@ export namespace Prisma {
     minValue2?: boolean
     maxValue2?: boolean
     defaultValue2?: boolean
-    conditionalOn?: boolean
+    conditionalOn1?: boolean
+    conditionalOn2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -2665,7 +2670,8 @@ export namespace Prisma {
     minValue2?: boolean
     maxValue2?: boolean
     defaultValue2?: boolean
-    conditionalOn?: boolean
+    conditionalOn1?: boolean
+    conditionalOn2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -2693,12 +2699,13 @@ export namespace Prisma {
     minValue2?: boolean
     maxValue2?: boolean
     defaultValue2?: boolean
-    conditionalOn?: boolean
+    conditionalOn1?: boolean
+    conditionalOn2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type FormStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "order" | "type1" | "question1" | "required1" | "type2" | "question2" | "required2" | "pricingImpact1" | "pricePerUnit1" | "unit1" | "minValue1" | "maxValue1" | "defaultValue1" | "pricingImpact2" | "pricePerUnit2" | "unit2" | "minValue2" | "maxValue2" | "defaultValue2" | "conditionalOn" | "createdAt" | "updatedAt", ExtArgs["result"]["formStep"]>
+  export type FormStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "order" | "type1" | "question1" | "required1" | "type2" | "question2" | "required2" | "pricingImpact1" | "pricePerUnit1" | "unit1" | "minValue1" | "maxValue1" | "defaultValue1" | "pricingImpact2" | "pricePerUnit2" | "unit2" | "minValue2" | "maxValue2" | "defaultValue2" | "conditionalOn1" | "conditionalOn2" | "createdAt" | "updatedAt", ExtArgs["result"]["formStep"]>
   export type FormStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     options?: boolean | FormStep$optionsArgs<ExtArgs>
@@ -2739,7 +2746,8 @@ export namespace Prisma {
       minValue2: number | null
       maxValue2: number | null
       defaultValue2: number | null
-      conditionalOn: Prisma.JsonValue | null
+      conditionalOn1: Prisma.JsonValue | null
+      conditionalOn2: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["formStep"]>
@@ -3188,7 +3196,8 @@ export namespace Prisma {
     readonly minValue2: FieldRef<"FormStep", 'Float'>
     readonly maxValue2: FieldRef<"FormStep", 'Float'>
     readonly defaultValue2: FieldRef<"FormStep", 'Float'>
-    readonly conditionalOn: FieldRef<"FormStep", 'Json'>
+    readonly conditionalOn1: FieldRef<"FormStep", 'Json'>
+    readonly conditionalOn2: FieldRef<"FormStep", 'Json'>
     readonly createdAt: FieldRef<"FormStep", 'DateTime'>
     readonly updatedAt: FieldRef<"FormStep", 'DateTime'>
   }
@@ -4830,7 +4839,8 @@ export namespace Prisma {
     minValue2: 'minValue2',
     maxValue2: 'maxValue2',
     defaultValue2: 'defaultValue2',
-    conditionalOn: 'conditionalOn',
+    conditionalOn1: 'conditionalOn1',
+    conditionalOn2: 'conditionalOn2',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -5097,7 +5107,8 @@ export namespace Prisma {
     minValue2?: FloatNullableFilter<"FormStep"> | number | null
     maxValue2?: FloatNullableFilter<"FormStep"> | number | null
     defaultValue2?: FloatNullableFilter<"FormStep"> | number | null
-    conditionalOn?: JsonNullableFilter<"FormStep">
+    conditionalOn1?: JsonNullableFilter<"FormStep">
+    conditionalOn2?: JsonNullableFilter<"FormStep">
     createdAt?: DateTimeFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeFilter<"FormStep"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -5126,7 +5137,8 @@ export namespace Prisma {
     minValue2?: SortOrderInput | SortOrder
     maxValue2?: SortOrderInput | SortOrder
     defaultValue2?: SortOrderInput | SortOrder
-    conditionalOn?: SortOrderInput | SortOrder
+    conditionalOn1?: SortOrderInput | SortOrder
+    conditionalOn2?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     product?: ProductOrderByWithRelationInput
@@ -5159,7 +5171,8 @@ export namespace Prisma {
     minValue2?: FloatNullableFilter<"FormStep"> | number | null
     maxValue2?: FloatNullableFilter<"FormStep"> | number | null
     defaultValue2?: FloatNullableFilter<"FormStep"> | number | null
-    conditionalOn?: JsonNullableFilter<"FormStep">
+    conditionalOn1?: JsonNullableFilter<"FormStep">
+    conditionalOn2?: JsonNullableFilter<"FormStep">
     createdAt?: DateTimeFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeFilter<"FormStep"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -5188,7 +5201,8 @@ export namespace Prisma {
     minValue2?: SortOrderInput | SortOrder
     maxValue2?: SortOrderInput | SortOrder
     defaultValue2?: SortOrderInput | SortOrder
-    conditionalOn?: SortOrderInput | SortOrder
+    conditionalOn1?: SortOrderInput | SortOrder
+    conditionalOn2?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: FormStepCountOrderByAggregateInput
@@ -5223,7 +5237,8 @@ export namespace Prisma {
     minValue2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
     maxValue2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
     defaultValue2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
-    conditionalOn?: JsonNullableWithAggregatesFilter<"FormStep">
+    conditionalOn1?: JsonNullableWithAggregatesFilter<"FormStep">
+    conditionalOn2?: JsonNullableWithAggregatesFilter<"FormStep">
     createdAt?: DateTimeWithAggregatesFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FormStep"> | Date | string
   }
@@ -5401,7 +5416,8 @@ export namespace Prisma {
     minValue2?: number | null
     maxValue2?: number | null
     defaultValue2?: number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutStepsInput
@@ -5430,7 +5446,8 @@ export namespace Prisma {
     minValue2?: number | null
     maxValue2?: number | null
     defaultValue2?: number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     options?: StepOptionUncheckedCreateNestedManyWithoutStepInput
@@ -5457,7 +5474,8 @@ export namespace Prisma {
     minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutStepsNestedInput
@@ -5486,7 +5504,8 @@ export namespace Prisma {
     minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     options?: StepOptionUncheckedUpdateManyWithoutStepNestedInput
@@ -5514,7 +5533,8 @@ export namespace Prisma {
     minValue2?: number | null
     maxValue2?: number | null
     defaultValue2?: number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5540,7 +5560,8 @@ export namespace Prisma {
     minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5567,7 +5588,8 @@ export namespace Prisma {
     minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5904,7 +5926,8 @@ export namespace Prisma {
     minValue2?: SortOrder
     maxValue2?: SortOrder
     defaultValue2?: SortOrder
-    conditionalOn?: SortOrder
+    conditionalOn1?: SortOrder
+    conditionalOn2?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6567,7 +6590,8 @@ export namespace Prisma {
     minValue2?: number | null
     maxValue2?: number | null
     defaultValue2?: number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     options?: StepOptionCreateNestedManyWithoutStepInput
@@ -6594,7 +6618,8 @@ export namespace Prisma {
     minValue2?: number | null
     maxValue2?: number | null
     defaultValue2?: number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     options?: StepOptionUncheckedCreateNestedManyWithoutStepInput
@@ -6651,7 +6676,8 @@ export namespace Prisma {
     minValue2?: FloatNullableFilter<"FormStep"> | number | null
     maxValue2?: FloatNullableFilter<"FormStep"> | number | null
     defaultValue2?: FloatNullableFilter<"FormStep"> | number | null
-    conditionalOn?: JsonNullableFilter<"FormStep">
+    conditionalOn1?: JsonNullableFilter<"FormStep">
+    conditionalOn2?: JsonNullableFilter<"FormStep">
     createdAt?: DateTimeFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeFilter<"FormStep"> | Date | string
   }
@@ -6796,7 +6822,8 @@ export namespace Prisma {
     minValue2?: number | null
     maxValue2?: number | null
     defaultValue2?: number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutStepsInput
@@ -6824,7 +6851,8 @@ export namespace Prisma {
     minValue2?: number | null
     maxValue2?: number | null
     defaultValue2?: number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6866,7 +6894,8 @@ export namespace Prisma {
     minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutStepsNestedInput
@@ -6894,7 +6923,8 @@ export namespace Prisma {
     minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6920,7 +6950,8 @@ export namespace Prisma {
     minValue2?: number | null
     maxValue2?: number | null
     defaultValue2?: number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6946,7 +6977,8 @@ export namespace Prisma {
     minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     options?: StepOptionUpdateManyWithoutStepNestedInput
@@ -6973,7 +7005,8 @@ export namespace Prisma {
     minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     options?: StepOptionUncheckedUpdateManyWithoutStepNestedInput
@@ -7000,7 +7033,8 @@ export namespace Prisma {
     minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
+    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
