@@ -1,6 +1,6 @@
 // app/components/Homepage.tsx
 'use client'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -23,6 +23,14 @@ interface HomePageProps {
 
 export default function HomePage({ products }: HomePageProps) {
     const { productSlug, answers, setProductSlug, setAnswer } = useStore()
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+    // When the product slug changes (e.g., on first selection or reset), reset the step index.
+    useEffect(() => {
+        if (!productSlug) {
+            setCurrentStepIndex(0);
+        }
+    }, [productSlug]);
 
     // Get selected product
     const selectedProduct = useMemo(() => {
@@ -54,6 +62,13 @@ export default function HomePage({ products }: HomePageProps) {
         setProductSlug(slug)
     }
 
+    const handleNext = () => {
+        if (currentStepIndex < visibleSteps.length) {
+            setCurrentStepIndex(prev => prev + 1);
+        }
+    };
+
+
     const handleAnswer = (stepId: string, questionNum: number, value: string | number | null) => {
         const key = `${stepId}_q${questionNum}`
         setAnswer(key, value === null ? '' : value) // Store null answers as empty string for consistency/clearing
@@ -66,82 +81,39 @@ export default function HomePage({ products }: HomePageProps) {
         return answer !== undefined && answer !== '' && answer !== null
     }
 
-    // Get all answered steps (both questions answered if step has 2 questions)
-    const getAnsweredSteps = () => {
-        return visibleSteps.filter(step => {
-            const q1Answered = isQuestionAnswered(step.id, 1)
-            if (!step.question2) return q1Answered
-            const q2Answered = isQuestionAnswered(step.id, 2)
-            return q1Answered && q2Answered
-        })
-    }
+    const isStepComplete = (step: FormStep) => {
+        const q1Complete = !step.required1 || isQuestionAnswered(step.id, 1);
+        if (!q1Complete) return false;
 
-    // Get the first unanswered step
-    const getFirstUnansweredStep = () => {
-        return visibleSteps.find(step => {
-            const q1Answered = isQuestionAnswered(step.id, 1)
-            if (!q1Answered) return true
-            if (step.question2) {
-                const q2Answered = isQuestionAnswered(step.id, 2)
-                return !q2Answered
-            }
-            return false
-        })
-    }
+        if (step.question2) {
+            const q2Complete = !step.required2 || isQuestionAnswered(step.id, 2);
+            return q2Complete;
+        }
 
-    const answeredSteps = getAnsweredSteps()
-    const currentUnansweredStep = getFirstUnansweredStep()
-    const allComplete = !currentUnansweredStep && visibleSteps.length > 0
-    const currentStepIndex = currentUnansweredStep
-        ? visibleSteps.findIndex(s => s.id === currentUnansweredStep.id)
-        : visibleSteps.length
+        return true;
+    };
+
+    const allComplete = useMemo(() => {
+        return productSlug && visibleSteps.length > 0 && currentStepIndex >= visibleSteps.length;
+    }, [productSlug, visibleSteps, currentStepIndex]);
 
     const handleGoBack = () => {
-        if (!selectedProduct || visibleSteps.length === 0) return;
-
-        // 1. If calculation is complete, target the last step
-        if (allComplete) {
-            const stepToClear = visibleSteps[visibleSteps.length - 1];
-            if (stepToClear) {
-                handleAnswer(stepToClear.id, 1, null);
-                if (stepToClear.question2) {
-                    handleAnswer(stepToClear.id, 2, null);
-                }
-            }
-            return;
-        }
-
-        // 2. We are currently stopped at currentUnansweredStep
-        if (currentUnansweredStep) {
-            // Case A: Q2 is pending, but Q1 is answered -> Clear Q1 (to go back to start of step, which recalculates visibility)
-            // Note: Since Q1 is required before Q2 appears, if Q1 is answered, we check Q2. If Q2 is unanswered, we clear Q1 to go back.
-            const q1Answered = isQuestionAnswered(currentUnansweredStep.id, 1);
-            const q2Answered = currentUnansweredStep.question2 && isQuestionAnswered(currentUnansweredStep.id, 2);
-
-            if (q2Answered) {
-                // Clear Q2
-                handleAnswer(currentUnansweredStep.id, 2, null);
-            }
-            else if (q1Answered) {
-                // Clear Q1 (forces progression back to Q1 input state)
-                handleAnswer(currentUnansweredStep.id, 1, null);
-
-                // If this step became invisible due to clearing Q1, the next action should target the previous step.
-                // However, simply clearing Q1 here is usually enough to let the logic re-evaluate.
-            }
-            else if (currentStepIndex > 0) {
-                // Case C: Q1 is unanswered, go to the previous step (index - 1) and clear its answers.
-                const prevStep = visibleSteps[currentStepIndex - 1];
-                handleAnswer(prevStep.id, 1, null);
-                if (prevStep.question2) {
-                    handleAnswer(prevStep.id, 2, null);
-                }
-            } else if (productSlug) {
-                // We are on the very first step, clear product selection
-                setProductSlug('');
-            }
+        if (currentStepIndex > 0) {
+            setCurrentStepIndex(prev => prev - 1);
+        } else if (productSlug) {
+            setProductSlug(''); // Go back to product selection
         }
     };
+
+    const isNextDisabled = useMemo(() => {
+        if (!productSlug) return true;
+        if (currentStepIndex >= visibleSteps.length) return true; // Already at the end
+
+        const currentStep = visibleSteps[currentStepIndex];
+        if (!currentStep) return true;
+
+        return !isStepComplete(currentStep);
+    }, [productSlug, currentStepIndex, visibleSteps, answers]);
 
 
     const renderQuestion = (step: FormStep, questionNum: 1 | 2, isDisabled: boolean = false) => {
@@ -232,8 +204,6 @@ export default function HomePage({ products }: HomePageProps) {
         return null
     }
 
-    const showBackButton = productSlug && (currentStepIndex > 0 || answeredSteps.length > 0)
-
     if (products.length === 0) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
@@ -272,34 +242,21 @@ export default function HomePage({ products }: HomePageProps) {
                             <div
                                 className="bg-white h-2 rounded-full transition-all duration-300"
                                 style={{
-                                    width: `${visibleSteps.length > 0 ? (answeredSteps.length / visibleSteps.length) * 100 : 0}%`
+                                    width: `${visibleSteps.length > 0 ? (currentStepIndex / visibleSteps.length) * 100 : 0}%`
                                 }}
                             />
                         </div>
                     )}
 
                     <CardContent className="p-6 space-y-6">
-                        {/* Back Button / Product Selection */}
-                        <div className="flex justify-between items-center">
-                            {showBackButton ? (
-                                <Button variant="ghost" size="sm" onClick={handleGoBack}>
-                                    <ArrowLeft className="w-4 h-4 mr-2" /> Back
-                                </Button>
-                            ) : (
-                                <div className="h-8"></div> // Spacer to keep layout stable
-                            )}
-                            <p className="text-sm text-muted-foreground">
-                                {selectedProduct?.description || 'Waar kunnen we u mee helpen?'}
-                            </p>
-                        </div>
 
-                        {!productSlug ? (
+                        {currentStepIndex === 0 && (
                             <div>
-                                <h3 className="font-semibold mb-4">
+                                <h3 className="font-semibold mb-2">
                                     Categorie
                                     <span className="text-red-500">*</span>
                                 </h3>
-                                <Select value={productSlug || ''} onValueChange={handleProductSelect}>
+                                <Select value={productSlug || ''} onValueChange={handleProductSelect} disabled={!!productSlug}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select a product" />
                                     </SelectTrigger>
@@ -318,36 +275,34 @@ export default function HomePage({ products }: HomePageProps) {
                                         ))}
                                     </SelectContent>
                                 </Select>
+                                {selectedProduct && <p className="text-sm text-muted-foreground mt-2">{selectedProduct.description}</p>}
                             </div>
-                        ) : (
-                            <>
-                                {/* Render current unanswered step */}
-                                {currentUnansweredStep ? (
-                                    <div className="space-y-4 p-4 border rounded-lg bg-white shadow-sm">
+                        )}
 
+                        {visibleSteps.map((step, index) => {
+                            if (index !== currentStepIndex) return null;
 
-                                        {/* Question 1 */}
-                                        {renderQuestion(currentUnansweredStep, 1, false)}
+                            return (
+                                <div key={step.id} className="space-y-4 p-4 border rounded-lg bg-white shadow-sm">
+                                    {renderQuestion(step, 1)}
+                                    {step.question2 && (
+                                        <div className="pt-4 border-t mt-4">
+                                            {renderQuestion(step, 2)}
+                                        </div>
+                                    )}
+                                </div>
+                            )
+                        })}
 
-                                        {/* Question 2 (only if Q1 is answered AND Q2 exists) */}
-                                        {currentUnansweredStep.question2 &&
-                                            isQuestionAnswered(currentUnansweredStep.id, 1) && (
-                                                <div className="pt-4 border-t mt-4">
-                                                    {renderQuestion(currentUnansweredStep, 2, false)}
-                                                </div>
-                                            )}
-                                    </div>
-                                ) : (
-                                    <div className="text-center py-6 bg-green-50 border border-green-200 rounded-lg">
-                                        <p className="text-xl font-bold text-green-700 mb-2">
-                                            Calculation Complete!
-                                        </p>
-                                        <p className="text-muted-foreground">
-                                            Your estimated price is ready.
-                                        </p>
-                                    </div>
-                                )}
-                            </>
+                        {allComplete && (
+                            <div className="text-center py-6 bg-green-50 border border-green-200 rounded-lg">
+                                <p className="text-xl font-bold text-green-700 mb-2">
+                                    Calculation Complete!
+                                </p>
+                                <p className="text-muted-foreground">
+                                    Your estimated price is ready.
+                                </p>
+                            </div>
                         )}
 
                         {/* Price Display */}
@@ -365,15 +320,37 @@ export default function HomePage({ products }: HomePageProps) {
                             </div>
                         )}
 
-                        {/* View Details Button */}
-                        {allComplete && priceInfo.isComplete && (
-                            <Link
-                                className="w-full bg-green-700 hover:bg-green-800 text-white text-center py-2 rounded inline-flex items-center justify-center"
-                                href={`/products/${productSlug}`}
-                            >
-                                View Details
-                            </Link>
-                        )}
+                        {/* Navigation */}
+                        <div className="border-t pt-4 flex justify-between items-center">
+                            <Button variant="ghost" onClick={handleGoBack} disabled={!productSlug && currentStepIndex === 0}>
+                                <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                            </Button>
+
+                            {!allComplete ? (
+                                <Button onClick={handleNext} disabled={isNextDisabled}>
+                                    Next
+                                </Button>
+                            ) : (
+                                <Link
+                                    className="w-auto bg-green-700 hover:bg-green-800 text-white text-center py-2 px-4 rounded inline-flex items-center justify-center"
+                                    href={`/products/${productSlug}`}
+                                >
+                                    View Details
+                                </Link>
+                            )}
+                        </div>
+
+                        {/* View Details Button - This is now part of the navigation footer */}
+                        {/* {allComplete && priceInfo.isComplete && (
+                                    <div className="text-center py-6 bg-green-50 border border-green-200 rounded-lg">
+                                        <p className="text-xl font-bold text-green-700 mb-2">
+                                            Calculation Complete!
+                                        </p>
+                                        <p className="text-muted-foreground">
+                                            Your estimated price is ready.
+                                        </p>
+                                    </div>
+                                )} */}
                     </CardContent>
                 </Card>
             </div>
