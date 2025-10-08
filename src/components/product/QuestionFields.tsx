@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Image as ImageIcon } from 'lucide-react';
 import { ConditionalLogicSelector } from './ConditionalLogicSelector';
 
 interface QuestionFieldsProps {
@@ -224,41 +224,74 @@ export function QuestionFields({
                     {currentOptions.length === 0 ? (
                         <p className="text-sm text-muted-foreground">No options added yet.</p>
                     ) : (
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             {currentOptions.map((option) => (
-                                <div key={option.tempId} className="flex gap-2 items-start">
-                                    <div className="flex-1">
-                                        <Input
-                                            value={option.label}
-                                            onChange={(e) => updateOption(step.tempId, option.tempId, {
-                                                label: e.target.value,
-                                                value: e.target.value.toLowerCase().replace(/\s+/g, '-')
-                                            })}
-                                            placeholder="Option label"
-                                            required
-                                        />
-                                    </div>
-                                    {pricingImpact === 'BASE' && (
-                                        <div className="w-32">
+                                <div key={option.tempId} className="p-3 border rounded-lg bg-white space-y-2">
+                                    <div className="flex gap-2 items-start">
+                                        <div className="flex-1">
+                                            <Label className="text-xs text-muted-foreground mb-1">Label *</Label>
                                             <Input
-                                                type="number"
-                                                step="0.01"
-                                                value={option.price || ''}
+                                                value={option.label}
                                                 onChange={(e) => updateOption(step.tempId, option.tempId, {
-                                                    price: parseFloat(e.target.value) || null
+                                                    label: e.target.value,
+                                                    value: e.target.value.toLowerCase().replace(/\s+/g, '-')
                                                 })}
-                                                placeholder="Price"
+                                                placeholder="Option label"
+                                                required
                                             />
                                         </div>
-                                    )}
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => deleteOption(step.tempId, option.tempId)}
-                                    >
-                                        <Trash2 className="w-4 h-4 text-destructive" />
-                                    </Button>
+                                        {pricingImpact === 'BASE' && (
+                                            <div className="w-32">
+                                                <Label className="text-xs text-muted-foreground mb-1">Price</Label>
+                                                <Input
+                                                    type="number"
+                                                    step="0.01"
+                                                    value={option.price || ''}
+                                                    onChange={(e) => updateOption(step.tempId, option.tempId, {
+                                                        price: parseFloat(e.target.value) || null
+                                                    })}
+                                                    placeholder="0.00"
+                                                />
+                                            </div>
+                                        )}
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => deleteOption(step.tempId, option.tempId)}
+                                            className="mt-5"
+                                        >
+                                            <Trash2 className="w-4 h-4 text-destructive" />
+                                        </Button>
+                                    </div>
+
+                                    {/* Image URL Input */}
+                                    <div className="space-y-1">
+                                        <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                                            <ImageIcon className="w-3 h-3" />
+                                            Image URL (Optional)
+                                        </Label>
+                                        <Input
+                                            value={option.imageUrl || ''}
+                                            onChange={(e) => updateOption(step.tempId, option.tempId, {
+                                                imageUrl: e.target.value || null
+                                            })}
+                                            placeholder="https://example.com/image.jpg"
+                                            className="text-sm"
+                                        />
+                                        {option.imageUrl && (
+                                            <div className="mt-2">
+                                                <img
+                                                    src={option.imageUrl}
+                                                    alt={option.label}
+                                                    className="w-20 h-20 object-cover rounded border"
+                                                    onError={(e) => {
+                                                        e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect width="80" height="80" fill="%23ddd"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%23999"%3ENo Image%3C/text%3E%3C/svg%3E'
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>

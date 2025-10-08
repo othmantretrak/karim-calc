@@ -165,6 +165,7 @@ exports.Prisma.StepOptionScalarFieldEnum = {
   label: 'label',
   value: 'value',
   price: 'price',
+  imageUrl: 'imageUrl',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

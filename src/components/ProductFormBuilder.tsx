@@ -1,4 +1,4 @@
-// ProductFormBuilder.tsx (Refactored)
+// ProductFormBuilder.tsx (Refactored with Image Support)
 
 'use client'
 import { useState, useEffect } from 'react'
@@ -128,6 +128,7 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
                     label: '',
                     value: '',
                     price: null,
+                    imageUrl: null, // Initialize imageUrl
                     order: step.options.filter(o => o.questionNum === questionNum).length,
                 }
                 return { ...step, options: [...step.options, newOption] }

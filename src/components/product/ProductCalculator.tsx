@@ -152,6 +152,7 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
 
         if (type === 'SELECT') {
             const options = step.options.filter(o => o.questionNum === questionNum)
+            const selectedOption = options.find(o => o.value === answer)
 
             return (
                 <div className="space-y-2">
@@ -159,6 +160,19 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
                         {question}
                         <span className="text-red-500">*</span>
                     </Label>
+
+                    {/* Show selected option with image if available */}
+                    {selectedOption?.imageUrl && (
+                        <div className="mb-3 p-3 border rounded-lg bg-green-50">
+                            <img
+                                src={selectedOption.imageUrl}
+                                alt={selectedOption.label}
+                                className="w-full h-48 object-cover rounded-md mb-2"
+                            />
+                            <p className="text-sm font-medium text-center">{selectedOption.label}</p>
+                        </div>
+                    )}
+
                     <Select
                         value={answer as string || ''}
                         onValueChange={(value) => handleAnswer(step.id, questionNum, value)}
@@ -170,13 +184,22 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
                         <SelectContent>
                             {options.map((option) => (
                                 <SelectItem key={option.id} value={option.value}>
-                                    <div className="flex justify-between items-center w-full gap-4">
-                                        <span>{option.label}</span>
-                                        {option.price !== null && option.price !== undefined && (
-                                            <span className="text-sm text-muted-foreground">
-                                                €{option.price.toFixed(2)}
-                                            </span>
+                                    <div className="flex items-center gap-3 w-full">
+                                        {option.imageUrl && (
+                                            <img
+                                                src={option.imageUrl}
+                                                alt={option.label}
+                                                className="w-10 h-10 object-cover rounded"
+                                            />
                                         )}
+                                        <div className="flex justify-between items-center flex-1 gap-4">
+                                            <span>{option.label}</span>
+                                            {option.price !== null && option.price !== undefined && (
+                                                <span className="text-sm text-muted-foreground">
+                                                    €{option.price.toFixed(2)}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 </SelectItem>
                             ))}

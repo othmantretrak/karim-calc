@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Progress } from "@/components/ui/progress"
 import { Calculator, ArrowLeft } from 'lucide-react'
 import useStore from '@/lib/store'
 import Link from 'next/link'
@@ -288,13 +289,9 @@ export default function HomePage({ products }: HomePageProps) {
                     </CardHeader>
 
                     {selectedProduct && (
-                        <div className="w-full bg-green-800 rounded-full h-2">
-                            <div
-                                className="bg-white h-2 rounded-full transition-all duration-300"
-                                style={{
-                                    width: `${visibleSteps.length > 0 ? (currentStepIndex / visibleSteps.length) * 100 : 0}%`
-                                }}
-                            />
+                        <div className='flex flex-col items-end mr-5'>
+
+                            <Progress value={((currentStepIndex) / visibleSteps.length) * 100} className="w-40" />
                         </div>
                     )}
 
@@ -335,7 +332,7 @@ export default function HomePage({ products }: HomePageProps) {
                             const visibleQuestions = selectedProduct ? getVisibleQuestionsForStep(step, selectedProduct, answers) : [];
 
                             return (
-                                <div key={step.id} className="space-y-4 p-4 border rounded-lg bg-white shadow-sm">
+                                <div key={step.id} className="space-y-4 p-4 rounded-lg bg-white shadow-sm">
                                     {visibleQuestions.includes(1) && renderQuestion(step, 1)}
                                     {visibleQuestions.includes(2) && step.question2 && (
                                         <div className="pt-4 border-t mt-4">
@@ -491,7 +488,7 @@ export default function HomePage({ products }: HomePageProps) {
                             <div className="border-t pt-4">
                                 <div className="flex justify-between items-center text-lg font-semibold">
                                     <span>
-                                        {priceInfo.isComplete ? 'Totaal' : 'Vanaf'} incl. btw.
+                                        Totaal incl. btw.
                                     </span>
                                     <span className="text-green-600">
                                         {!priceInfo.isComplete && '~'} €
@@ -571,7 +568,7 @@ export default function HomePage({ products }: HomePageProps) {
                                         onChange={handleFileUpload}
                                         className="hidden"
                                     />
-                                    <span className="border-2 border-orange-500 text-orange-500 px-6 py-2 rounded cursor-pointer hover:bg-orange-50">
+                                    <span className="border-2 border-orange-500 text-orange-500 px-6 py-2 rounded cursor-pointer hover:bg-orange-500 hover:text-white transition-colors duration-300 ease-in-out">
                                         Upload
                                     </span>
                                 </label>
@@ -587,7 +584,7 @@ export default function HomePage({ products }: HomePageProps) {
 
                             <button
                                 onClick={() => setShowImageUpload(false)}
-                                className="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded font-medium"
+                                className="w-full bg-green-700 hover:bg-white cursor-pointer hover:text-green-700 hover:border-green-700 border border-green-700 text-white py-3 rounded font-medium"
                             >
                                 Upload
                             </button>

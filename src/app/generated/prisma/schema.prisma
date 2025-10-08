@@ -84,12 +84,13 @@ enum PricingImpact {
 }
 
 model StepOption {
-  id          String @id @default(cuid())
+  id          String  @id @default(cuid())
   stepId      String
-  questionNum Int    @default(1) // 1 or 2 - which question this option belongs to
+  questionNum Int     @default(1) // 1 or 2 - which question this option belongs to
   label       String // Display text
   value       String // Internal value
   price       Float? // Price for this option (for BASE pricing)
+  imageUrl    String? // Optional image URL for this option
   order       Int // Order in the list
 
   createdAt DateTime @default(now())

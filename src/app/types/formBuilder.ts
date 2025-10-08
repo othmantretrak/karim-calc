@@ -9,6 +9,7 @@ export interface StepOption {
     questionNum: number // 1 or 2
     label: string
     value: string
+    imageUrl?: string | null // Optional image URL
     price: number | null
     order: number
 }

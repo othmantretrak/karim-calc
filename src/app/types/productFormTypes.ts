@@ -6,6 +6,7 @@ export interface OptionData {
     label: string
     value: string
     price: number | null
+    imageUrl?: string | null // Add optional image URL
     order: number
 }
 
