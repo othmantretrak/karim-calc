@@ -1,5 +1,5 @@
 // app/utils/priceCalculator.ts
-import { Product, FormStep, PriceBreakdown } from '@/app/types/formBuilder'
+import { Product, FormStep, PriceBreakdown, Question } from '@/app/types/formBuilder'
 
 /**
  * Calculate the total price based on user answers
@@ -11,81 +11,65 @@ export function calculatePrice(
     let basePrice = 0
     const multipliers: Array<{ label: string; factor: number }> = []
     const additions: Array<{ label: string; amount: number }> = []
-    let baseSet = false // This variable is correctly closed over
 
     // 1. Determine which steps are visible and should be included in calculation
-    const stepsToProcess = product.steps.sort((a, b) => a.order - b.order);
+    const visibleSteps = getVisibleSteps(product, answers);
 
-    function processAnswer(
-        step: FormStep,
-        answer: string | number,
-        questionNum: 1 | 2,
-        mults: Array<{ label: string; factor: number }>,
-        adds: Array<{ label: string; amount: number }>
-    ) {
-        const pricingImpact = questionNum === 1 ? step.pricingImpact1 : step.pricingImpact2
-        const pricePerUnit = questionNum === 1 ? step.pricePerUnit1 : step.pricePerUnit2
-        const question = questionNum === 1 ? step.question1 : step.question2
+    for (const step of visibleSteps) {
+        const visibleQuestions = getVisibleQuestionsForStep(step, answers);
 
-        switch (pricingImpact) {
-            case 'BASE': {
-                const selectedOption = step.options?.find(
-                    opt => opt.value === answer && opt.questionNum === questionNum
-                )
-                // FIX: Removed !baseSet check and changed to += for accumulation
-                if (selectedOption?.price !== null && selectedOption?.price !== undefined) {
-                    basePrice += selectedOption.price // Accumulate base prices
-                    baseSet = true // Indicate that at least one base price has been set
+        for (const question of visibleQuestions) {
+            const answer = answers[question.id];
+            // Normalize checkbox answers stored as comma-separated strings into arrays when needed
+            if (question.type === 'SELECT' || question.type === 'NUMBER' || question.type === 'CHECKBOX') {
+                // nothing special here, but for CHECKBOX we'll accept comma-separated strings below
+            }
+
+            if (answer === undefined || answer === '' || answer === null) {
+                continue;
+            }
+
+            switch (question.pricingImpact) {
+                case 'BASE': {
+                    // For checkbox multi-selects, base pricing should add prices for all selected options
+                    if (question.type === 'CHECKBOX') {
+                        const vals = typeof answer === 'string' ? (answer as string).split(',').filter(Boolean) : Array.isArray(answer) ? answer : [];
+                        for (const v of vals) {
+                            const opt = question.options?.find(o => o.value === v);
+                            if (opt && opt.price !== null && opt.price !== undefined) basePrice += opt.price;
+                        }
+                    } else {
+                        const selectedOption = question.options?.find(opt => opt.value === answer);
+                        if (selectedOption?.price !== null && selectedOption?.price !== undefined) {
+                            basePrice += selectedOption.price;
+                        }
+                    }
+                    break;
                 }
-                break
-            }
-
-            case 'MULTIPLIER': {
-                const multiplier = typeof answer === 'number' ? answer : parseFloat(answer as string)
-                if (!isNaN(multiplier) && multiplier > 0) {
-                    mults.push({
-                        label: question || '',
-                        factor: multiplier,
-                    })
+                case 'MULTIPLIER': {
+                    const multiplier = typeof answer === 'number' ? answer : parseFloat(answer as string);
+                    if (!isNaN(multiplier) && multiplier > 0) {
+                        multipliers.push({
+                            label: question.question || '',
+                            factor: multiplier,
+                        });
+                    }
+                    break;
                 }
-                break
-            }
-
-            case 'ADDITIVE': {
-                const quantity = typeof answer === 'number' ? answer : parseFloat(answer as string)
-                if (!isNaN(quantity) && pricePerUnit !== null && pricePerUnit !== undefined) {
-                    const addition = quantity * pricePerUnit
-                    adds.push({
-                        label: question || '',
-                        amount: addition,
-                    })
+                case 'ADDITIVE': {
+                    const quantity = typeof answer === 'number' ? answer : parseFloat(answer as string);
+                    if (!isNaN(quantity) && question.pricePerUnit !== null && question.pricePerUnit !== undefined) {
+                        const addition = quantity * question.pricePerUnit;
+                        additions.push({
+                            label: question.question || '',
+                            amount: addition,
+                        });
+                    }
+                    break;
                 }
-                break
-            }
-
-            case 'NONE':
-            default:
-                break
-        }
-    }
-
-    // 2. Iterate only over visible steps
-    for (const step of stepsToProcess) {
-        const visibleQuestions = getVisibleQuestionsForStep(step, product, answers);
-
-        // Process Question 1
-        if (visibleQuestions.includes(1)) {
-            const answer1 = answers[`${step.id}_q1`];
-            if (answer1 !== undefined && answer1 !== '' && answer1 !== null) {
-                processAnswer(step, answer1, 1, multipliers, additions);
-            }
-        }
-
-        // Process Question 2 if exists
-        if (visibleQuestions.includes(2)) {
-            const answer2 = answers[`${step.id}_q2`];
-            if (answer2 !== undefined && answer2 !== '' && answer2 !== null) {
-                processAnswer(step, answer2, 2, multipliers, additions);
+                case 'NONE':
+                default:
+                    break;
             }
         }
     }
@@ -113,74 +97,53 @@ export function getVisibleSteps(product: Product, answers: Record<string, string
     if (!product || !product.steps) return []
 
     // A step is visible if at least one of its questions is visible.
-    return product.steps
-        .filter(step => getVisibleQuestionsForStep(step, product, answers).length > 0)
-        .sort((a, b) => a.order - b.order)
+    const visibleSteps = product.steps.filter(step => {
+        return getVisibleQuestionsForStep(step, answers).length > 0;
+    });
+
+    return visibleSteps.sort((a, b) => a.order - b.order);
 }
 
 /**
- * Get visible questions (1 or 2) for a given step.
+ * Get visible questions for a given step based on answers.
  */
-export function getVisibleQuestionsForStep(
-    step: FormStep,
-    product: Product,
-    answers: Record<string, string | number>
-): (1 | 2)[] {
-    const visible: (1 | 2)[] = [];
+export function getVisibleQuestionsForStep(step: FormStep, answers: Record<string, string | number>): Question[] {
+    if (!step || !step.questions) return [];
 
-    // Check visibility for Question 1
-    const condition1 = step.conditionalOn1 as { stepId: string; questionNum: 1 | 2; value: string } | null;
-    let isQ1Visible = true;
-    if (condition1) {
-        const conditionKey = `${condition1.stepId}_q${condition1.questionNum}`;
-        const actualAnswer = answers[conditionKey];
-        isQ1Visible = actualAnswer === condition1.value;
-    }
-
-    if (isQ1Visible) {
-        visible.push(1);
-
-        // Check visibility for Question 2 (only if Q1 is visible and Q2 exists)
-        if (step.question2) {
-            const condition2 = step.conditionalOn2 as { stepId: string; questionNum: 1 | 2; value: string } | null;
-            let isQ2Visible = true;
-            if (condition2) {
-                const conditionKey = `${condition2.stepId}_q${condition2.questionNum}`;
-                const actualAnswer = answers[conditionKey];
-                isQ2Visible = actualAnswer === condition2.value;
+    return step.questions
+        .filter(question => {
+            if (!question.conditionalOn) {
+                return true; // Always visible if no condition
             }
-            if (isQ2Visible) {
-                visible.push(2);
-            }
-        }
-    }
+            const { questionId, value } = question.conditionalOn;
+            const actualAnswer = answers[questionId];
+            if (actualAnswer === undefined || actualAnswer === null) return false;
 
-    return visible;
+            // If the referenced question is a checkbox multi-select saved as comma-separated values,
+            // check whether the required value is included.
+            if (typeof actualAnswer === 'string' && actualAnswer.includes(',')) {
+                const parts = actualAnswer.split(',').filter(Boolean);
+                return parts.includes(String(value));
+            }
+
+            return actualAnswer === value;
+        })
+        .sort((a, b) => a.order - b.order);
 }
 
 /**
  * Check if all required questions in a step are answered
  */
-function isStepComplete(step: FormStep, answers: Record<string, string | number>): boolean {
-    const answer1 = answers[`${step.id}_q1`]
-    const q1Complete = answer1 !== undefined && answer1 !== '' && answer1 !== null
-
-    // Check if Q1 is required and answered
-    if (step.required1 && !q1Complete) return false;
-
-    if (!step.question2) return q1Complete || !step.required1
-
-    const answer2 = answers[`${step.id}_q2`]
-    const q2Complete = answer2 !== undefined && answer2 !== '' && answer2 !== null
-
-    // Check if Q2 is required and answered
-    if (step.required2 && !q2Complete) return false;
-
-    // If Q2 exists, both must be answered if they are required/present.
-    if (step.question2) {
-        return q1Complete && q2Complete;
+function areStepQuestionsComplete(questions: Question[], answers: Record<string, string | number>): boolean {
+    for (const question of questions) {
+        if (question.required) {
+            const answer = answers[question.id];
+            if (answer === undefined || answer === '' || answer === null) {
+                return false;
+            }
+        }
     }
-    return q1Complete;
+    return true;
 }
 
 /**
@@ -190,13 +153,10 @@ export function areAllStepsComplete(
     product: Product,
     answers: Record<string, string | number>
 ): boolean {
-    const allSteps = product.steps.sort((a, b) => a.order - b.order);
-    for (const step of allSteps) {
-        const visibleQuestions = getVisibleQuestionsForStep(step, product, answers);
-        if (visibleQuestions.includes(1) && step.required1 && !isStepComplete(step, answers)) {
-            return false;
-        }
-        if (visibleQuestions.includes(2) && step.required2 && !isStepComplete(step, answers)) {
+    const visibleSteps = getVisibleSteps(product, answers);
+    for (const step of visibleSteps) {
+        const visibleQuestions = getVisibleQuestionsForStep(step, answers);
+        if (!areStepQuestionsComplete(visibleQuestions, answers)) {
             return false;
         }
     }
@@ -210,82 +170,65 @@ export function calculatePartialPrice(
     product: Product,
     answers: Record<string, string | number>
 ): number {
-    let basePrice = 0
-    const multipliers: Array<{ factor: number }> = [] // Simplified, no labels needed
-    const additions: Array<{ amount: number }> = []
-    let baseSet = false
+    let basePrice = 0;
+    const multipliers: Array<{ factor: number }> = [];
+    const additions: Array<{ amount: number }> = [];
+    let basePriceSet = false;
 
-    // 1. Determine which steps are visible and should be included in calculation
-    const stepsToProcess = product.steps.sort((a, b) => a.order - b.order);
+    const visibleSteps = getVisibleSteps(product, answers);
 
-    function processPartialAnswer(
-        step: FormStep,
-        answer: string | number,
-        questionNum: 1 | 2,
-        mults: Array<{ factor: number }>,
-        adds: Array<{ amount: number }>
-    ) {
-        const pricingImpact = questionNum === 1 ? step.pricingImpact1 : step.pricingImpact2
-        const pricePerUnit = questionNum === 1 ? step.pricePerUnit1 : step.pricePerUnit2
+    for (const step of visibleSteps) {
+        const visibleQuestions = getVisibleQuestionsForStep(step, answers);
 
-        switch (pricingImpact) {
-            case 'BASE': {
-                const selectedOption = step.options?.find(
-                    opt => opt.value === answer && opt.questionNum === questionNum
-                )
-                // FIX: Removed !baseSet check and changed to += for accumulation
-                if (selectedOption?.price !== null && selectedOption?.price !== undefined) {
-                    basePrice += selectedOption.price // Accumulate base prices
-                    baseSet = true // Indicate that at least one base price has been set
+        for (const question of visibleQuestions) {
+            const answer = answers[question.id];
+            if (answer === undefined || answer === '' || answer === null) {
+                continue;
+            }
+
+            switch (question.pricingImpact) {
+                case 'BASE': {
+                    if (question.type === 'CHECKBOX') {
+                        const vals = typeof answer === 'string' ? (answer as string).split(',').filter(Boolean) : Array.isArray(answer) ? answer : [];
+                        for (const v of vals) {
+                            const opt = question.options?.find(o => o.value === v);
+                            if (opt && opt.price !== null && opt.price !== undefined) {
+                                basePrice += opt.price;
+                                basePriceSet = true;
+                            }
+                        }
+                    } else {
+                        const selectedOption = question.options?.find(opt => opt.value === answer);
+                        if (selectedOption?.price !== null && selectedOption?.price !== undefined) {
+                            basePrice += selectedOption.price;
+                            basePriceSet = true;
+                        }
+                    }
+                    break;
                 }
-                break
-            }
-
-            case 'MULTIPLIER': {
-                const multiplier = typeof answer === 'number' ? answer : parseFloat(answer as string)
-                if (!isNaN(multiplier) && multiplier > 0) {
-                    mults.push({ factor: multiplier })
+                case 'MULTIPLIER': {
+                    const multiplier = typeof answer === 'number' ? answer : parseFloat(answer as string);
+                    if (!isNaN(multiplier) && multiplier > 0) {
+                        multipliers.push({ factor: multiplier });
+                    }
+                    break;
                 }
-                break
-            }
-
-            case 'ADDITIVE': {
-                const quantity = typeof answer === 'number' ? answer : parseFloat(answer as string)
-                if (!isNaN(quantity) && pricePerUnit !== null && pricePerUnit !== undefined) {
-                    const addition = quantity * pricePerUnit
-                    adds.push({ amount: addition })
+                case 'ADDITIVE': {
+                    const quantity = typeof answer === 'number' ? answer : parseFloat(answer as string);
+                    if (!isNaN(quantity) && question.pricePerUnit !== null && question.pricePerUnit !== undefined) {
+                        const addition = quantity * question.pricePerUnit;
+                        additions.push({ amount: addition });
+                    }
+                    break;
                 }
-                break
-            }
-
-            case 'NONE':
-            default:
-                break
-        }
-    }
-
-    // 2. Iterate only over visible steps
-    for (const step of stepsToProcess) {
-        const visibleQuestions = getVisibleQuestionsForStep(step, product, answers);
-
-        // Process Question 1
-        if (visibleQuestions.includes(1)) {
-            const answer1 = answers[`${step.id}_q1`];
-            if (answer1 !== undefined && answer1 !== '' && answer1 !== null) {
-                processPartialAnswer(step, answer1, 1, multipliers, additions);
-            }
-        }
-
-        // Process Question 2 if exists
-        if (visibleQuestions.includes(2)) {
-            const answer2 = answers[`${step.id}_q2`];
-            if (answer2 !== undefined && answer2 !== '' && answer2 !== null) {
-                processPartialAnswer(step, answer2, 2, multipliers, additions);
+                case 'NONE':
+                default:
+                    break;
             }
         }
     }
 
-    if (!baseSet) return 0 // If no BASE option was ever selected, return 0 (or a default starting price logic)
+    if (!basePriceSet) return 0; // If no BASE option was ever selected, return 0
 
     let price = basePrice
     // Apply all multipliers

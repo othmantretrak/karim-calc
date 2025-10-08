@@ -97,7 +97,8 @@ exports.Prisma.ProductScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   description: 'description',
-  baseImage: 'baseImage',
+  baseImageUrl: 'baseImageUrl',
+  baseImagePublicId: 'baseImagePublicId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -106,38 +107,36 @@ exports.Prisma.FormStepScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
   order: 'order',
-  type1: 'type1',
-  question1: 'question1',
-  required1: 'required1',
-  type2: 'type2',
-  question2: 'question2',
-  required2: 'required2',
-  pricingImpact1: 'pricingImpact1',
-  pricePerUnit1: 'pricePerUnit1',
-  unit1: 'unit1',
-  minValue1: 'minValue1',
-  maxValue1: 'maxValue1',
-  defaultValue1: 'defaultValue1',
-  pricingImpact2: 'pricingImpact2',
-  pricePerUnit2: 'pricePerUnit2',
-  unit2: 'unit2',
-  minValue2: 'minValue2',
-  maxValue2: 'maxValue2',
-  defaultValue2: 'defaultValue2',
-  conditionalOn1: 'conditionalOn1',
-  conditionalOn2: 'conditionalOn2',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuestionScalarFieldEnum = {
+  id: 'id',
+  stepId: 'stepId',
+  order: 'order',
+  type: 'type',
+  question: 'question',
+  required: 'required',
+  pricingImpact: 'pricingImpact',
+  pricePerUnit: 'pricePerUnit',
+  unit: 'unit',
+  minValue: 'minValue',
+  maxValue: 'maxValue',
+  defaultValue: 'defaultValue',
+  conditionalOn: 'conditionalOn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
 exports.Prisma.StepOptionScalarFieldEnum = {
   id: 'id',
-  stepId: 'stepId',
-  questionNum: 'questionNum',
+  questionId: 'questionId',
   label: 'label',
   value: 'value',
   price: 'price',
   imageUrl: 'imageUrl',
+  imagePublicId: 'imagePublicId',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -185,6 +184,7 @@ exports.PricingImpact = exports.$Enums.PricingImpact = {
 exports.Prisma.ModelName = {
   Product: 'Product',
   FormStep: 'FormStep',
+  Question: 'Question',
   StepOption: 'StepOption'
 };
 /**
@@ -216,7 +216,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
+    "rootEnvPath": "../../../../.env",
     "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../../../../prisma",
@@ -226,6 +226,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -234,15 +235,22 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Product {\n  id          String   @id @default(cuid())\n  name        String\n  slug        String   @unique\n  description String?\n  baseImage   String?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  // Relations\n  steps FormStep[]\n}\n\nmodel FormStep {\n  id        String @id @default(cuid())\n  productId String\n  order     Int // Order of the step in the form\n\n  // Each step can now have TWO questions\n  type1     StepType // First question type\n  question1 String // First question\n  required1 Boolean  @default(true)\n\n  type2     StepType? // Second question type (optional)\n  question2 String? // Second question (optional)\n  required2 Boolean   @default(false)\n\n  // Pricing configuration for question 1\n  pricingImpact1 PricingImpact @default(NONE)\n  pricePerUnit1  Float?\n  unit1          String?\n  minValue1      Float?\n  maxValue1      Float?\n  defaultValue1  Float?\n\n  // Pricing configuration for question 2\n  pricingImpact2 PricingImpact @default(NONE)\n  pricePerUnit2  Float?\n  unit2          String?\n  minValue2      Float?\n  maxValue2      Float?\n  defaultValue2  Float?\n\n  // Conditional logic - stored as JSON\n  // Format: { stepId: \"xxx\", value: \"yes\" }\n  conditionalOn1 Json?\n  conditionalOn2 Json?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  product Product      @relation(fields: [productId], references: [id], onDelete: Cascade)\n  options StepOption[]\n\n  @@unique([productId, order])\n}\n\nenum StepType {\n  SELECT // Dropdown/radio selection\n  NUMBER // Number input\n  TEXT // Text input (future use)\n  CHECKBOX // Multiple selection (future use)\n}\n\nenum PricingImpact {\n  BASE // Sets the base price (first step usually)\n  MULTIPLIER // Multiplies current price\n  ADDITIVE // Adds fixed amount (quantity × pricePerUnit)\n  NONE // No pricing impact\n}\n\nmodel StepOption {\n  id          String  @id @default(cuid())\n  stepId      String\n  questionNum Int     @default(1) // 1 or 2 - which question this option belongs to\n  label       String // Display text\n  value       String // Internal value\n  price       Float? // Price for this option (for BASE pricing)\n  imageUrl    String? // Optional image URL for this option\n  order       Int // Order in the list\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  step FormStep @relation(fields: [stepId], references: [id], onDelete: Cascade)\n\n  @@unique([stepId, questionNum, order])\n}\n",
-  "inlineSchemaHash": "010245f9002a5fbdcda6a73126dc92fcce27be997fc8a1a4de2a5d19156e77fc",
-  "copyEngine": false
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Product {\n  id                String   @id @default(cuid())\n  name              String\n  slug              String   @unique\n  description       String?\n  baseImageUrl      String?\n  baseImagePublicId String?\n  createdAt         DateTime @default(now())\n  updatedAt         DateTime @updatedAt\n\n  // Relations\n  steps FormStep[]\n}\n\nmodel FormStep {\n  id        String @id @default(cuid())\n  productId String\n  order     Int // Order of the step in the form\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)\n  questions Question[]\n\n  @@unique([productId, order])\n}\n\nmodel Question {\n  id     String @id @default(cuid())\n  stepId String\n  order  Int // Order of the question within the step\n\n  type     StepType\n  question String\n  required Boolean  @default(true)\n\n  // Pricing configuration\n  pricingImpact PricingImpact @default(NONE)\n  pricePerUnit  Float?\n  unit          String?\n  minValue      Float?\n  maxValue      Float?\n  defaultValue  Float?\n\n  // Conditional logic - format: { questionId: \"xxx\", value: \"yes\" }\n  conditionalOn Json?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  step    FormStep     @relation(fields: [stepId], references: [id], onDelete: Cascade)\n  options StepOption[]\n\n  @@unique([stepId, order])\n}\n\nenum StepType {\n  SELECT // Dropdown/radio selection\n  NUMBER // Number input\n  TEXT // Text input (future use)\n  CHECKBOX // Multiple selection (future use)\n}\n\nenum PricingImpact {\n  BASE // Sets the base price (first step usually)\n  MULTIPLIER // Multiplies current price\n  ADDITIVE // Adds fixed amount (quantity × pricePerUnit)\n  NONE // No pricing impact\n}\n\nmodel StepOption {\n  id            String  @id @default(cuid())\n  questionId    String\n  label         String // Display text\n  value         String // Internal value\n  price         Float? // Price for this option (for BASE pricing)\n  imageUrl      String? // Optional image URL for this option\n  imagePublicId String?\n  order         Int // Order in the list\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)\n\n  @@unique([questionId, order])\n}\n",
+  "inlineSchemaHash": "5893cbdaed05b8b07a413d22c406c4240697ad2269fe75bfe09a9441eacf38cd",
+  "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Product\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"baseImage\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"steps\",\"kind\":\"object\",\"type\":\"FormStep\",\"relationName\":\"FormStepToProduct\"}],\"dbName\":null},\"FormStep\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"type1\",\"kind\":\"enum\",\"type\":\"StepType\"},{\"name\":\"question1\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"required1\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"type2\",\"kind\":\"enum\",\"type\":\"StepType\"},{\"name\":\"question2\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"required2\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"pricingImpact1\",\"kind\":\"enum\",\"type\":\"PricingImpact\"},{\"name\":\"pricePerUnit1\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"unit1\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"minValue1\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"maxValue1\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"defaultValue1\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"pricingImpact2\",\"kind\":\"enum\",\"type\":\"PricingImpact\"},{\"name\":\"pricePerUnit2\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"unit2\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"minValue2\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"maxValue2\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"defaultValue2\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"conditionalOn1\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"conditionalOn2\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"FormStepToProduct\"},{\"name\":\"options\",\"kind\":\"object\",\"type\":\"StepOption\",\"relationName\":\"FormStepToStepOption\"}],\"dbName\":null},\"StepOption\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stepId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"questionNum\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"label\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"step\",\"kind\":\"object\",\"type\":\"FormStep\",\"relationName\":\"FormStepToStepOption\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Product\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"baseImageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"baseImagePublicId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"steps\",\"kind\":\"object\",\"type\":\"FormStep\",\"relationName\":\"FormStepToProduct\"}],\"dbName\":null},\"FormStep\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"FormStepToProduct\"},{\"name\":\"questions\",\"kind\":\"object\",\"type\":\"Question\",\"relationName\":\"FormStepToQuestion\"}],\"dbName\":null},\"Question\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stepId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"StepType\"},{\"name\":\"question\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"required\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"pricingImpact\",\"kind\":\"enum\",\"type\":\"PricingImpact\"},{\"name\":\"pricePerUnit\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"unit\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"minValue\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"maxValue\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"defaultValue\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"conditionalOn\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"step\",\"kind\":\"object\",\"type\":\"FormStep\",\"relationName\":\"FormStepToQuestion\"},{\"name\":\"options\",\"kind\":\"object\",\"type\":\"StepOption\",\"relationName\":\"QuestionToStepOption\"}],\"dbName\":null},\"StepOption\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"questionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"label\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"imagePublicId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"question\",\"kind\":\"object\",\"type\":\"Question\",\"relationName\":\"QuestionToStepOption\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
-config.engineWasm = undefined
+config.engineWasm = {
+  getRuntime: async () => require('./query_engine_bg.js'),
+  getQueryEngineWasmModule: async () => {
+    const loader = (await import('#wasm-engine-loader')).default
+    const engine = (await loader).default
+    return engine
+  }
+}
 config.compilerWasm = undefined
 
 config.injectableEdgeEnv = () => ({

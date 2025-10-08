@@ -1,75 +1,63 @@
 // app/actions/productActions.ts
 'use server'
 
-import prisma from '@/app/lib/prisma'
+import prisma from '@/app/lib/prisma';
 import { revalidatePath } from 'next/cache'
 
-// Helper interface for conditional logic structure used in transit
-interface ConditionalData {
-    stepId: string; // tempId or real ID from the client
+// Redefined interfaces for server-side action clarity, matching productFormTypes.ts
+interface OptionData {
+    label: string;
     value: string;
-    questionNum: 1 | 2; // Which question (1 or 2) in the parent step sets the condition
+    price: number | null;
+    order: number;
+    imageUrl?: string | null;
+    imagePublicId?: string | null;
+    tempId?: string;
 }
 
-interface StepOptionData {
-    questionNum: number
-    label: string
-    value: string
-    price: number | null
-    order: number
+interface QuestionData {
+    tempId?: string;
+    id?: string;
+    order: number;
+    type: 'SELECT' | 'NUMBER' | 'CHECKBOX';
+    question: string;
+    required: boolean;
+    pricingImpact: 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE';
+    pricePerUnit?: number | null;
+    unit?: string | null;
+    minValue?: number | null;
+    maxValue?: number | null;
+    defaultValue?: number | null;
+    conditionalOn?: { questionId: string, value: any } | null;
+    options?: OptionData[];
 }
 
 interface StepData {
-    tempId?: string
-    id?: string
-    order: number
-
-    // Question 1 (required)
-    type1: 'SELECT' | 'NUMBER'
-    question1: string
-    required1: boolean
-    pricingImpact1: 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE'
-    pricePerUnit1?: number | null
-    unit1?: string | null
-    minValue1?: number | null
-    maxValue1?: number | null
-    defaultValue1?: number | null
-
-    // Question 2 (optional)
-    type2?: 'SELECT' | 'NUMBER' | null
-    question2?: string | null
-    required2?: boolean
-    pricingImpact2?: 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE'
-    pricePerUnit2?: number | null
-    unit2?: string | null
-    minValue2?: number | null
-    maxValue2?: number | null
-    defaultValue2?: number | null
-
-    conditionalOn1?: ConditionalData | null
-    conditionalOn2?: ConditionalData | null
-    options?: StepOptionData[]
+    tempId?: string;
+    id?: string;
+    order: number;
+    questions: QuestionData[];
 }
 
 interface ProductFormData {
-    name: string
-    slug: string
-    description?: string
-    steps: StepData[]
+    name: string;
+    slug: string;
+    description?: string;
+    steps: StepData[];
 }
 
 export async function createProduct(formData: ProductFormData) {
     try {
         if (!formData.name || !formData.slug) {
-            return { success: false, error: 'Product name and slug are required' }
+            return { success: false, error: 'Product name and slug are required' };
         }
 
         const existingProduct = await prisma.product.findUnique({
-            where: { slug: formData.slug }
-        })
+            where: { slug: formData.slug },
+        });
 
         if (existingProduct) {
-            return { success: false, error: 'A product with this slug already exists' }
+            return { success: false, error: 'A product with this slug already exists' };
         }
 
         const result = await prisma.$transaction(async (tx) => {
@@ -79,145 +67,103 @@ export async function createProduct(formData: ProductFormData) {
                     slug: formData.slug,
                     description: formData.description || null,
                 },
-            })
+            });
 
-            // Map used to resolve temporary IDs of steps to their new database IDs
-            const stepIdMap = new Map<string, string>()
+            const questionIdMap = new Map<string, string>();
+            const questionsToUpdate: { id: string, conditionalOn: any }[] = [];
 
-            // First pass: Create all steps (excluding conditionalOn initially)
-            const createdSteps = await Promise.all(
-                formData.steps.map(async (stepData) => {
-                    const step = await tx.formStep.create({
+            for (const stepData of formData.steps) {
+                const step = await tx.formStep.create({
+                    data: {
+                        productId: product.id,
+                        order: stepData.order,
+                    },
+                });
+
+                for (const questionData of stepData.questions) {
+                    const { tempId, options, conditionalOn, ...restOfQuestion } = questionData;
+
+                    const question = await tx.question.create({
                         data: {
-                            productId: product.id,
-                            order: stepData.order,
-
-                            // Question 1
-                            type1: stepData.type1,
-                            question1: stepData.question1,
-                            required1: stepData.required1,
-                            pricingImpact1: stepData.pricingImpact1,
-                            pricePerUnit1: stepData.pricePerUnit1 ?? null,
-                            unit1: stepData.unit1 ?? null,
-                            minValue1: stepData.minValue1 ?? null,
-                            maxValue1: stepData.maxValue1 ?? null,
-                            defaultValue1: stepData.defaultValue1 ?? null,
-
-                            // Question 2
-                            type2: stepData.type2 ?? null,
-                            question2: stepData.question2 ?? null,
-                            required2: stepData.required2 ?? false,
-                            pricingImpact2: stepData.pricingImpact2 ?? 'NONE',
-                            pricePerUnit2: stepData.pricePerUnit2 ?? null,
-                            unit2: stepData.unit2 ?? null,
-                            minValue2: stepData.minValue2 ?? null,
-                            maxValue2: stepData.maxValue2 ?? null,
-                            defaultValue2: stepData.defaultValue2 ?? null,
-
-                            conditionalOn1: undefined,
-                            conditionalOn2: undefined,
+                            stepId: step.id,
+                            ...restOfQuestion,
+                            options: {
+                                create: options?.map((o) => {
+                                    const rest = { ...(o as any) } as any;
+                                    delete rest.tempId;
+                                    delete rest.questionTempId;
+                                    return rest;
+                                }), // Remove temp IDs
+                            },
                         },
-                    })
+                    });
 
-                    if (stepData.tempId) {
-                        stepIdMap.set(stepData.tempId, step.id)
+                    if (tempId) {
+                        questionIdMap.set(tempId, question.id);
                     }
 
-                    return { step, stepData }
-                })
-            )
-
-            // Second pass: Update conditional logic and create options
-            for (const { step, stepData } of createdSteps) {
-                const updateData: { conditionalOn1?: any, conditionalOn2?: any } = {};
-
-                if (stepData.conditionalOn1) {
-                    const conditional = stepData.conditionalOn1;
-                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId;
-                    updateData.conditionalOn1 = {
-                        stepId: referencedStepId,
-                        value: conditional.value,
-                        questionNum: conditional.questionNum,
-                    };
-                }
-
-                if (stepData.conditionalOn2) {
-                    const conditional = stepData.conditionalOn2;
-                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId;
-                    updateData.conditionalOn2 = {
-                        stepId: referencedStepId,
-                        value: conditional.value,
-                        questionNum: conditional.questionNum,
-                    };
-                }
-
-                if (Object.keys(updateData).length > 0) {
-                    await tx.formStep.update({
-                        where: { id: step.id },
-                        data: updateData,
-                    })
-                }
-
-                // Create options
-                if (stepData.options && stepData.options.length > 0) {
-                    await tx.stepOption.createMany({
-                        data: stepData.options.map((option) => ({
-                            stepId: step.id,
-                            questionNum: option.questionNum,
-                            label: option.label,
-                            value: option.value,
-                            price: option.price,
-                            order: option.order,
-                        })),
-                    })
+                    if (conditionalOn && conditionalOn.questionId) {
+                        questionsToUpdate.push({ id: question.id, conditionalOn });
+                    }
                 }
             }
 
-            return product
-        })
+            // Second pass to update conditional logic with the newly created question IDs
+            for (const { id, conditionalOn } of questionsToUpdate) {
+                const realQuestionId = questionIdMap.get(conditionalOn.questionId);
+                if (realQuestionId) {
+                    await tx.question.update({
+                        where: { id },
+                        data: {
+                            conditionalOn: {
+                                questionId: realQuestionId,
+                                value: conditionalOn.value
+                            },
+                        },
+                    });
+                }
+            }
 
-        revalidatePath('/products')
-        revalidatePath('/')
+            return product;
+        }, { timeout: 15000 }); // <-- increased interactive transaction timeout to 30s
 
-        return { success: true, productId: result.id, slug: result.slug }
+        revalidatePath('/products');
+        revalidatePath('/');
+
+        return { success: true, productId: result.id, slug: result.slug };
     } catch (error) {
-        console.error('Error creating product:', error)
-        return { success: false, error: 'Failed to create product' }
+        console.error('Error creating product:', error);
+        return { success: false, error: 'Failed to create product' };
     }
 }
 
 export async function updateProduct(productId: string, formData: ProductFormData) {
     try {
         if (!formData.name || !formData.slug) {
-            return { success: false, error: 'Product name and slug are required' }
+            return { success: false, error: 'Product name and slug are required' };
         }
-
+        console.log('Updating product with data:', formData);
         const existingProduct = await prisma.product.findUnique({
-            where: { id: productId }
-        })
+            where: { id: productId },
+        });
 
         if (!existingProduct) {
-            return { success: false, error: 'Product not found' }
+            return { success: false, error: 'Product not found' };
         }
 
         const slugConflict = await prisma.product.findFirst({
             where: {
                 slug: formData.slug,
-                id: { not: productId }
-            }
-        })
+                id: { not: productId },
+            },
+        });
 
         if (slugConflict) {
-            return { success: false, error: 'This slug is already used by another product' }
+            return { success: false, error: 'This slug is already used by another product' };
         }
 
         await prisma.$transaction(async (tx) => {
-            // Delete existing steps (cascade will delete options)
-            await tx.formStep.deleteMany({
-                where: { productId },
-            })
-
-            // Update product
+            // Update product basic info
             await tx.product.update({
                 where: { id: productId },
                 data: {
@@ -225,109 +171,76 @@ export async function updateProduct(productId: string, formData: ProductFormData
                     slug: formData.slug,
                     description: formData.description || null,
                 },
-            })
+            });
 
-            const stepIdMap = new Map<string, string>()
+            // Delete old steps, questions, and options
+            await tx.formStep.deleteMany({ where: { productId } });
 
-            // Create new steps
-            const createdSteps = await Promise.all(
-                formData.steps.map(async (stepData) => {
-                    const step = await tx.formStep.create({
+            // Re-create steps, questions, and options from formData
+            const questionIdMap = new Map<string, string>();
+            const questionsToUpdate: { id: string, conditionalOn: any }[] = [];
+
+            for (const stepData of formData.steps) {
+                const step = await tx.formStep.create({
+                    data: {
+                        productId: productId,
+                        order: stepData.order,
+                    },
+                });
+
+                for (const questionData of stepData.questions) {
+                    const { tempId, options, conditionalOn, ...restOfQuestion } = questionData;
+
+                    const question = await tx.question.create({
                         data: {
-                            productId,
-                            order: stepData.order,
-
-                            // Question 1
-                            type1: stepData.type1,
-                            question1: stepData.question1,
-                            required1: stepData.required1,
-                            pricingImpact1: stepData.pricingImpact1,
-                            pricePerUnit1: stepData.pricePerUnit1 ?? null,
-                            unit1: stepData.unit1 ?? null,
-                            minValue1: stepData.minValue1 ?? null,
-                            maxValue1: stepData.maxValue1 ?? null,
-                            defaultValue1: stepData.defaultValue1 ?? null,
-
-                            // Question 2
-                            type2: stepData.type2 ?? null,
-                            question2: stepData.question2 ?? null,
-                            required2: stepData.required2 ?? false,
-                            pricingImpact2: stepData.pricingImpact2 ?? 'NONE',
-                            pricePerUnit2: stepData.pricePerUnit2 ?? null,
-                            unit2: stepData.unit2 ?? null,
-                            minValue2: stepData.minValue2 ?? null,
-                            maxValue2: stepData.maxValue2 ?? null,
-                            defaultValue2: stepData.defaultValue2 ?? null,
-
-                            conditionalOn1: undefined,
-                            conditionalOn2: undefined,
+                            stepId: step.id,
+                            ...restOfQuestion,
+                            options: {
+                                create: options?.map((o) => {
+                                    const rest = { ...(o as any) } as any;
+                                    delete rest.tempId;
+                                    delete rest.questionTempId;
+                                    return rest;
+                                }), // Remove temp IDs
+                            },
                         },
-                    })
+                    });
 
-                    // Map the tempId (or old ID if editing) to the new ID
-                    const key = stepData.tempId || stepData.id
-                    if (key) {
-                        stepIdMap.set(key, step.id)
+                    if (tempId) {
+                        questionIdMap.set(tempId, question.id);
                     }
 
-                    return { step, stepData }
-                })
-            )
-
-            // Update conditional logic and create options
-            for (const { step, stepData } of createdSteps) {
-                const updateData: { conditionalOn1?: any, conditionalOn2?: any } = {};
-
-                if (stepData.conditionalOn1) {
-                    const conditional = stepData.conditionalOn1;
-                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId;
-                    updateData.conditionalOn1 = {
-                        stepId: referencedStepId,
-                        value: conditional.value,
-                        questionNum: conditional.questionNum,
-                    };
-                }
-
-                if (stepData.conditionalOn2) {
-                    const conditional = stepData.conditionalOn2;
-                    const referencedStepId = stepIdMap.get(conditional.stepId) || conditional.stepId;
-                    updateData.conditionalOn2 = {
-                        stepId: referencedStepId,
-                        value: conditional.value,
-                        questionNum: conditional.questionNum,
-                    };
-                }
-
-                if (Object.keys(updateData).length > 0) {
-                    await tx.formStep.update({
-                        where: { id: step.id },
-                        data: updateData,
-                    })
-                }
-
-                if (stepData.options && stepData.options.length > 0) {
-                    await tx.stepOption.createMany({
-                        data: stepData.options.map((option) => ({
-                            stepId: step.id,
-                            questionNum: option.questionNum,
-                            label: option.label,
-                            value: option.value,
-                            price: option.price,
-                            order: option.order,
-                        })),
-                    })
+                    if (conditionalOn && conditionalOn.questionId) {
+                        questionsToUpdate.push({ id: question.id, conditionalOn });
+                    }
                 }
             }
-        })
 
-        revalidatePath('/products')
-        revalidatePath(`/products/${formData.slug}`)
-        revalidatePath('/')
+            // Second pass to update conditional logic with the newly created question IDs
+            for (const { id, conditionalOn } of questionsToUpdate) {
+                const realQuestionId = questionIdMap.get(conditionalOn.questionId);
+                if (realQuestionId) {
+                    await tx.question.update({
+                        where: { id },
+                        data: {
+                            conditionalOn: {
+                                questionId: realQuestionId,
+                                value: conditionalOn.value
+                            },
+                        },
+                    });
+                }
+            }
+        }, { timeout: 15000 }); // <-- increased interactive transaction timeout to 30s
 
-        return { success: true, productId, slug: formData.slug }
+        revalidatePath('/products');
+        revalidatePath(`/products/${formData.slug}`);
+        revalidatePath('/');
+
+        return { success: true, productId, slug: formData.slug };
     } catch (error) {
-        console.error('Error updating product:', error)
-        return { success: false, error: 'Failed to update product' }
+        console.error('Error updating product:', error);
+        return { success: false, error: 'Failed to update product' };
     }
 }
 
@@ -355,13 +268,6 @@ export async function deleteProduct(productId: string) {
     }
 }
 
-// Type definition for the conditional logic stored in JSON
-type ConditionalLogic = {
-    stepId: string;
-    value: string;
-    questionNum: 1 | 2;
-} | null;
-
 
 export async function getAllProducts() {
     try {
@@ -370,29 +276,35 @@ export async function getAllProducts() {
                 steps: {
                     orderBy: { order: 'asc' },
                     include: {
-                        options: {
-                            orderBy: { order: 'asc' }
-                        }
-                    }
-                }
+                        questions: {
+                            orderBy: { order: 'asc' },
+                            include: {
+                                options: {
+                                    orderBy: { order: 'asc' },
+                                },
+                            },
+                        },
+                    },
+                },
             },
-            orderBy: { createdAt: 'desc' }
-        })
+            orderBy: { createdAt: 'desc' },
+        });
 
-        // Transform conditionalOn from Json to proper type
-        const transformedProducts = products.map(product => ({
+        // The structure should now be correct, just need to cast conditionalOn
+        return products.map(product => ({
             ...product,
+            baseImage: (product as any).baseImageUrl ?? null,
             steps: product.steps.map(step => ({
                 ...step,
-                conditionalOn1: step.conditionalOn1 as ConditionalLogic,
-                conditionalOn2: step.conditionalOn2 as ConditionalLogic,
-            }))
-        }))
-
-        return transformedProducts
+                questions: step.questions.map(question => ({
+                    ...question,
+                    conditionalOn: question.conditionalOn as { questionId: string, value: any } | null,
+                })),
+            })),
+        }));
     } catch (error) {
-        console.error('Error fetching products:', error)
-        return []
+        console.error('Error fetching products:', error);
+        return [];
     }
 }
 
@@ -404,30 +316,38 @@ export async function getProductBySlug(slug: string) {
                 steps: {
                     orderBy: { order: 'asc' },
                     include: {
-                        options: {
-                            orderBy: { order: 'asc' }
-                        }
-                    }
-                }
-            }
-        })
+                        questions: {
+                            orderBy: { order: 'asc' },
+                            include: {
+                                options: {
+                                    orderBy: { order: 'asc' },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
 
         if (!product) {
-            return null
+            return null;
         }
 
-        // Transform conditionalOn from Json to proper type
+        // The structure should now be correct, just need to cast conditionalOn
         return {
             ...product,
+            baseImage: (product as any).baseImageUrl ?? null,
             steps: product.steps.map(step => ({
                 ...step,
-                conditionalOn1: step.conditionalOn1 as ConditionalLogic,
-                conditionalOn2: step.conditionalOn2 as ConditionalLogic,
-            }))
-        }
+                questions: step.questions.map(question => ({
+                    ...question,
+                    conditionalOn: question.conditionalOn as { questionId: string, value: any } | null,
+                })),
+            })),
+        };
     } catch (error) {
-        console.error('Error fetching product:', error)
-        return null
+        console.error('Error fetching product:', error);
+        return null;
     }
 }
 
@@ -439,29 +359,37 @@ export async function getProductById(id: string) {
                 steps: {
                     orderBy: { order: 'asc' },
                     include: {
-                        options: {
-                            orderBy: { order: 'asc' }
-                        }
-                    }
-                }
-            }
-        })
+                        questions: {
+                            orderBy: { order: 'asc' },
+                            include: {
+                                options: {
+                                    orderBy: { order: 'asc' },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
 
         if (!product) {
-            return null
+            return null;
         }
 
-        // Transform conditionalOn from Json to proper type
+        // The structure should now be correct, just need to cast conditionalOn
         return {
             ...product,
+            baseImage: (product as any).baseImageUrl ?? null,
             steps: product.steps.map(step => ({
                 ...step,
-                conditionalOn1: step.conditionalOn1 as ConditionalLogic,
-                conditionalOn2: step.conditionalOn2 as ConditionalLogic,
-            }))
-        }
+                questions: step.questions.map(question => ({
+                    ...question,
+                    conditionalOn: question.conditionalOn as { questionId: string, value: any } | null,
+                })),
+            })),
+        };
     } catch (error) {
-        console.error('Error fetching product:', error)
-        return null
+        console.error('Error fetching product:', error);
+        return null;
     }
 }

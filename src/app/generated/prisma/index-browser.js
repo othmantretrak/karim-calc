@@ -125,7 +125,8 @@ exports.Prisma.ProductScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   description: 'description',
-  baseImage: 'baseImage',
+  baseImageUrl: 'baseImageUrl',
+  baseImagePublicId: 'baseImagePublicId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -134,38 +135,36 @@ exports.Prisma.FormStepScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
   order: 'order',
-  type1: 'type1',
-  question1: 'question1',
-  required1: 'required1',
-  type2: 'type2',
-  question2: 'question2',
-  required2: 'required2',
-  pricingImpact1: 'pricingImpact1',
-  pricePerUnit1: 'pricePerUnit1',
-  unit1: 'unit1',
-  minValue1: 'minValue1',
-  maxValue1: 'maxValue1',
-  defaultValue1: 'defaultValue1',
-  pricingImpact2: 'pricingImpact2',
-  pricePerUnit2: 'pricePerUnit2',
-  unit2: 'unit2',
-  minValue2: 'minValue2',
-  maxValue2: 'maxValue2',
-  defaultValue2: 'defaultValue2',
-  conditionalOn1: 'conditionalOn1',
-  conditionalOn2: 'conditionalOn2',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuestionScalarFieldEnum = {
+  id: 'id',
+  stepId: 'stepId',
+  order: 'order',
+  type: 'type',
+  question: 'question',
+  required: 'required',
+  pricingImpact: 'pricingImpact',
+  pricePerUnit: 'pricePerUnit',
+  unit: 'unit',
+  minValue: 'minValue',
+  maxValue: 'maxValue',
+  defaultValue: 'defaultValue',
+  conditionalOn: 'conditionalOn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
 exports.Prisma.StepOptionScalarFieldEnum = {
   id: 'id',
-  stepId: 'stepId',
-  questionNum: 'questionNum',
+  questionId: 'questionId',
   label: 'label',
   value: 'value',
   price: 'price',
   imageUrl: 'imageUrl',
+  imagePublicId: 'imagePublicId',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -213,6 +212,7 @@ exports.PricingImpact = exports.$Enums.PricingImpact = {
 exports.Prisma.ModelName = {
   Product: 'Product',
   FormStep: 'FormStep',
+  Question: 'Question',
   StepOption: 'StepOption'
 };
 

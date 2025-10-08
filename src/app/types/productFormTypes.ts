@@ -1,50 +1,46 @@
-// types/productFormTypes.ts
+// src/app/types/productFormTypes.ts
 
 export interface OptionData {
-    tempId: string
-    questionNum: number
-    label: string
-    value: string
-    price: number | null
-    imageUrl?: string | null // Add optional image URL
-    order: number
+    tempId: string;
+    label: string;
+    value: string;
+    price: number | null;
+    imageUrl?: string | null;
+    imagePublicId?: string | null; // Add imagePublicId
+    order: number;
+}
+
+export interface QuestionFormData {
+    tempId: string;
+    order: number;
+    type: 'SELECT' | 'NUMBER' | 'CHECKBOX';
+    question: string;
+    required: boolean;
+    pricingImpact: 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE';
+    pricePerUnit: number | null;
+    unit: string | null;
+    minValue: number | null;
+    maxValue: number | null;
+    defaultValue: number | null;
+    conditionalOn: any; // Will be { questionId: string, value: any }
+    options: OptionData[];
 }
 
 export interface StepFormData {
-    tempId: string
-    order: number
-
-    // Question 1
-    type1: 'SELECT' | 'NUMBER'
-    question1: string
-    required1: boolean
-    pricingImpact1: 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE'
-    pricePerUnit1: number | null
-    unit1: string | null
-    minValue1: number | null
-    maxValue1: number | null
-    defaultValue1: number | null
-
-    // Question 2 (optional)
-    type2: 'SELECT' | 'NUMBER' | null
-    question2: string | null
-    required2: boolean
-    pricingImpact2: 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE'
-    pricePerUnit2: number | null
-    unit2: string | null
-    minValue2: number | null
-    maxValue2: number | null
-    defaultValue2: number | null
-
-    conditionalOn1: any,
-    conditionalOn2: any,
-    options: OptionData[]
+    tempId: string;
+    order: number;
+    questions: QuestionFormData[];
 }
 
 // Prop Types for handler functions
-export type UpdateStepHandler = (tempId: string, updates: Partial<StepFormData>) => void
-export type UpdateOptionHandler = (stepTempId: string, optionTempId: string, updates: Partial<OptionData>) => void
-export type AddOptionHandler = (stepTempId: string, questionNum: number) => void
-export type DeleteOptionHandler = (stepTempId: string, optionTempId: string) => void
-export type DeleteStepHandler = (tempId: string) => void
-export type MoveStepHandler = (tempId: string, direction: 'up' | 'down') => void
+export type UpdateStepHandler = (tempId: string, updates: Partial<StepFormData>) => void;
+export type UpdateQuestionHandler = (stepTempId: string, questionTempId: string, updates: Partial<QuestionFormData>) => void;
+export type AddQuestionHandler = (stepTempId: string) => void;
+export type DeleteQuestionHandler = (stepTempId: string, questionTempId: string) => void;
+
+export type UpdateOptionHandler = (stepTempId: string, questionTempId: string, optionTempId: string, updates: Partial<OptionData>) => void;
+export type AddOptionHandler = (stepTempId: string, questionTempId: string) => void;
+export type DeleteOptionHandler = (stepTempId: string, questionTempId: string, optionTempId: string) => void;
+
+export type DeleteStepHandler = (tempId: string) => void;
+export type MoveStepHandler = (tempId: string, direction: 'up' | 'down') => void;

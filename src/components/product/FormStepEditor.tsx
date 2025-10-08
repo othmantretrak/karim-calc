@@ -3,13 +3,16 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useSortable } from '@dnd-kit/sortable';
-import { Trash2, GripVertical, ChevronUp, ChevronDown } from 'lucide-react';
+import { Trash2, GripVertical, ChevronUp, ChevronDown, Plus } from 'lucide-react';
 import { QuestionFields } from './QuestionFields';
 import {
     StepFormData,
     UpdateStepHandler,
     DeleteStepHandler,
     MoveStepHandler,
+    AddQuestionHandler,
+    UpdateQuestionHandler,
+    DeleteQuestionHandler,
     AddOptionHandler,
     UpdateOptionHandler,
     DeleteOptionHandler
@@ -23,6 +26,9 @@ interface FormStepEditorProps {
     updateStep: UpdateStepHandler
     deleteStep: DeleteStepHandler
     moveStep: MoveStepHandler
+    addQuestion: AddQuestionHandler
+    updateQuestion: UpdateQuestionHandler
+    deleteQuestion: DeleteQuestionHandler
     addOption: AddOptionHandler
     updateOption: UpdateOptionHandler
     deleteOption: DeleteOptionHandler
@@ -36,6 +42,9 @@ export function FormStepEditor({
     updateStep,
     deleteStep,
     moveStep,
+    addQuestion,
+    updateQuestion,
+    deleteQuestion,
     addOption,
     updateOption,
     deleteOption,
@@ -98,29 +107,33 @@ export function FormStepEditor({
             </CardHeader>
             <CardContent className="space-y-6">
 
-                {/* Question 1 Fields */}
-                <QuestionFields
-                    step={step}
-                    questionNum={1}
-                    allSteps={allSteps}
-                    index={index}
-                    updateStep={updateStep}
-                    addOption={addOption}
-                    updateOption={updateOption}
-                    deleteOption={deleteOption}
-                />
+                {step.questions.map((question, qIndex) => (
+                    <QuestionFields
+                        key={question.tempId}
+                        step={step}
+                        question={question}
+                        questionNum={qIndex + 1}
+                        updateQuestion={updateQuestion}
+                        deleteQuestion={deleteQuestion}
+                        addOption={addOption}
+                        updateOption={updateOption}
+                        deleteOption={deleteOption}
+                        allSteps={allSteps}
+                        index={index}
+                    />
+                ))}
 
-                {/* Question 2 Fields (Conditional) */}
-                <QuestionFields
-                    step={step}
-                    questionNum={2}
-                    allSteps={allSteps}
-                    index={index}
-                    updateStep={updateStep}
-                    addOption={addOption}
-                    updateOption={updateOption}
-                    deleteOption={deleteOption}
-                />
+                <div className="p-4 border-2 border-dashed rounded-lg">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => addQuestion(step.tempId)}
+                        className="w-full"
+                    >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Question to Step {index + 1}
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     )

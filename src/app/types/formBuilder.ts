@@ -3,47 +3,41 @@
 export type StepType = 'SELECT' | 'NUMBER' | 'TEXT' | 'CHECKBOX'
 export type PricingImpact = 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE'
 
+// StepOption now belongs to a Question
 export interface StepOption {
     id: string
-    stepId: string
-    questionNum: number // 1 or 2
+    questionId: string // Belongs to a question
     label: string
     value: string
-    imageUrl?: string | null // Optional image URL
+    imageUrl?: string | null
     price: number | null
     order: number
 }
 
+// The new Question type, which holds all question-specific data
+export interface Question {
+    id: string
+    stepId: string
+    order: number // Order within the step
+    type: StepType
+    question: string
+    required: boolean
+    pricingImpact: PricingImpact
+    pricePerUnit: number | null
+    unit: string | null
+    minValue: number | null
+    maxValue: number | null
+    defaultValue: number | null
+    conditionalOn: { questionId: string; value: string } | null
+    options: StepOption[] // Each question holds its own options
+}
+
+// FormStep now contains an array of Questions
 export interface FormStep {
     id: string
     productId: string
     order: number
-
-    // Question 1 (required)
-    type1: StepType
-    question1: string
-    required1: boolean
-    pricingImpact1: PricingImpact
-    pricePerUnit1: number | null
-    unit1: string | null
-    minValue1: number | null
-    maxValue1: number | null
-    defaultValue1: number | null
-
-    // Question 2 (optional)
-    type2: StepType | null
-    question2: string | null
-    required2: boolean
-    pricingImpact2: PricingImpact
-    pricePerUnit2: number | null
-    unit2: string | null
-    minValue2: number | null
-    maxValue2: number | null
-    defaultValue2: number | null
-
-    conditionalOn1: { stepId: string; value: string, questionNum: 1 | 2 } | null
-    conditionalOn2: { stepId: string; value: string, questionNum: 1 | 2 } | null
-    options: StepOption[]
+    questions: Question[]
 }
 
 export interface Product {
@@ -64,5 +58,5 @@ export interface PriceBreakdown {
 
 export interface UserSelection {
     productSlug: string | null
-    answers: Record<string, string | number>
+    answers: Record<string, string | number> // Key will likely be `question-${questionId}`
 }

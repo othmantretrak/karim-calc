@@ -10,11 +10,12 @@ import { Label } from '@/components/ui/label'
 import { Calculator, ArrowLeft } from 'lucide-react'
 import useStore from '@/lib/store'
 import Link from 'next/link'
-import { Product, FormStep } from '@/app/types/formBuilder'
+import { Product, FormStep, Question } from '@/app/types/formBuilder'
 import {
     calculatePrice,
     calculatePartialPrice,
     getVisibleSteps,
+    getVisibleQuestionsForStep,
     areAllStepsComplete,
 } from '@/app/utils/priceCalculator'
 
@@ -51,40 +52,40 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
     }, [product, answers])
 
 
-    const handleAnswer = (stepId: string, questionNum: number, value: string | number | null) => {
-        const key = `${stepId}_q${questionNum}`
+    const handleAnswer = (questionId: string, value: string | number | null) => {
         // Use null to explicitly clear the answer
-        setAnswer(key, value === null ? '' : value)
+        setAnswer(questionId, value === null ? '' : value)
     }
 
     // Check if a question is answered
-    const isQuestionAnswered = (stepId: string, questionNum: number) => {
-        const key = `${stepId}_q${questionNum}`
-        const answer = answers[key]
+    const isQuestionAnswered = (questionId: string) => {
+        const answer = answers[questionId]
         return answer !== undefined && answer !== '' && answer !== null
     }
 
-    // Get all answered steps (both questions answered if step has 2 questions)
+    const areStepQuestionsAnswered = (step: FormStep) => {
+        const visibleQuestions = getVisibleQuestionsForStep(step, answers);
+        return visibleQuestions.every(q => isQuestionAnswered(q.id));
+    };
+
+    // Get all answered steps
     const getAnsweredSteps = () => {
-        return visibleSteps.filter(step => {
-            const q1Answered = isQuestionAnswered(step.id, 1)
-            if (!step.question2) return q1Answered
-            const q2Answered = isQuestionAnswered(step.id, 2)
-            return q1Answered && q2Answered
-        })
+        return visibleSteps.filter(areStepQuestionsAnswered);
     }
 
     // Get the first unanswered step
     const getFirstUnansweredStep = () => {
-        return visibleSteps.find(step => {
-            const q1Answered = isQuestionAnswered(step.id, 1)
-            if (!q1Answered) return true
-            if (step.question2) {
-                const q2Answered = isQuestionAnswered(step.id, 2)
-                return !q2Answered
-            }
-            return false
-        })
+        return visibleSteps.find(step => !areStepQuestionsAnswered(step));
+    }
+
+    const getFirstUnansweredQuestionInStep = (step: FormStep) => {
+        const visibleQuestions = getVisibleQuestionsForStep(step, answers);
+        return visibleQuestions.find(q => !isQuestionAnswered(q.id));
+    }
+
+    const getLastAnsweredQuestionInStep = (step: FormStep) => {
+        const visibleQuestions = getVisibleQuestionsForStep(step, answers);
+        return [...visibleQuestions].reverse().find(q => isQuestionAnswered(q.id));
     }
 
     const answeredSteps = getAnsweredSteps()
@@ -101,63 +102,51 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
         // Case A: Calculation is complete, target the last step
         if (allComplete) {
             const stepToClear = visibleSteps[visibleSteps.length - 1];
-            if (stepToClear) {
-                handleAnswer(stepToClear.id, 1, null);
-                if (stepToClear.question2) {
-                    handleAnswer(stepToClear.id, 2, null);
-                }
-            }
+            stepToClear?.questions.forEach(q => handleAnswer(q.id, null));
             return;
         }
 
         const activeStep = currentUnansweredStep;
 
         if (activeStep) {
-            const q1Answered = isQuestionAnswered(activeStep.id, 1);
-            const q2Answered = activeStep.question2 && isQuestionAnswered(activeStep.id, 2);
+            const lastAnsweredQuestion = getLastAnsweredQuestionInStep(activeStep);
 
-            if (q2Answered) {
-                // Clear Q2
-                handleAnswer(activeStep.id, 2, null);
-            }
-            else if (q1Answered) {
-                // Clear Q1
-                handleAnswer(activeStep.id, 1, null);
-            }
-            else if (currentStepIndex > 0) {
-                // Q1 is unanswered, go back to the PREVIOUS step and clear its answers.
+            if (lastAnsweredQuestion) {
+                // Clear the last answered question in the current active step
+                handleAnswer(lastAnsweredQuestion.id, null);
+            } else if (currentStepIndex > 0) {
+                // Current step is completely unanswered, so go back to the PREVIOUS step and clear its answers.
                 const prevStep = visibleSteps[currentStepIndex - 1];
-                handleAnswer(prevStep.id, 1, null);
-                if (prevStep.question2) {
-                    handleAnswer(prevStep.id, 2, null);
-                }
+                prevStep.questions.forEach(q => handleAnswer(q.id, null));
             }
         }
     };
 
 
-    const renderQuestion = (step: FormStep, questionNum: 1 | 2, isDisabled: boolean = false) => {
-        const type = questionNum === 1 ? step.type1 : step.type2
-        const question = questionNum === 1 ? step.question1 : step.question2
-        const unit = questionNum === 1 ? step.unit1 : step.unit2
-        const minValue = questionNum === 1 ? step.minValue1 : step.minValue2
-        const maxValue = questionNum === 1 ? step.maxValue1 : step.maxValue2
-        const defaultValue = questionNum === 1 ? step.defaultValue1 : step.defaultValue2
-        const pricePerUnit = questionNum === 1 ? step.pricePerUnit1 : step.pricePerUnit2
+    const renderQuestion = (question: Question, isDisabled: boolean = false) => {
+        const {
+            id: questionId,
+            type,
+            question: questionText,
+            unit,
+            minValue,
+            maxValue,
+            defaultValue,
+            pricePerUnit,
+            options
+        } = question;
 
-        if (!question) return null
+        if (!questionText) return null
 
-        const answerKey = `${step.id}_q${questionNum}`
-        const answer = answers[answerKey]
+        const answer = answers[questionId]
 
         if (type === 'SELECT') {
-            const options = step.options.filter(o => o.questionNum === questionNum)
             const selectedOption = options.find(o => o.value === answer)
 
             return (
-                <div className="space-y-2">
-                    <Label htmlFor={answerKey} className="font-semibold">
-                        {question}
+                <div key={questionId} className="space-y-2">
+                    <Label htmlFor={questionId} className="font-semibold">
+                        {questionText}
                         <span className="text-red-500">*</span>
                     </Label>
 
@@ -175,11 +164,11 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
 
                     <Select
                         value={answer as string || ''}
-                        onValueChange={(value) => handleAnswer(step.id, questionNum, value)}
+                        onValueChange={(value) => handleAnswer(questionId, value)}
                         disabled={isDisabled}
                     >
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder={`Select ${question.toLowerCase()}`} />
+                            <SelectValue placeholder={`Select ${questionText.toLowerCase()}`} />
                         </SelectTrigger>
                         <SelectContent>
                             {options.map((option) => (
@@ -213,13 +202,13 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
             const numValue = typeof answer === 'number' ? answer : (answer ? parseFloat(answer as string) : defaultValue || 1)
 
             return (
-                <div className="space-y-2">
-                    <Label htmlFor={answerKey} className="font-semibold">
-                        {question} {unit && `(${unit})`}
+                <div key={questionId} className="space-y-2">
+                    <Label htmlFor={questionId} className="font-semibold">
+                        {questionText} {unit && `(${unit})`}
                         <span className="text-red-500">*</span>
                     </Label>
                     <Input
-                        id={answerKey}
+                        id={questionId}
                         type="number"
                         min={minValue || 1}
                         max={maxValue || undefined}
@@ -227,7 +216,7 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
                         value={numValue}
                         onChange={(e) => {
                             const value = parseInt(e.target.value) || (minValue || 1)
-                            handleAnswer(step.id, questionNum, Math.max(minValue || 1, value))
+                            handleAnswer(questionId, Math.max(minValue || 1, value))
                         }}
                         className="w-full"
                         disabled={isDisabled}
@@ -289,16 +278,16 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
                             Step {currentStepIndex + 1} of {visibleSteps.length}
                         </h3>
 
-                        {/* Question 1 */}
-                        {renderQuestion(currentUnansweredStep, 1, false)}
+                        {getVisibleQuestionsForStep(currentUnansweredStep, answers).map((question, index, arr) => {
+                            const isAnswered = isQuestionAnswered(question.id);
+                            const prevQuestion = index > 0 ? arr[index - 1] : null;
+                            const isPrevAnswered = prevQuestion ? isQuestionAnswered(prevQuestion.id) : true;
 
-                        {/* Question 2 (only if Q1 is answered AND Q2 exists) */}
-                        {currentUnansweredStep.question2 &&
-                            isQuestionAnswered(currentUnansweredStep.id, 1) && (
-                                <div className="pt-4 border-t mt-4">
-                                    {renderQuestion(currentUnansweredStep, 2, false)}
-                                </div>
-                            )}
+                            // A question is interactive if it's the first, or the previous one has been answered.
+                            const isInteractive = index === 0 || isPrevAnswered;
+
+                            return renderQuestion(question, !isInteractive);
+                        })}
                     </div>
                 ) : visibleSteps.length > 0 && allComplete ? (
                     <div className="text-center py-6 bg-green-50 border border-green-200 rounded-lg">

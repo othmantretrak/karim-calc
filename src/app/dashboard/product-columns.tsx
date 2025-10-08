@@ -125,12 +125,6 @@ function ActionsCell({ row }: { row: { original: ProductTableData } }) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-32">
-                    {/* Link to view the live product calculator */}
-                    <DropdownMenuItem asChild>
-                        <Link href={`/products/${row.original.slug}`} target="_blank" className="flex items-center">
-                            View Live
-                        </Link>
-                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Link href={`/dashboard/products/edit/${row.original.id}`} className="flex items-center">
                             Edit

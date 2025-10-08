@@ -1,6 +1,6 @@
 // app/components/Homepage.tsx
 'use client'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress"
 import { Calculator, ArrowLeft } from 'lucide-react'
 import useStore from '@/lib/store'
 import Link from 'next/link'
-import { Product, FormStep } from '@/app/types/formBuilder'
+import { Product, FormStep, Question } from '@/app/types/formBuilder'
 import {
     calculatePrice,
     calculatePartialPrice,
@@ -18,6 +18,7 @@ import {
     getVisibleQuestionsForStep,
     areAllStepsComplete,
 } from '@/app/utils/priceCalculator'
+import { uploadToCloudinary } from '@/app/utils/cloudinary'
 
 interface HomePageProps {
     products: Product[]
@@ -79,43 +80,57 @@ export default function HomePage({ products }: HomePageProps) {
     }
 
     const handleNext = () => {
-        if (currentStepIndex < visibleSteps.length) {
+        if (currentStepIndex <= visibleSteps.length) {
             setCurrentStepIndex(prev => prev + 1);
         }
     };
 
 
-    const handleAnswer = (stepId: string, questionNum: number, value: string | number | null) => {
-        const key = `${stepId}_q${questionNum}`
-        setAnswer(key, value === null ? '' : value) // Store null answers as empty string for consistency/clearing
+    const handleAnswer = (questionId: string, value: string | number | null) => {
+        setAnswer(questionId, value === null ? '' : value)
     }
+
+    // Local state to control which checkbox-dropdown is open (questionId or null)
+    const [openMultiSelect, setOpenMultiSelect] = useState<string | null>(null);
+    const multiSelectRef = useRef<HTMLDivElement | null>(null);
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        function onDocClick(e: MouseEvent) {
+            if (!openMultiSelect) return;
+            if (multiSelectRef.current && !multiSelectRef.current.contains(e.target as Node)) {
+                setOpenMultiSelect(null);
+            }
+        }
+        document.addEventListener('mousedown', onDocClick);
+        return () => document.removeEventListener('mousedown', onDocClick);
+    }, [openMultiSelect]);
 
     // Check if a question is answered
-    const isQuestionAnswered = (stepId: string, questionNum: number) => {
-        const key = `${stepId}_q${questionNum}`
-        const answer = answers[key]
+    const isQuestionAnswered = (questionId: string) => {
+        const answer = answers[questionId];
         return answer !== undefined && answer !== '' && answer !== null
     }
-
-    const isStepComplete = (step: FormStep) => {
-        if (!selectedProduct) return false;
-        const visibleQuestions = getVisibleQuestionsForStep(step, selectedProduct, answers);
-
-        if (visibleQuestions.includes(1) && step.required1 && !isQuestionAnswered(step.id, 1)) {
-            return false;
-        }
-
-        if (visibleQuestions.includes(2) && step.required2 && !isQuestionAnswered(step.id, 2)) {
-            return false;
-        }
-
-        // The step is complete if all its *visible and required* questions are answered.
-        return true;
-    };
 
     const allComplete = useMemo(() => {
         return productSlug && visibleSteps.length > 0 && currentStepIndex >= visibleSteps.length;
     }, [productSlug, visibleSteps, currentStepIndex]);
+
+    const isStepComplete = (step: FormStep) => {
+        if (!selectedProduct) return false;
+        const visibleQuestions = getVisibleQuestionsForStep(step, answers);
+
+        for (const question of visibleQuestions) {
+            if (question.required) {
+                const answer = answers[question.id];
+                if (answer === undefined || answer === '' || answer === null) {
+                    return false; // If any required visible question is unanswered, step is not complete
+                }
+            }
+        }
+        return true; // All required visible questions are answered
+    };
+
 
     const handleGoBack = () => {
         if (currentStepIndex > 0) {
@@ -127,8 +142,10 @@ export default function HomePage({ products }: HomePageProps) {
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files ? Array.from(e.target.files) : [];
         if (files.length === 0) return;
-        const imageUrls = files.map(file => URL.createObjectURL(file));
-        setUploadedImages((prev: string[]) => [...prev, ...imageUrls]);
+        /* upload first file */
+        uploadToCloudinary(files[0]).then((data) => {
+            setUploadedImages((prev: string[]) => [...prev, data.secure_url]);
+        });
     }
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -158,55 +175,66 @@ export default function HomePage({ products }: HomePageProps) {
 
     const isNextDisabled = useMemo(() => {
         if (!productSlug) return true;
-        if (currentStepIndex >= visibleSteps.length) return true; // Already at the end
+        if (currentStepIndex === 0) return false;
+        if (currentStepIndex > visibleSteps.length) return true;
 
-        const currentStep = visibleSteps[currentStepIndex];
+        const currentStep = visibleSteps[currentStepIndex - 1];
         if (!currentStep) return true;
 
         return !isStepComplete(currentStep);
     }, [productSlug, currentStepIndex, visibleSteps, answers]);
 
 
-    const renderQuestion = (step: FormStep, questionNum: 1 | 2, isDisabled: boolean = false) => {
-        const type = questionNum === 1 ? step.type1 : step.type2
-        const question = questionNum === 1 ? step.question1 : step.question2
-        const unit = questionNum === 1 ? step.unit1 : step.unit2
-        const minValue = questionNum === 1 ? step.minValue1 : step.minValue2
-        const maxValue = questionNum === 1 ? step.maxValue1 : step.maxValue2
-        const defaultValue = questionNum === 1 ? step.defaultValue1 : step.defaultValue2
-        const pricePerUnit = questionNum === 1 ? step.pricePerUnit1 : step.pricePerUnit2
+    const renderQuestion = (question: Question, isDisabled: boolean = false) => {
+        const {
+            id: questionId,
+            type,
+            question: questionText,
+            unit,
+            minValue,
+            maxValue,
+            defaultValue,
+            pricePerUnit,
+            options
+        } = question;
 
-        if (!question) return null
+        if (!questionText) return null
 
-        const answerKey = `${step.id}_q${questionNum}`
-        const answer = answers[answerKey]
+        const answer = answers[questionId]
 
         if (type === 'SELECT') {
-            const options = step.options.filter(o => o.questionNum === questionNum)
-
             return (
-                <div className="space-y-2">
-                    <Label htmlFor={answerKey} className="font-semibold">
-                        {question}
+                <div key={questionId} className="space-y-2">
+                    <Label htmlFor={questionId} className="font-semibold">
+                        {questionText}
                         <span className="text-red-500">*</span>
                     </Label>
                     <Select
                         value={answer as string || ''}
-                        onValueChange={(value) => handleAnswer(step.id, questionNum, value)}
+                        onValueChange={(value) => handleAnswer(questionId, value)}
                         disabled={isDisabled}
                     >
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder={`Select ${question.toLowerCase()}`} />
+                            <SelectValue placeholder={`Select ${questionText.toLowerCase()}`} />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className='w-full'>
                             {options.map((option) => (
-                                <SelectItem key={option.id} value={option.value}>
-                                    <div className="flex justify-between items-center w-full gap-4">
-                                        <span>{option.label}</span>
+                                <SelectItem key={option.id} value={option.value} className='w-full'>
+                                    <div className="flex justify-evenly items-center w-full gap-4 group">
+                                        <div className="flex items-center gap-3">
+                                            <span>{option.label}</span>
+                                        </div>
                                         {option.price !== null && option.price !== undefined && (
                                             <span className="text-sm text-muted-foreground">
                                                 €{option.price.toFixed(2)}
                                             </span>
+                                        )}
+                                        {option.imageUrl && (
+                                            <img
+                                                src={option.imageUrl}
+                                                alt={option.label}
+                                                className="w-8 h-8 object-cover rounded transform transition-transform duration-200 group-hover:scale-110"
+                                            />
                                         )}
                                     </div>
                                 </SelectItem>
@@ -217,17 +245,91 @@ export default function HomePage({ products }: HomePageProps) {
             )
         }
 
+        if (type === 'CHECKBOX') {
+            // Multi-select behavior using checkboxes. Store as comma-separated values in answers.
+            const selectedValues = typeof answer === 'string' && answer !== '' ? (answer as string).split(',') : [];
+            const toggleValue = (val: string) => {
+                const set = new Set(selectedValues);
+                if (set.has(val)) set.delete(val);
+                else set.add(val);
+                const arr = Array.from(set);
+                handleAnswer(questionId, arr.join(','));
+            };
+            return (
+                <div key={questionId} className="space-y-2">
+                    <Label htmlFor={questionId} className="font-semibold">
+                        {questionText}
+                        <span className="text-red-500">*</span>
+                    </Label>
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => setOpenMultiSelect(openMultiSelect === questionId ? null : questionId)}
+                            className="w-full text-left"
+                        >
+                            <div className="border-input flex w-full items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm text-muted-foreground">{selectedValues.length > 0 ? `${selectedValues.length} selected` : `Select ${questionText.toLowerCase()}`}</span>
+                                </div>
+                                <svg className="w-4 h-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                            </div>
+                        </button>
+                        {openMultiSelect === questionId && (
+                            <div ref={multiSelectRef} className="absolute z-50 mt-2 w-full bg-white border rounded-md shadow-lg p-3">
+                                <div className="space-y-2 max-h-64 overflow-auto">
+                                    {options.map((option) => {
+                                        const checked = selectedValues.includes(option.value);
+                                        return (
+                                            <label key={option.id} className="flex items-center justify-between gap-4 p-2 border rounded-md group">
+                                                <div className="flex items-center gap-3">
+                                                    <span>{option.label}</span>
+                                                </div>
+                                                <div className="flex items-center gap-4">
+                                                    {option.price !== null && option.price !== undefined && (
+                                                        <span className="text-sm text-muted-foreground">€{option.price.toFixed(2)}</span>
+                                                    )}
+                                                    {option.imageUrl && (
+                                                        <>
+                                                            <img
+                                                                src={option.imageUrl}
+                                                                alt={option.label}
+                                                                className="w-8 h-8 object-cover rounded transform transition-transform duration-200 group-hover:scale-150"
+                                                            />
+
+                                                            <img
+                                                                src={option.imageUrl}
+                                                                alt={option.label}
+                                                                className="absolute w-0.5 h-0.5 object-cover transform transition-transform duration-200 group-hover:scale-10000 right-20"
+                                                            />
+                                                        </>
+                                                    )}
+                                                    <input type="checkbox" checked={checked} onChange={() => toggleValue(option.value)} />
+                                                </div>
+                                            </label>
+                                        )
+                                    })}
+                                </div>
+                                <div className="mt-3 flex justify-end">
+                                    <button type="button" className="text-sm px-3 py-1 bg-green-700 text-white rounded" onClick={() => setOpenMultiSelect(null)}>Done</button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )
+        }
+
         if (type === 'NUMBER') {
             const numValue = typeof answer === 'number' ? answer : (answer ? parseFloat(answer as string) : defaultValue || 1)
 
             return (
-                <div className="space-y-2">
-                    <Label htmlFor={answerKey} className="font-semibold">
-                        {question} {unit && `(${unit})`}
+                <div key={questionId} className="space-y-2">
+                    <Label htmlFor={questionId} className="font-semibold">
+                        {questionText} {unit && `(${unit})`}
                         <span className="text-red-500">*</span>
                     </Label>
                     <Input
-                        id={answerKey}
+                        id={questionId}
                         type="number"
                         min={minValue || 1}
                         max={maxValue || undefined}
@@ -235,7 +337,7 @@ export default function HomePage({ products }: HomePageProps) {
                         value={numValue}
                         onChange={(e) => {
                             const value = parseInt(e.target.value) || (minValue || 1)
-                            handleAnswer(step.id, questionNum, Math.max(minValue || 1, value))
+                            handleAnswer(questionId, Math.max(minValue || 1, value))
                         }}
                         className="w-full"
                         disabled={isDisabled}
@@ -243,7 +345,7 @@ export default function HomePage({ products }: HomePageProps) {
                     {pricePerUnit !== null && pricePerUnit !== undefined && (
                         <div className="text-sm text-muted-foreground bg-blue-50 p-3 rounded-md">
                             <div className="flex justify-between">
-                                <span>Price per {unit || 'unit'}:</span>
+                                <span>Prijs per {unit || 'unit'}:</span>
                                 <span className="font-medium">€{pricePerUnit.toFixed(2)}</span>
                             </div>
                         </div>
@@ -303,43 +405,32 @@ export default function HomePage({ products }: HomePageProps) {
                                     Categorie
                                     <span className="text-red-500">*</span>
                                 </h3>
-                                <Select value={productSlug || ''} onValueChange={handleProductSelect} disabled={!!productSlug}>
+                                <Select value={productSlug || ''} onValueChange={handleProductSelect} >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select a product" />
+                                        <SelectValue placeholder="Selecteer een categorie" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {products.map((product) => (
                                             <SelectItem key={product.id} value={product.slug}>
                                                 <div className="flex flex-col">
                                                     <span className="font-medium">{product.name}</span>
-                                                    {product.description && (
-                                                        <span className="text-sm text-muted-foreground">
-                                                            {product.description}
-                                                        </span>
-                                                    )}
                                                 </div>
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
-                                {selectedProduct && <p className="text-sm text-muted-foreground mt-2">{selectedProduct.description}</p>}
                             </div>
                         )}
 
-                        {visibleSteps.map((step, index) => {
+                        {currentStepIndex >= 0 && visibleSteps.map((step, index) => {
                             if (index !== currentStepIndex) return null;
 
-                            const visibleQuestions = selectedProduct ? getVisibleQuestionsForStep(step, selectedProduct, answers) : [];
+                            const visibleQuestions = getVisibleQuestionsForStep(step, answers);
 
                             return (
                                 <div key={step.id} className="space-y-4 p-4 rounded-lg bg-white shadow-sm">
-                                    {visibleQuestions.includes(1) && renderQuestion(step, 1)}
-                                    {visibleQuestions.includes(2) && step.question2 && (
-                                        <div className="pt-4 border-t mt-4">
-                                            {renderQuestion(step, 2)}
-                                        </div>
-                                    )}
-                                    {visibleQuestions.length === 0 && <p className="text-muted-foreground">This step is currently hidden by conditional logic.</p>}
+                                    {visibleQuestions.map(question => renderQuestion(question))}
+                                    {visibleQuestions.length === 0 && <p className="text-muted-foreground">This step is currently hidden.</p>}
                                 </div>
                             )
                         })}
@@ -352,14 +443,14 @@ export default function HomePage({ products }: HomePageProps) {
                                         onClick={() => setShowImageUpload(true)}
                                         className="text-green-700 hover:text-green-900 font-medium"
                                     >
-                                        Add image
+                                        Foto uploaden
                                     </button>
                                     <span className="text-gray-400">|</span>
                                     <button
                                         onClick={() => setShowComments(true)}
                                         className="text-green-700 hover:text-green-900 font-medium"
                                     >
-                                        Add comments
+                                        Opmerkingen toevoegen
                                     </button>
                                 </div>
                             </div>
@@ -372,7 +463,7 @@ export default function HomePage({ products }: HomePageProps) {
                                     className="flex items-center text-sm text-gray-600 hover:text-gray-900"
                                 >
                                     <ArrowLeft className="w-4 h-4 mr-2" />
-                                    Contact
+                                    Vorige
                                 </button>
 
                                 <form onSubmit={handleContactSubmit} className="space-y-4">
@@ -482,6 +573,15 @@ export default function HomePage({ products }: HomePageProps) {
                                 </div>
                             </div>
                         )}
+                        {/* show a debugger block */}
+                        {process.env.NODE_ENV === 'development' && (
+                            <div className="border-t pt-4">
+                                <h3 className="text-lg font-semibold">Debug Information</h3>
+                                <p>allComplete: {allComplete ? 'Yes' : 'No'}</p>
+                                <p>currentStepIndex: {currentStepIndex}</p>
+                                <p>visibleSteps length: {visibleSteps.length}</p>
+                            </div>
+                        )}
 
                         {/* Price Display */}
                         {(priceInfo.total > 0 || priceInfo.partial > 0) && !showThankYou && (
@@ -502,19 +602,19 @@ export default function HomePage({ products }: HomePageProps) {
                         {!showThankYou && (
                             <div className="border-t pt-4 flex justify-between items-center">
                                 {!showThankYou && <Button variant="ghost" onClick={handleGoBack} disabled={!productSlug && currentStepIndex === 0}>
-                                    <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                                    <ArrowLeft className="w-4 h-4 mr-2" /> Vorige
                                 </Button>}
 
                                 {!allComplete ? (
                                     <Button onClick={handleNext} disabled={isNextDisabled}>
-                                        Next
+                                        Volgende
                                     </Button>
                                 ) : (
                                     <Button
                                         onClick={handleContactSubmit}
                                         disabled={!isContactFormValid()}
                                     >
-                                        Next
+                                        Volgende
                                     </Button>
                                 )}
                             </div>
@@ -541,7 +641,7 @@ export default function HomePage({ products }: HomePageProps) {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
                         <div className="bg-gradient-to-r from-green-700 to-green-800 text-white text-center py-6 rounded-t-lg">
-                            <h2 className="text-lg font-semibold">Calculate your price quickly!</h2>
+                            <h2 className="text-lg font-semibold">Snel uw prijs berekenen!</h2>
                         </div>
 
                         <div className="p-6 space-y-4">
@@ -550,7 +650,7 @@ export default function HomePage({ products }: HomePageProps) {
                                 className="flex items-center text-sm text-gray-600 hover:text-gray-900"
                             >
                                 <ArrowLeft className="w-4 h-4 mr-2" />
-                                Go back
+                                Ga terug
                             </button>
 
                             <div
@@ -558,8 +658,8 @@ export default function HomePage({ products }: HomePageProps) {
                                 onDragOver={(e) => e.preventDefault()}
                                 className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center"
                             >
-                                <p className="text-gray-700 mb-2">Drag and drop files here or upload</p>
-                                <p className="text-sm text-gray-500 mb-4">Accepted file types: JPEG, PNG</p>
+                                <p className="text-gray-700 mb-2">Sleep bestanden hierheen of upload ze</p>
+                                <p className="text-sm text-gray-500 mb-4">Geaccepteerde bestandstypen: JPEG, PNG</p>
                                 <label className="inline-block">
                                     <input
                                         type="file"
@@ -598,7 +698,7 @@ export default function HomePage({ products }: HomePageProps) {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
                         <div className="bg-gradient-to-r from-green-700 to-green-800 text-white text-center py-6 rounded-t-lg">
-                            <h2 className="text-lg font-semibold">Calculate your price quickly!</h2>
+                            <h2 className="text-lg font-semibold">Snel uw prijs berekenen!</h2>
                         </div>
 
                         <div className="p-6 space-y-4">
@@ -607,7 +707,7 @@ export default function HomePage({ products }: HomePageProps) {
                                 className="flex items-center text-sm text-gray-600 hover:text-gray-900"
                             >
                                 <ArrowLeft className="w-4 h-4 mr-2" />
-                                Go back
+                                Ga terug
                             </button>
 
                             <div>

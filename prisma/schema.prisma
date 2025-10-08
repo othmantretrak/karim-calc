@@ -12,13 +12,14 @@ datasource db {
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  description String?
-  baseImage   String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                String   @id @default(cuid())
+  name              String
+  slug              String   @unique
+  description       String?
+  baseImageUrl      String?
+  baseImagePublicId String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   // Relations
   steps FormStep[]
@@ -29,44 +30,44 @@ model FormStep {
   productId String
   order     Int // Order of the step in the form
 
-  // Each step can now have TWO questions
-  type1     StepType // First question type
-  question1 String // First question
-  required1 Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  type2     StepType? // Second question type (optional)
-  question2 String? // Second question (optional)
-  required2 Boolean   @default(false)
+  // Relations
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  questions Question[]
 
-  // Pricing configuration for question 1
-  pricingImpact1 PricingImpact @default(NONE)
-  pricePerUnit1  Float?
-  unit1          String?
-  minValue1      Float?
-  maxValue1      Float?
-  defaultValue1  Float?
+  @@unique([productId, order])
+}
 
-  // Pricing configuration for question 2
-  pricingImpact2 PricingImpact @default(NONE)
-  pricePerUnit2  Float?
-  unit2          String?
-  minValue2      Float?
-  maxValue2      Float?
-  defaultValue2  Float?
+model Question {
+  id        String @id @default(cuid())
+  stepId    String
+  order     Int // Order of the question within the step
 
-  // Conditional logic - stored as JSON
-  // Format: { stepId: "xxx", value: "yes" }
-  conditionalOn1 Json?
-  conditionalOn2 Json?
+  type     StepType
+  question String
+  required Boolean  @default(true)
+
+  // Pricing configuration
+  pricingImpact PricingImpact @default(NONE)
+  pricePerUnit  Float?
+  unit          String?
+  minValue      Float?
+  maxValue      Float?
+  defaultValue  Float?
+
+  // Conditional logic - format: { questionId: "xxx", value: "yes" }
+  conditionalOn Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  product Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  step    FormStep     @relation(fields: [stepId], references: [id], onDelete: Cascade)
   options StepOption[]
 
-  @@unique([productId, order])
+  @@unique([stepId, order])
 }
 
 enum StepType {
@@ -84,20 +85,20 @@ enum PricingImpact {
 }
 
 model StepOption {
-  id          String  @id @default(cuid())
-  stepId      String
-  questionNum Int     @default(1) // 1 or 2 - which question this option belongs to
-  label       String // Display text
-  value       String // Internal value
-  price       Float? // Price for this option (for BASE pricing)
-  imageUrl    String? // Optional image URL for this option
-  order       Int // Order in the list
+  id            String  @id @default(cuid())
+  questionId    String
+  label         String // Display text
+  value         String // Internal value
+  price         Float? // Price for this option (for BASE pricing)
+  imageUrl      String? // Optional image URL for this option
+  imagePublicId String?
+  order         Int // Order in the list
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  step FormStep @relation(fields: [stepId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
-  @@unique([stepId, questionNum, order])
+  @@unique([questionId, order])
 }

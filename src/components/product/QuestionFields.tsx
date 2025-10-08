@@ -1,100 +1,65 @@
 // components/product/QuestionFields.tsx
 
 import {
-    AddOptionHandler,
     DeleteOptionHandler,
     StepFormData,
+    QuestionFormData,
     UpdateOptionHandler,
-    UpdateStepHandler
+    UpdateQuestionHandler,
+    DeleteQuestionHandler,
 } from '@/app/types/productFormTypes';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Trash2, Image as ImageIcon } from 'lucide-react';
+import { AddOptionHandler } from '@/app/types/productFormTypes';
 import { ConditionalLogicSelector } from './ConditionalLogicSelector';
+import { uploadToCloudinary } from '@/app/utils/cloudinary';
 
 interface QuestionFieldsProps {
-    step: StepFormData
-    questionNum: 1 | 2
-    updateStep: UpdateStepHandler
-    addOption: AddOptionHandler
-    updateOption: UpdateOptionHandler
-    deleteOption: DeleteOptionHandler
-    allSteps: StepFormData[]
-    index: number
+    step: StepFormData;
+    question: QuestionFormData;
+    questionNum: number;
+    deleteQuestion: DeleteQuestionHandler;
+    updateQuestion: UpdateQuestionHandler;
+    addOption: AddOptionHandler;
+    updateOption: UpdateOptionHandler;
+    deleteOption: DeleteOptionHandler;
+    allSteps: StepFormData[];
+    index: number;
 }
 
 export function QuestionFields({
     step,
+    question,
     questionNum,
-    updateStep,
+    updateQuestion,
+    deleteQuestion,
     addOption,
     updateOption,
     deleteOption,
     allSteps,
     index,
 }: QuestionFieldsProps) {
-    // Determine which field keys to use based on questionNum
-    const typeKey = `type${questionNum}` as keyof StepFormData
-    const questionKey = `question${questionNum}` as keyof StepFormData
-    const pricingImpactKey = `pricingImpact${questionNum}` as keyof StepFormData
-    const unitKey = `unit${questionNum}` as keyof StepFormData
-    const pricePerUnitKey = `pricePerUnit${questionNum}` as keyof StepFormData
-    const minValueKey = `minValue${questionNum}` as keyof StepFormData
-    const maxValueKey = `maxValue${questionNum}` as keyof StepFormData
-    const defaultValueKey = `defaultValue${questionNum}` as keyof StepFormData
+    const { type, pricingImpact, options } = question;
 
-    const type = step[typeKey] as 'SELECT' | 'NUMBER' | null
-    const pricingImpact = step[pricingImpactKey] as 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE'
-
-    const handleUpdate = (key: keyof StepFormData, value: any) => {
-        updateStep(step.tempId, { [key]: value })
-    }
-
-    // --- Conditional Rendering for Q2 initiation/removal ---
-    if (questionNum === 2 && !step.type2) {
-        return (
-            <div className="p-4 border-2 border-dashed rounded-lg">
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => handleUpdate('type2', 'SELECT')}
-                    className="w-full"
-                >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Second Question (Optional)
-                </Button>
-            </div>
-        )
-    }
-
-    if (!type) return null // Should not happen for Q1, handled above for Q2
-
-    const currentOptions = step.options.filter(o => o.questionNum === questionNum)
+    const handleUpdate = (updates: Partial<QuestionFormData>) => {
+        updateQuestion(step.tempId, question.tempId, updates);
+    };
 
     return (
         <div className="space-y-4 p-4 border rounded-lg bg-muted/30">
             <div className="flex justify-between items-center">
                 <h4 className="font-medium">Question {questionNum}</h4>
-                {questionNum === 2 && (
+                {step.questions.length > 1 && (
                     <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => updateStep(step.tempId, {
-                            type2: null,
-                            question2: null,
-                            required2: false,
-                            pricingImpact2: 'NONE',
-                            pricePerUnit2: null,
-                            unit2: null,
-                            minValue2: null,
-                            maxValue2: null,
-                            defaultValue2: null,
-                        })}
+                        onClick={() => deleteQuestion(step.tempId, question.tempId)}
                     >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-4 h-4 text-destructive" />
                     </Button>
                 )}
             </div>
@@ -105,7 +70,7 @@ export function QuestionFields({
                     <Label>Question Type *</Label>
                     <Select
                         value={type}
-                        onValueChange={(value: 'SELECT' | 'NUMBER') => handleUpdate(typeKey, value)}
+                        onValueChange={(value: 'SELECT' | 'NUMBER' | 'CHECKBOX') => handleUpdate({ type: value })}
                     >
                         <SelectTrigger>
                             <SelectValue />
@@ -113,6 +78,7 @@ export function QuestionFields({
                         <SelectContent>
                             <SelectItem value="SELECT">Dropdown Selection</SelectItem>
                             <SelectItem value="NUMBER">Number Input</SelectItem>
+                            <SelectItem value="CHECKBOX">Checkbox</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -121,7 +87,7 @@ export function QuestionFields({
                     <Label>Pricing Impact *</Label>
                     <Select
                         value={pricingImpact}
-                        onValueChange={(value: any) => handleUpdate(pricingImpactKey, value)}
+                        onValueChange={(value: any) => handleUpdate({ pricingImpact: value })}
                     >
                         <SelectTrigger>
                             <SelectValue />
@@ -140,8 +106,8 @@ export function QuestionFields({
             <div className="space-y-2">
                 <Label>Question *</Label>
                 <Input
-                    value={step[questionKey] || ''}
-                    onChange={(e) => handleUpdate(questionKey, e.target.value)}
+                    value={question.question || ''}
+                    onChange={(e) => handleUpdate({ question: e.target.value })}
                     placeholder="e.g., Which service package?"
                     required
                 />
@@ -154,8 +120,8 @@ export function QuestionFields({
                         <div className="space-y-2">
                             <Label>Unit (optional)</Label>
                             <Input
-                                value={step[unitKey] || ''}
-                                onChange={(e) => handleUpdate(unitKey, e.target.value || null)}
+                                value={question.unit || ''}
+                                onChange={(e) => handleUpdate({ unit: e.target.value || null })}
                                 placeholder="e.g., m², meters"
                             />
                         </div>
@@ -163,8 +129,8 @@ export function QuestionFields({
                             <Label>Default Value</Label>
                             <Input
                                 type="number"
-                                value={step[defaultValueKey] || ''}
-                                onChange={(e) => handleUpdate(defaultValueKey, parseFloat(e.target.value) || null)}
+                                value={question.defaultValue || ''}
+                                onChange={(e) => handleUpdate({ defaultValue: parseFloat(e.target.value) || null })}
                                 placeholder="1"
                             />
                         </div>
@@ -172,8 +138,8 @@ export function QuestionFields({
                             <Label>Min Value</Label>
                             <Input
                                 type="number"
-                                value={step[minValueKey] || ''}
-                                onChange={(e) => handleUpdate(minValueKey, parseFloat(e.target.value) || null)}
+                                value={question.minValue || ''}
+                                onChange={(e) => handleUpdate({ minValue: parseFloat(e.target.value) || null })}
                                 placeholder="1"
                             />
                         </div>
@@ -181,8 +147,8 @@ export function QuestionFields({
                             <Label>Max Value</Label>
                             <Input
                                 type="number"
-                                value={step[maxValueKey] || ''}
-                                onChange={(e) => handleUpdate(maxValueKey, parseFloat(e.target.value) || null)}
+                                value={question.maxValue || ''}
+                                onChange={(e) => handleUpdate({ maxValue: parseFloat(e.target.value) || null })}
                                 placeholder="Optional"
                             />
                         </div>
@@ -197,16 +163,16 @@ export function QuestionFields({
                     <Input
                         type="number"
                         step="0.01"
-                        value={step[pricePerUnitKey] || ''}
-                        onChange={(e) => handleUpdate(pricePerUnitKey, parseFloat(e.target.value) || null)}
+                        value={question.pricePerUnit || ''}
+                        onChange={(e) => handleUpdate({ pricePerUnit: parseFloat(e.target.value) || null })}
                         placeholder="e.g., 50.00"
                         required
                     />
                 </div>
             )}
 
-            {/* SELECT Options Field */}
-            {type === 'SELECT' && (
+            {/* SELECT or CHECKBOX Options Field */}
+            {(type === 'SELECT' || type === 'CHECKBOX') && (
                 <div className="space-y-3">
                     <div className="flex justify-between items-center">
                         <Label>Options</Label>
@@ -214,25 +180,25 @@ export function QuestionFields({
                             type="button"
                             variant="outline"
                             size="sm"
-                            onClick={() => addOption(step.tempId, questionNum)}
+                            onClick={() => addOption(step.tempId, question.tempId)}
                         >
                             <Plus className="w-4 h-4 mr-2" />
                             Add Option
                         </Button>
                     </div>
 
-                    {currentOptions.length === 0 ? (
+                    {options.length === 0 ? (
                         <p className="text-sm text-muted-foreground">No options added yet.</p>
                     ) : (
                         <div className="space-y-3">
-                            {currentOptions.map((option) => (
+                            {options.map((option) => (
                                 <div key={option.tempId} className="p-3 border rounded-lg bg-white space-y-2">
                                     <div className="flex gap-2 items-start">
                                         <div className="flex-1">
                                             <Label className="text-xs text-muted-foreground mb-1">Label *</Label>
                                             <Input
                                                 value={option.label}
-                                                onChange={(e) => updateOption(step.tempId, option.tempId, {
+                                                onChange={(e) => updateOption(step.tempId, question.tempId, option.tempId, {
                                                     label: e.target.value,
                                                     value: e.target.value.toLowerCase().replace(/\s+/g, '-')
                                                 })}
@@ -247,7 +213,7 @@ export function QuestionFields({
                                                     type="number"
                                                     step="0.01"
                                                     value={option.price || ''}
-                                                    onChange={(e) => updateOption(step.tempId, option.tempId, {
+                                                    onChange={(e) => updateOption(step.tempId, question.tempId, option.tempId, {
                                                         price: parseFloat(e.target.value) || null
                                                     })}
                                                     placeholder="0.00"
@@ -258,7 +224,7 @@ export function QuestionFields({
                                             type="button"
                                             variant="ghost"
                                             size="sm"
-                                            onClick={() => deleteOption(step.tempId, option.tempId)}
+                                            onClick={() => deleteOption(step.tempId, question.tempId, option.tempId)}
                                             className="mt-5"
                                         >
                                             <Trash2 className="w-4 h-4 text-destructive" />
@@ -271,12 +237,29 @@ export function QuestionFields({
                                             <ImageIcon className="w-3 h-3" />
                                             Image URL (Optional)
                                         </Label>
-                                        <Input
+                                        {/* <Input
                                             value={option.imageUrl || ''}
-                                            onChange={(e) => updateOption(step.tempId, option.tempId, {
+                                            onChange={(e) => updateOption(step.tempId, question.tempId, option.tempId, {
                                                 imageUrl: e.target.value || null
                                             })}
                                             placeholder="https://example.com/image.jpg"
+                                            className="text-sm"
+                                        /> */}
+                                        <Input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                const file = e.target.files ? e.target.files[0] : null;
+                                                if (file) {
+                                                    //const imageUrl = URL.createObjectURL(file);
+                                                    uploadToCloudinary(file).then((data) => {
+                                                        updateOption(step.tempId, question.tempId, option.tempId, {
+                                                            imageUrl: data.secure_url
+                                                        });
+                                                    });
+
+                                                }
+                                            }}
                                             className="text-sm"
                                         />
                                         {option.imageUrl && (
@@ -302,10 +285,9 @@ export function QuestionFields({
             {/* Conditional Logic Selector for this question */}
             <ConditionalLogicSelector
                 step={step}
-                questionNum={questionNum}
+                question={question}
                 allSteps={allSteps}
-                index={index}
-                updateStep={updateStep}
+                updateQuestion={updateQuestion}
             />
         </div>
     )

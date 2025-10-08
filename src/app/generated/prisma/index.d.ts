@@ -24,6 +24,11 @@ export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
  */
 export type FormStep = $Result.DefaultSelection<Prisma.$FormStepPayload>
 /**
+ * Model Question
+ * 
+ */
+export type Question = $Result.DefaultSelection<Prisma.$QuestionPayload>
+/**
  * Model StepOption
  * 
  */
@@ -199,6 +204,16 @@ export class PrismaClient<
     * ```
     */
   get formStep(): Prisma.FormStepDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.question`: Exposes CRUD operations for the **Question** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Questions
+    * const questions = await prisma.question.findMany()
+    * ```
+    */
+  get question(): Prisma.QuestionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.stepOption`: Exposes CRUD operations for the **StepOption** model.
@@ -651,6 +666,7 @@ export namespace Prisma {
   export const ModelName: {
     Product: 'Product',
     FormStep: 'FormStep',
+    Question: 'Question',
     StepOption: 'StepOption'
   };
 
@@ -670,7 +686,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "product" | "formStep" | "stepOption"
+      modelProps: "product" | "formStep" | "question" | "stepOption"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -819,6 +835,80 @@ export namespace Prisma {
           count: {
             args: Prisma.FormStepCountArgs<ExtArgs>
             result: $Utils.Optional<FormStepCountAggregateOutputType> | number
+          }
+        }
+      }
+      Question: {
+        payload: Prisma.$QuestionPayload<ExtArgs>
+        fields: Prisma.QuestionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QuestionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QuestionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          findFirst: {
+            args: Prisma.QuestionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QuestionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          findMany: {
+            args: Prisma.QuestionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>[]
+          }
+          create: {
+            args: Prisma.QuestionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          createMany: {
+            args: Prisma.QuestionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QuestionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>[]
+          }
+          delete: {
+            args: Prisma.QuestionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          update: {
+            args: Prisma.QuestionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          deleteMany: {
+            args: Prisma.QuestionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QuestionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.QuestionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>[]
+          }
+          upsert: {
+            args: Prisma.QuestionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          aggregate: {
+            args: Prisma.QuestionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQuestion>
+          }
+          groupBy: {
+            args: Prisma.QuestionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QuestionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QuestionCountArgs<ExtArgs>
+            result: $Utils.Optional<QuestionCountAggregateOutputType> | number
           }
         }
       }
@@ -994,6 +1084,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     product?: ProductOmit
     formStep?: FormStepOmit
+    question?: QuestionOmit
     stepOption?: StepOptionOmit
   }
 
@@ -1106,11 +1197,11 @@ export namespace Prisma {
    */
 
   export type FormStepCountOutputType = {
-    options: number
+    questions: number
   }
 
   export type FormStepCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    options?: boolean | FormStepCountOutputTypeCountOptionsArgs
+    questions?: boolean | FormStepCountOutputTypeCountQuestionsArgs
   }
 
   // Custom InputTypes
@@ -1127,7 +1218,38 @@ export namespace Prisma {
   /**
    * FormStepCountOutputType without action
    */
-  export type FormStepCountOutputTypeCountOptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStepCountOutputTypeCountQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuestionWhereInput
+  }
+
+
+  /**
+   * Count Type QuestionCountOutputType
+   */
+
+  export type QuestionCountOutputType = {
+    options: number
+  }
+
+  export type QuestionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    options?: boolean | QuestionCountOutputTypeCountOptionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * QuestionCountOutputType without action
+   */
+  export type QuestionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuestionCountOutputType
+     */
+    select?: QuestionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * QuestionCountOutputType without action
+   */
+  export type QuestionCountOutputTypeCountOptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StepOptionWhereInput
   }
 
@@ -1151,7 +1273,8 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     description: string | null
-    baseImage: string | null
+    baseImageUrl: string | null
+    baseImagePublicId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1161,7 +1284,8 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     description: string | null
-    baseImage: string | null
+    baseImageUrl: string | null
+    baseImagePublicId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1171,7 +1295,8 @@ export namespace Prisma {
     name: number
     slug: number
     description: number
-    baseImage: number
+    baseImageUrl: number
+    baseImagePublicId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1183,7 +1308,8 @@ export namespace Prisma {
     name?: true
     slug?: true
     description?: true
-    baseImage?: true
+    baseImageUrl?: true
+    baseImagePublicId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1193,7 +1319,8 @@ export namespace Prisma {
     name?: true
     slug?: true
     description?: true
-    baseImage?: true
+    baseImageUrl?: true
+    baseImagePublicId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1203,7 +1330,8 @@ export namespace Prisma {
     name?: true
     slug?: true
     description?: true
-    baseImage?: true
+    baseImageUrl?: true
+    baseImagePublicId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1286,7 +1414,8 @@ export namespace Prisma {
     name: string
     slug: string
     description: string | null
-    baseImage: string | null
+    baseImageUrl: string | null
+    baseImagePublicId: string | null
     createdAt: Date
     updatedAt: Date
     _count: ProductCountAggregateOutputType | null
@@ -1313,7 +1442,8 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
-    baseImage?: boolean
+    baseImageUrl?: boolean
+    baseImagePublicId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     steps?: boolean | Product$stepsArgs<ExtArgs>
@@ -1325,7 +1455,8 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
-    baseImage?: boolean
+    baseImageUrl?: boolean
+    baseImagePublicId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["product"]>
@@ -1335,7 +1466,8 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
-    baseImage?: boolean
+    baseImageUrl?: boolean
+    baseImagePublicId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["product"]>
@@ -1345,12 +1477,13 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
-    baseImage?: boolean
+    baseImageUrl?: boolean
+    baseImagePublicId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "baseImage" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "baseImageUrl" | "baseImagePublicId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     steps?: boolean | Product$stepsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -1368,7 +1501,8 @@ export namespace Prisma {
       name: string
       slug: string
       description: string | null
-      baseImage: string | null
+      baseImageUrl: string | null
+      baseImagePublicId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["product"]>
@@ -1799,7 +1933,8 @@ export namespace Prisma {
     readonly name: FieldRef<"Product", 'String'>
     readonly slug: FieldRef<"Product", 'String'>
     readonly description: FieldRef<"Product", 'String'>
-    readonly baseImage: FieldRef<"Product", 'String'>
+    readonly baseImageUrl: FieldRef<"Product", 'String'>
+    readonly baseImagePublicId: FieldRef<"Product", 'String'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
   }
@@ -2246,50 +2381,16 @@ export namespace Prisma {
 
   export type FormStepAvgAggregateOutputType = {
     order: number | null
-    pricePerUnit1: number | null
-    minValue1: number | null
-    maxValue1: number | null
-    defaultValue1: number | null
-    pricePerUnit2: number | null
-    minValue2: number | null
-    maxValue2: number | null
-    defaultValue2: number | null
   }
 
   export type FormStepSumAggregateOutputType = {
     order: number | null
-    pricePerUnit1: number | null
-    minValue1: number | null
-    maxValue1: number | null
-    defaultValue1: number | null
-    pricePerUnit2: number | null
-    minValue2: number | null
-    maxValue2: number | null
-    defaultValue2: number | null
   }
 
   export type FormStepMinAggregateOutputType = {
     id: string | null
     productId: string | null
     order: number | null
-    type1: $Enums.StepType | null
-    question1: string | null
-    required1: boolean | null
-    type2: $Enums.StepType | null
-    question2: string | null
-    required2: boolean | null
-    pricingImpact1: $Enums.PricingImpact | null
-    pricePerUnit1: number | null
-    unit1: string | null
-    minValue1: number | null
-    maxValue1: number | null
-    defaultValue1: number | null
-    pricingImpact2: $Enums.PricingImpact | null
-    pricePerUnit2: number | null
-    unit2: string | null
-    minValue2: number | null
-    maxValue2: number | null
-    defaultValue2: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2298,24 +2399,6 @@ export namespace Prisma {
     id: string | null
     productId: string | null
     order: number | null
-    type1: $Enums.StepType | null
-    question1: string | null
-    required1: boolean | null
-    type2: $Enums.StepType | null
-    question2: string | null
-    required2: boolean | null
-    pricingImpact1: $Enums.PricingImpact | null
-    pricePerUnit1: number | null
-    unit1: string | null
-    minValue1: number | null
-    maxValue1: number | null
-    defaultValue1: number | null
-    pricingImpact2: $Enums.PricingImpact | null
-    pricePerUnit2: number | null
-    unit2: string | null
-    minValue2: number | null
-    maxValue2: number | null
-    defaultValue2: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2324,26 +2407,6 @@ export namespace Prisma {
     id: number
     productId: number
     order: number
-    type1: number
-    question1: number
-    required1: number
-    type2: number
-    question2: number
-    required2: number
-    pricingImpact1: number
-    pricePerUnit1: number
-    unit1: number
-    minValue1: number
-    maxValue1: number
-    defaultValue1: number
-    pricingImpact2: number
-    pricePerUnit2: number
-    unit2: number
-    minValue2: number
-    maxValue2: number
-    defaultValue2: number
-    conditionalOn1: number
-    conditionalOn2: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2352,50 +2415,16 @@ export namespace Prisma {
 
   export type FormStepAvgAggregateInputType = {
     order?: true
-    pricePerUnit1?: true
-    minValue1?: true
-    maxValue1?: true
-    defaultValue1?: true
-    pricePerUnit2?: true
-    minValue2?: true
-    maxValue2?: true
-    defaultValue2?: true
   }
 
   export type FormStepSumAggregateInputType = {
     order?: true
-    pricePerUnit1?: true
-    minValue1?: true
-    maxValue1?: true
-    defaultValue1?: true
-    pricePerUnit2?: true
-    minValue2?: true
-    maxValue2?: true
-    defaultValue2?: true
   }
 
   export type FormStepMinAggregateInputType = {
     id?: true
     productId?: true
     order?: true
-    type1?: true
-    question1?: true
-    required1?: true
-    type2?: true
-    question2?: true
-    required2?: true
-    pricingImpact1?: true
-    pricePerUnit1?: true
-    unit1?: true
-    minValue1?: true
-    maxValue1?: true
-    defaultValue1?: true
-    pricingImpact2?: true
-    pricePerUnit2?: true
-    unit2?: true
-    minValue2?: true
-    maxValue2?: true
-    defaultValue2?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2404,24 +2433,6 @@ export namespace Prisma {
     id?: true
     productId?: true
     order?: true
-    type1?: true
-    question1?: true
-    required1?: true
-    type2?: true
-    question2?: true
-    required2?: true
-    pricingImpact1?: true
-    pricePerUnit1?: true
-    unit1?: true
-    minValue1?: true
-    maxValue1?: true
-    defaultValue1?: true
-    pricingImpact2?: true
-    pricePerUnit2?: true
-    unit2?: true
-    minValue2?: true
-    maxValue2?: true
-    defaultValue2?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2430,26 +2441,6 @@ export namespace Prisma {
     id?: true
     productId?: true
     order?: true
-    type1?: true
-    question1?: true
-    required1?: true
-    type2?: true
-    question2?: true
-    required2?: true
-    pricingImpact1?: true
-    pricePerUnit1?: true
-    unit1?: true
-    minValue1?: true
-    maxValue1?: true
-    defaultValue1?: true
-    pricingImpact2?: true
-    pricePerUnit2?: true
-    unit2?: true
-    minValue2?: true
-    maxValue2?: true
-    defaultValue2?: true
-    conditionalOn1?: true
-    conditionalOn2?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2545,26 +2536,6 @@ export namespace Prisma {
     id: string
     productId: string
     order: number
-    type1: $Enums.StepType
-    question1: string
-    required1: boolean
-    type2: $Enums.StepType | null
-    question2: string | null
-    required2: boolean
-    pricingImpact1: $Enums.PricingImpact
-    pricePerUnit1: number | null
-    unit1: string | null
-    minValue1: number | null
-    maxValue1: number | null
-    defaultValue1: number | null
-    pricingImpact2: $Enums.PricingImpact
-    pricePerUnit2: number | null
-    unit2: string | null
-    minValue2: number | null
-    maxValue2: number | null
-    defaultValue2: number | null
-    conditionalOn1: JsonValue | null
-    conditionalOn2: JsonValue | null
     createdAt: Date
     updatedAt: Date
     _count: FormStepCountAggregateOutputType | null
@@ -2592,30 +2563,10 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     order?: boolean
-    type1?: boolean
-    question1?: boolean
-    required1?: boolean
-    type2?: boolean
-    question2?: boolean
-    required2?: boolean
-    pricingImpact1?: boolean
-    pricePerUnit1?: boolean
-    unit1?: boolean
-    minValue1?: boolean
-    maxValue1?: boolean
-    defaultValue1?: boolean
-    pricingImpact2?: boolean
-    pricePerUnit2?: boolean
-    unit2?: boolean
-    minValue2?: boolean
-    maxValue2?: boolean
-    defaultValue2?: boolean
-    conditionalOn1?: boolean
-    conditionalOn2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
-    options?: boolean | FormStep$optionsArgs<ExtArgs>
+    questions?: boolean | FormStep$questionsArgs<ExtArgs>
     _count?: boolean | FormStepCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["formStep"]>
 
@@ -2623,26 +2574,6 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     order?: boolean
-    type1?: boolean
-    question1?: boolean
-    required1?: boolean
-    type2?: boolean
-    question2?: boolean
-    required2?: boolean
-    pricingImpact1?: boolean
-    pricePerUnit1?: boolean
-    unit1?: boolean
-    minValue1?: boolean
-    maxValue1?: boolean
-    defaultValue1?: boolean
-    pricingImpact2?: boolean
-    pricePerUnit2?: boolean
-    unit2?: boolean
-    minValue2?: boolean
-    maxValue2?: boolean
-    defaultValue2?: boolean
-    conditionalOn1?: boolean
-    conditionalOn2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -2652,26 +2583,6 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     order?: boolean
-    type1?: boolean
-    question1?: boolean
-    required1?: boolean
-    type2?: boolean
-    question2?: boolean
-    required2?: boolean
-    pricingImpact1?: boolean
-    pricePerUnit1?: boolean
-    unit1?: boolean
-    minValue1?: boolean
-    maxValue1?: boolean
-    defaultValue1?: boolean
-    pricingImpact2?: boolean
-    pricePerUnit2?: boolean
-    unit2?: boolean
-    minValue2?: boolean
-    maxValue2?: boolean
-    defaultValue2?: boolean
-    conditionalOn1?: boolean
-    conditionalOn2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -2681,34 +2592,14 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     order?: boolean
-    type1?: boolean
-    question1?: boolean
-    required1?: boolean
-    type2?: boolean
-    question2?: boolean
-    required2?: boolean
-    pricingImpact1?: boolean
-    pricePerUnit1?: boolean
-    unit1?: boolean
-    minValue1?: boolean
-    maxValue1?: boolean
-    defaultValue1?: boolean
-    pricingImpact2?: boolean
-    pricePerUnit2?: boolean
-    unit2?: boolean
-    minValue2?: boolean
-    maxValue2?: boolean
-    defaultValue2?: boolean
-    conditionalOn1?: boolean
-    conditionalOn2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type FormStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "order" | "type1" | "question1" | "required1" | "type2" | "question2" | "required2" | "pricingImpact1" | "pricePerUnit1" | "unit1" | "minValue1" | "maxValue1" | "defaultValue1" | "pricingImpact2" | "pricePerUnit2" | "unit2" | "minValue2" | "maxValue2" | "defaultValue2" | "conditionalOn1" | "conditionalOn2" | "createdAt" | "updatedAt", ExtArgs["result"]["formStep"]>
+  export type FormStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["formStep"]>
   export type FormStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
-    options?: boolean | FormStep$optionsArgs<ExtArgs>
+    questions?: boolean | FormStep$questionsArgs<ExtArgs>
     _count?: boolean | FormStepCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FormStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2722,32 +2613,12 @@ export namespace Prisma {
     name: "FormStep"
     objects: {
       product: Prisma.$ProductPayload<ExtArgs>
-      options: Prisma.$StepOptionPayload<ExtArgs>[]
+      questions: Prisma.$QuestionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       productId: string
       order: number
-      type1: $Enums.StepType
-      question1: string
-      required1: boolean
-      type2: $Enums.StepType | null
-      question2: string | null
-      required2: boolean
-      pricingImpact1: $Enums.PricingImpact
-      pricePerUnit1: number | null
-      unit1: string | null
-      minValue1: number | null
-      maxValue1: number | null
-      defaultValue1: number | null
-      pricingImpact2: $Enums.PricingImpact
-      pricePerUnit2: number | null
-      unit2: string | null
-      minValue2: number | null
-      maxValue2: number | null
-      defaultValue2: number | null
-      conditionalOn1: Prisma.JsonValue | null
-      conditionalOn2: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["formStep"]>
@@ -3145,7 +3016,7 @@ export namespace Prisma {
   export interface Prisma__FormStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    options<T extends FormStep$optionsArgs<ExtArgs> = {}>(args?: Subset<T, FormStep$optionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    questions<T extends FormStep$questionsArgs<ExtArgs> = {}>(args?: Subset<T, FormStep$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3178,26 +3049,6 @@ export namespace Prisma {
     readonly id: FieldRef<"FormStep", 'String'>
     readonly productId: FieldRef<"FormStep", 'String'>
     readonly order: FieldRef<"FormStep", 'Int'>
-    readonly type1: FieldRef<"FormStep", 'StepType'>
-    readonly question1: FieldRef<"FormStep", 'String'>
-    readonly required1: FieldRef<"FormStep", 'Boolean'>
-    readonly type2: FieldRef<"FormStep", 'StepType'>
-    readonly question2: FieldRef<"FormStep", 'String'>
-    readonly required2: FieldRef<"FormStep", 'Boolean'>
-    readonly pricingImpact1: FieldRef<"FormStep", 'PricingImpact'>
-    readonly pricePerUnit1: FieldRef<"FormStep", 'Float'>
-    readonly unit1: FieldRef<"FormStep", 'String'>
-    readonly minValue1: FieldRef<"FormStep", 'Float'>
-    readonly maxValue1: FieldRef<"FormStep", 'Float'>
-    readonly defaultValue1: FieldRef<"FormStep", 'Float'>
-    readonly pricingImpact2: FieldRef<"FormStep", 'PricingImpact'>
-    readonly pricePerUnit2: FieldRef<"FormStep", 'Float'>
-    readonly unit2: FieldRef<"FormStep", 'String'>
-    readonly minValue2: FieldRef<"FormStep", 'Float'>
-    readonly maxValue2: FieldRef<"FormStep", 'Float'>
-    readonly defaultValue2: FieldRef<"FormStep", 'Float'>
-    readonly conditionalOn1: FieldRef<"FormStep", 'Json'>
-    readonly conditionalOn2: FieldRef<"FormStep", 'Json'>
     readonly createdAt: FieldRef<"FormStep", 'DateTime'>
     readonly updatedAt: FieldRef<"FormStep", 'DateTime'>
   }
@@ -3596,27 +3447,27 @@ export namespace Prisma {
   }
 
   /**
-   * FormStep.options
+   * FormStep.questions
    */
-  export type FormStep$optionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormStep$questionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the StepOption
+     * Select specific fields to fetch from the Question
      */
-    select?: StepOptionSelect<ExtArgs> | null
+    select?: QuestionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the StepOption
+     * Omit specific fields from the Question
      */
-    omit?: StepOptionOmit<ExtArgs> | null
+    omit?: QuestionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: StepOptionInclude<ExtArgs> | null
-    where?: StepOptionWhereInput
-    orderBy?: StepOptionOrderByWithRelationInput | StepOptionOrderByWithRelationInput[]
-    cursor?: StepOptionWhereUniqueInput
+    include?: QuestionInclude<ExtArgs> | null
+    where?: QuestionWhereInput
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    cursor?: QuestionWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: StepOptionScalarFieldEnum | StepOptionScalarFieldEnum[]
+    distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
   }
 
   /**
@@ -3639,6 +3490,1270 @@ export namespace Prisma {
 
 
   /**
+   * Model Question
+   */
+
+  export type AggregateQuestion = {
+    _count: QuestionCountAggregateOutputType | null
+    _avg: QuestionAvgAggregateOutputType | null
+    _sum: QuestionSumAggregateOutputType | null
+    _min: QuestionMinAggregateOutputType | null
+    _max: QuestionMaxAggregateOutputType | null
+  }
+
+  export type QuestionAvgAggregateOutputType = {
+    order: number | null
+    pricePerUnit: number | null
+    minValue: number | null
+    maxValue: number | null
+    defaultValue: number | null
+  }
+
+  export type QuestionSumAggregateOutputType = {
+    order: number | null
+    pricePerUnit: number | null
+    minValue: number | null
+    maxValue: number | null
+    defaultValue: number | null
+  }
+
+  export type QuestionMinAggregateOutputType = {
+    id: string | null
+    stepId: string | null
+    order: number | null
+    type: $Enums.StepType | null
+    question: string | null
+    required: boolean | null
+    pricingImpact: $Enums.PricingImpact | null
+    pricePerUnit: number | null
+    unit: string | null
+    minValue: number | null
+    maxValue: number | null
+    defaultValue: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QuestionMaxAggregateOutputType = {
+    id: string | null
+    stepId: string | null
+    order: number | null
+    type: $Enums.StepType | null
+    question: string | null
+    required: boolean | null
+    pricingImpact: $Enums.PricingImpact | null
+    pricePerUnit: number | null
+    unit: string | null
+    minValue: number | null
+    maxValue: number | null
+    defaultValue: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QuestionCountAggregateOutputType = {
+    id: number
+    stepId: number
+    order: number
+    type: number
+    question: number
+    required: number
+    pricingImpact: number
+    pricePerUnit: number
+    unit: number
+    minValue: number
+    maxValue: number
+    defaultValue: number
+    conditionalOn: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type QuestionAvgAggregateInputType = {
+    order?: true
+    pricePerUnit?: true
+    minValue?: true
+    maxValue?: true
+    defaultValue?: true
+  }
+
+  export type QuestionSumAggregateInputType = {
+    order?: true
+    pricePerUnit?: true
+    minValue?: true
+    maxValue?: true
+    defaultValue?: true
+  }
+
+  export type QuestionMinAggregateInputType = {
+    id?: true
+    stepId?: true
+    order?: true
+    type?: true
+    question?: true
+    required?: true
+    pricingImpact?: true
+    pricePerUnit?: true
+    unit?: true
+    minValue?: true
+    maxValue?: true
+    defaultValue?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QuestionMaxAggregateInputType = {
+    id?: true
+    stepId?: true
+    order?: true
+    type?: true
+    question?: true
+    required?: true
+    pricingImpact?: true
+    pricePerUnit?: true
+    unit?: true
+    minValue?: true
+    maxValue?: true
+    defaultValue?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QuestionCountAggregateInputType = {
+    id?: true
+    stepId?: true
+    order?: true
+    type?: true
+    question?: true
+    required?: true
+    pricingImpact?: true
+    pricePerUnit?: true
+    unit?: true
+    minValue?: true
+    maxValue?: true
+    defaultValue?: true
+    conditionalOn?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type QuestionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Question to aggregate.
+     */
+    where?: QuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Questions to fetch.
+     */
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Questions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Questions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Questions
+    **/
+    _count?: true | QuestionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: QuestionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: QuestionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QuestionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QuestionMaxAggregateInputType
+  }
+
+  export type GetQuestionAggregateType<T extends QuestionAggregateArgs> = {
+        [P in keyof T & keyof AggregateQuestion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQuestion[P]>
+      : GetScalarType<T[P], AggregateQuestion[P]>
+  }
+
+
+
+
+  export type QuestionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuestionWhereInput
+    orderBy?: QuestionOrderByWithAggregationInput | QuestionOrderByWithAggregationInput[]
+    by: QuestionScalarFieldEnum[] | QuestionScalarFieldEnum
+    having?: QuestionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QuestionCountAggregateInputType | true
+    _avg?: QuestionAvgAggregateInputType
+    _sum?: QuestionSumAggregateInputType
+    _min?: QuestionMinAggregateInputType
+    _max?: QuestionMaxAggregateInputType
+  }
+
+  export type QuestionGroupByOutputType = {
+    id: string
+    stepId: string
+    order: number
+    type: $Enums.StepType
+    question: string
+    required: boolean
+    pricingImpact: $Enums.PricingImpact
+    pricePerUnit: number | null
+    unit: string | null
+    minValue: number | null
+    maxValue: number | null
+    defaultValue: number | null
+    conditionalOn: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: QuestionCountAggregateOutputType | null
+    _avg: QuestionAvgAggregateOutputType | null
+    _sum: QuestionSumAggregateOutputType | null
+    _min: QuestionMinAggregateOutputType | null
+    _max: QuestionMaxAggregateOutputType | null
+  }
+
+  type GetQuestionGroupByPayload<T extends QuestionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QuestionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QuestionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QuestionGroupByOutputType[P]>
+            : GetScalarType<T[P], QuestionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QuestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    stepId?: boolean
+    order?: boolean
+    type?: boolean
+    question?: boolean
+    required?: boolean
+    pricingImpact?: boolean
+    pricePerUnit?: boolean
+    unit?: boolean
+    minValue?: boolean
+    maxValue?: boolean
+    defaultValue?: boolean
+    conditionalOn?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+    options?: boolean | Question$optionsArgs<ExtArgs>
+    _count?: boolean | QuestionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["question"]>
+
+  export type QuestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    stepId?: boolean
+    order?: boolean
+    type?: boolean
+    question?: boolean
+    required?: boolean
+    pricingImpact?: boolean
+    pricePerUnit?: boolean
+    unit?: boolean
+    minValue?: boolean
+    maxValue?: boolean
+    defaultValue?: boolean
+    conditionalOn?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["question"]>
+
+  export type QuestionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    stepId?: boolean
+    order?: boolean
+    type?: boolean
+    question?: boolean
+    required?: boolean
+    pricingImpact?: boolean
+    pricePerUnit?: boolean
+    unit?: boolean
+    minValue?: boolean
+    maxValue?: boolean
+    defaultValue?: boolean
+    conditionalOn?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["question"]>
+
+  export type QuestionSelectScalar = {
+    id?: boolean
+    stepId?: boolean
+    order?: boolean
+    type?: boolean
+    question?: boolean
+    required?: boolean
+    pricingImpact?: boolean
+    pricePerUnit?: boolean
+    unit?: boolean
+    minValue?: boolean
+    maxValue?: boolean
+    defaultValue?: boolean
+    conditionalOn?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "stepId" | "order" | "type" | "question" | "required" | "pricingImpact" | "pricePerUnit" | "unit" | "minValue" | "maxValue" | "defaultValue" | "conditionalOn" | "createdAt" | "updatedAt", ExtArgs["result"]["question"]>
+  export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+    options?: boolean | Question$optionsArgs<ExtArgs>
+    _count?: boolean | QuestionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type QuestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }
+  export type QuestionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    step?: boolean | FormStepDefaultArgs<ExtArgs>
+  }
+
+  export type $QuestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Question"
+    objects: {
+      step: Prisma.$FormStepPayload<ExtArgs>
+      options: Prisma.$StepOptionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      stepId: string
+      order: number
+      type: $Enums.StepType
+      question: string
+      required: boolean
+      pricingImpact: $Enums.PricingImpact
+      pricePerUnit: number | null
+      unit: string | null
+      minValue: number | null
+      maxValue: number | null
+      defaultValue: number | null
+      conditionalOn: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["question"]>
+    composites: {}
+  }
+
+  type QuestionGetPayload<S extends boolean | null | undefined | QuestionDefaultArgs> = $Result.GetResult<Prisma.$QuestionPayload, S>
+
+  type QuestionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<QuestionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: QuestionCountAggregateInputType | true
+    }
+
+  export interface QuestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Question'], meta: { name: 'Question' } }
+    /**
+     * Find zero or one Question that matches the filter.
+     * @param {QuestionFindUniqueArgs} args - Arguments to find a Question
+     * @example
+     * // Get one Question
+     * const question = await prisma.question.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QuestionFindUniqueArgs>(args: SelectSubset<T, QuestionFindUniqueArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Question that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {QuestionFindUniqueOrThrowArgs} args - Arguments to find a Question
+     * @example
+     * // Get one Question
+     * const question = await prisma.question.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QuestionFindUniqueOrThrowArgs>(args: SelectSubset<T, QuestionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Question that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionFindFirstArgs} args - Arguments to find a Question
+     * @example
+     * // Get one Question
+     * const question = await prisma.question.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QuestionFindFirstArgs>(args?: SelectSubset<T, QuestionFindFirstArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Question that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionFindFirstOrThrowArgs} args - Arguments to find a Question
+     * @example
+     * // Get one Question
+     * const question = await prisma.question.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QuestionFindFirstOrThrowArgs>(args?: SelectSubset<T, QuestionFindFirstOrThrowArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Questions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Questions
+     * const questions = await prisma.question.findMany()
+     * 
+     * // Get first 10 Questions
+     * const questions = await prisma.question.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const questionWithIdOnly = await prisma.question.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QuestionFindManyArgs>(args?: SelectSubset<T, QuestionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Question.
+     * @param {QuestionCreateArgs} args - Arguments to create a Question.
+     * @example
+     * // Create one Question
+     * const Question = await prisma.question.create({
+     *   data: {
+     *     // ... data to create a Question
+     *   }
+     * })
+     * 
+     */
+    create<T extends QuestionCreateArgs>(args: SelectSubset<T, QuestionCreateArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Questions.
+     * @param {QuestionCreateManyArgs} args - Arguments to create many Questions.
+     * @example
+     * // Create many Questions
+     * const question = await prisma.question.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QuestionCreateManyArgs>(args?: SelectSubset<T, QuestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Questions and returns the data saved in the database.
+     * @param {QuestionCreateManyAndReturnArgs} args - Arguments to create many Questions.
+     * @example
+     * // Create many Questions
+     * const question = await prisma.question.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Questions and only return the `id`
+     * const questionWithIdOnly = await prisma.question.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QuestionCreateManyAndReturnArgs>(args?: SelectSubset<T, QuestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Question.
+     * @param {QuestionDeleteArgs} args - Arguments to delete one Question.
+     * @example
+     * // Delete one Question
+     * const Question = await prisma.question.delete({
+     *   where: {
+     *     // ... filter to delete one Question
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QuestionDeleteArgs>(args: SelectSubset<T, QuestionDeleteArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Question.
+     * @param {QuestionUpdateArgs} args - Arguments to update one Question.
+     * @example
+     * // Update one Question
+     * const question = await prisma.question.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QuestionUpdateArgs>(args: SelectSubset<T, QuestionUpdateArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Questions.
+     * @param {QuestionDeleteManyArgs} args - Arguments to filter Questions to delete.
+     * @example
+     * // Delete a few Questions
+     * const { count } = await prisma.question.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QuestionDeleteManyArgs>(args?: SelectSubset<T, QuestionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Questions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Questions
+     * const question = await prisma.question.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QuestionUpdateManyArgs>(args: SelectSubset<T, QuestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Questions and returns the data updated in the database.
+     * @param {QuestionUpdateManyAndReturnArgs} args - Arguments to update many Questions.
+     * @example
+     * // Update many Questions
+     * const question = await prisma.question.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Questions and only return the `id`
+     * const questionWithIdOnly = await prisma.question.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends QuestionUpdateManyAndReturnArgs>(args: SelectSubset<T, QuestionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Question.
+     * @param {QuestionUpsertArgs} args - Arguments to update or create a Question.
+     * @example
+     * // Update or create a Question
+     * const question = await prisma.question.upsert({
+     *   create: {
+     *     // ... data to create a Question
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Question we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QuestionUpsertArgs>(args: SelectSubset<T, QuestionUpsertArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Questions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionCountArgs} args - Arguments to filter Questions to count.
+     * @example
+     * // Count the number of Questions
+     * const count = await prisma.question.count({
+     *   where: {
+     *     // ... the filter for the Questions we want to count
+     *   }
+     * })
+    **/
+    count<T extends QuestionCountArgs>(
+      args?: Subset<T, QuestionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QuestionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Question.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QuestionAggregateArgs>(args: Subset<T, QuestionAggregateArgs>): Prisma.PrismaPromise<GetQuestionAggregateType<T>>
+
+    /**
+     * Group by Question.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QuestionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QuestionGroupByArgs['orderBy'] }
+        : { orderBy?: QuestionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QuestionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQuestionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Question model
+   */
+  readonly fields: QuestionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Question.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QuestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    step<T extends FormStepDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormStepDefaultArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    options<T extends Question$optionsArgs<ExtArgs> = {}>(args?: Subset<T, Question$optionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StepOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Question model
+   */
+  interface QuestionFieldRefs {
+    readonly id: FieldRef<"Question", 'String'>
+    readonly stepId: FieldRef<"Question", 'String'>
+    readonly order: FieldRef<"Question", 'Int'>
+    readonly type: FieldRef<"Question", 'StepType'>
+    readonly question: FieldRef<"Question", 'String'>
+    readonly required: FieldRef<"Question", 'Boolean'>
+    readonly pricingImpact: FieldRef<"Question", 'PricingImpact'>
+    readonly pricePerUnit: FieldRef<"Question", 'Float'>
+    readonly unit: FieldRef<"Question", 'String'>
+    readonly minValue: FieldRef<"Question", 'Float'>
+    readonly maxValue: FieldRef<"Question", 'Float'>
+    readonly defaultValue: FieldRef<"Question", 'Float'>
+    readonly conditionalOn: FieldRef<"Question", 'Json'>
+    readonly createdAt: FieldRef<"Question", 'DateTime'>
+    readonly updatedAt: FieldRef<"Question", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Question findUnique
+   */
+  export type QuestionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Question to fetch.
+     */
+    where: QuestionWhereUniqueInput
+  }
+
+  /**
+   * Question findUniqueOrThrow
+   */
+  export type QuestionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Question to fetch.
+     */
+    where: QuestionWhereUniqueInput
+  }
+
+  /**
+   * Question findFirst
+   */
+  export type QuestionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Question to fetch.
+     */
+    where?: QuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Questions to fetch.
+     */
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Questions.
+     */
+    cursor?: QuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Questions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Questions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Questions.
+     */
+    distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Question findFirstOrThrow
+   */
+  export type QuestionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Question to fetch.
+     */
+    where?: QuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Questions to fetch.
+     */
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Questions.
+     */
+    cursor?: QuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Questions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Questions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Questions.
+     */
+    distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Question findMany
+   */
+  export type QuestionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Questions to fetch.
+     */
+    where?: QuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Questions to fetch.
+     */
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Questions.
+     */
+    cursor?: QuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Questions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Questions.
+     */
+    skip?: number
+    distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Question create
+   */
+  export type QuestionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Question.
+     */
+    data: XOR<QuestionCreateInput, QuestionUncheckedCreateInput>
+  }
+
+  /**
+   * Question createMany
+   */
+  export type QuestionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Questions.
+     */
+    data: QuestionCreateManyInput | QuestionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Question createManyAndReturn
+   */
+  export type QuestionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Questions.
+     */
+    data: QuestionCreateManyInput | QuestionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Question update
+   */
+  export type QuestionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Question.
+     */
+    data: XOR<QuestionUpdateInput, QuestionUncheckedUpdateInput>
+    /**
+     * Choose, which Question to update.
+     */
+    where: QuestionWhereUniqueInput
+  }
+
+  /**
+   * Question updateMany
+   */
+  export type QuestionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Questions.
+     */
+    data: XOR<QuestionUpdateManyMutationInput, QuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which Questions to update
+     */
+    where?: QuestionWhereInput
+    /**
+     * Limit how many Questions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Question updateManyAndReturn
+   */
+  export type QuestionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * The data used to update Questions.
+     */
+    data: XOR<QuestionUpdateManyMutationInput, QuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which Questions to update
+     */
+    where?: QuestionWhereInput
+    /**
+     * Limit how many Questions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Question upsert
+   */
+  export type QuestionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Question to update in case it exists.
+     */
+    where: QuestionWhereUniqueInput
+    /**
+     * In case the Question found by the `where` argument doesn't exist, create a new Question with this data.
+     */
+    create: XOR<QuestionCreateInput, QuestionUncheckedCreateInput>
+    /**
+     * In case the Question was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QuestionUpdateInput, QuestionUncheckedUpdateInput>
+  }
+
+  /**
+   * Question delete
+   */
+  export type QuestionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter which Question to delete.
+     */
+    where: QuestionWhereUniqueInput
+  }
+
+  /**
+   * Question deleteMany
+   */
+  export type QuestionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Questions to delete
+     */
+    where?: QuestionWhereInput
+    /**
+     * Limit how many Questions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Question.options
+   */
+  export type Question$optionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StepOption
+     */
+    select?: StepOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StepOption
+     */
+    omit?: StepOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StepOptionInclude<ExtArgs> | null
+    where?: StepOptionWhereInput
+    orderBy?: StepOptionOrderByWithRelationInput | StepOptionOrderByWithRelationInput[]
+    cursor?: StepOptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StepOptionScalarFieldEnum | StepOptionScalarFieldEnum[]
+  }
+
+  /**
+   * Question without action
+   */
+  export type QuestionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model StepOption
    */
 
@@ -3651,25 +4766,23 @@ export namespace Prisma {
   }
 
   export type StepOptionAvgAggregateOutputType = {
-    questionNum: number | null
     price: number | null
     order: number | null
   }
 
   export type StepOptionSumAggregateOutputType = {
-    questionNum: number | null
     price: number | null
     order: number | null
   }
 
   export type StepOptionMinAggregateOutputType = {
     id: string | null
-    stepId: string | null
-    questionNum: number | null
+    questionId: string | null
     label: string | null
     value: string | null
     price: number | null
     imageUrl: string | null
+    imagePublicId: string | null
     order: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3677,12 +4790,12 @@ export namespace Prisma {
 
   export type StepOptionMaxAggregateOutputType = {
     id: string | null
-    stepId: string | null
-    questionNum: number | null
+    questionId: string | null
     label: string | null
     value: string | null
     price: number | null
     imageUrl: string | null
+    imagePublicId: string | null
     order: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3690,12 +4803,12 @@ export namespace Prisma {
 
   export type StepOptionCountAggregateOutputType = {
     id: number
-    stepId: number
-    questionNum: number
+    questionId: number
     label: number
     value: number
     price: number
     imageUrl: number
+    imagePublicId: number
     order: number
     createdAt: number
     updatedAt: number
@@ -3704,25 +4817,23 @@ export namespace Prisma {
 
 
   export type StepOptionAvgAggregateInputType = {
-    questionNum?: true
     price?: true
     order?: true
   }
 
   export type StepOptionSumAggregateInputType = {
-    questionNum?: true
     price?: true
     order?: true
   }
 
   export type StepOptionMinAggregateInputType = {
     id?: true
-    stepId?: true
-    questionNum?: true
+    questionId?: true
     label?: true
     value?: true
     price?: true
     imageUrl?: true
+    imagePublicId?: true
     order?: true
     createdAt?: true
     updatedAt?: true
@@ -3730,12 +4841,12 @@ export namespace Prisma {
 
   export type StepOptionMaxAggregateInputType = {
     id?: true
-    stepId?: true
-    questionNum?: true
+    questionId?: true
     label?: true
     value?: true
     price?: true
     imageUrl?: true
+    imagePublicId?: true
     order?: true
     createdAt?: true
     updatedAt?: true
@@ -3743,12 +4854,12 @@ export namespace Prisma {
 
   export type StepOptionCountAggregateInputType = {
     id?: true
-    stepId?: true
-    questionNum?: true
+    questionId?: true
     label?: true
     value?: true
     price?: true
     imageUrl?: true
+    imagePublicId?: true
     order?: true
     createdAt?: true
     updatedAt?: true
@@ -3843,12 +4954,12 @@ export namespace Prisma {
 
   export type StepOptionGroupByOutputType = {
     id: string
-    stepId: string
-    questionNum: number
+    questionId: string
     label: string
     value: string
     price: number | null
     imageUrl: string | null
+    imagePublicId: string | null
     order: number
     createdAt: Date
     updatedAt: Date
@@ -3875,83 +4986,83 @@ export namespace Prisma {
 
   export type StepOptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    stepId?: boolean
-    questionNum?: boolean
+    questionId?: boolean
     label?: boolean
     value?: boolean
     price?: boolean
     imageUrl?: boolean
+    imagePublicId?: boolean
     order?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    step?: boolean | FormStepDefaultArgs<ExtArgs>
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stepOption"]>
 
   export type StepOptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    stepId?: boolean
-    questionNum?: boolean
+    questionId?: boolean
     label?: boolean
     value?: boolean
     price?: boolean
     imageUrl?: boolean
+    imagePublicId?: boolean
     order?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    step?: boolean | FormStepDefaultArgs<ExtArgs>
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stepOption"]>
 
   export type StepOptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    stepId?: boolean
-    questionNum?: boolean
+    questionId?: boolean
     label?: boolean
     value?: boolean
     price?: boolean
     imageUrl?: boolean
+    imagePublicId?: boolean
     order?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    step?: boolean | FormStepDefaultArgs<ExtArgs>
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stepOption"]>
 
   export type StepOptionSelectScalar = {
     id?: boolean
-    stepId?: boolean
-    questionNum?: boolean
+    questionId?: boolean
     label?: boolean
     value?: boolean
     price?: boolean
     imageUrl?: boolean
+    imagePublicId?: boolean
     order?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type StepOptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "stepId" | "questionNum" | "label" | "value" | "price" | "imageUrl" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["stepOption"]>
+  export type StepOptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "questionId" | "label" | "value" | "price" | "imageUrl" | "imagePublicId" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["stepOption"]>
   export type StepOptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    step?: boolean | FormStepDefaultArgs<ExtArgs>
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
   }
   export type StepOptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    step?: boolean | FormStepDefaultArgs<ExtArgs>
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
   }
   export type StepOptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    step?: boolean | FormStepDefaultArgs<ExtArgs>
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
   }
 
   export type $StepOptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StepOption"
     objects: {
-      step: Prisma.$FormStepPayload<ExtArgs>
+      question: Prisma.$QuestionPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      stepId: string
-      questionNum: number
+      questionId: string
       label: string
       value: string
       price: number | null
       imageUrl: string | null
+      imagePublicId: string | null
       order: number
       createdAt: Date
       updatedAt: Date
@@ -4349,7 +5460,7 @@ export namespace Prisma {
    */
   export interface Prisma__StepOptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    step<T extends FormStepDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormStepDefaultArgs<ExtArgs>>): Prisma__FormStepClient<$Result.GetResult<Prisma.$FormStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    question<T extends QuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionDefaultArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4380,12 +5491,12 @@ export namespace Prisma {
    */
   interface StepOptionFieldRefs {
     readonly id: FieldRef<"StepOption", 'String'>
-    readonly stepId: FieldRef<"StepOption", 'String'>
-    readonly questionNum: FieldRef<"StepOption", 'Int'>
+    readonly questionId: FieldRef<"StepOption", 'String'>
     readonly label: FieldRef<"StepOption", 'String'>
     readonly value: FieldRef<"StepOption", 'String'>
     readonly price: FieldRef<"StepOption", 'Float'>
     readonly imageUrl: FieldRef<"StepOption", 'String'>
+    readonly imagePublicId: FieldRef<"StepOption", 'String'>
     readonly order: FieldRef<"StepOption", 'Int'>
     readonly createdAt: FieldRef<"StepOption", 'DateTime'>
     readonly updatedAt: FieldRef<"StepOption", 'DateTime'>
@@ -4822,7 +5933,8 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     description: 'description',
-    baseImage: 'baseImage',
+    baseImageUrl: 'baseImageUrl',
+    baseImagePublicId: 'baseImagePublicId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -4834,26 +5946,6 @@ export namespace Prisma {
     id: 'id',
     productId: 'productId',
     order: 'order',
-    type1: 'type1',
-    question1: 'question1',
-    required1: 'required1',
-    type2: 'type2',
-    question2: 'question2',
-    required2: 'required2',
-    pricingImpact1: 'pricingImpact1',
-    pricePerUnit1: 'pricePerUnit1',
-    unit1: 'unit1',
-    minValue1: 'minValue1',
-    maxValue1: 'maxValue1',
-    defaultValue1: 'defaultValue1',
-    pricingImpact2: 'pricingImpact2',
-    pricePerUnit2: 'pricePerUnit2',
-    unit2: 'unit2',
-    minValue2: 'minValue2',
-    maxValue2: 'maxValue2',
-    defaultValue2: 'defaultValue2',
-    conditionalOn1: 'conditionalOn1',
-    conditionalOn2: 'conditionalOn2',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -4861,14 +5953,35 @@ export namespace Prisma {
   export type FormStepScalarFieldEnum = (typeof FormStepScalarFieldEnum)[keyof typeof FormStepScalarFieldEnum]
 
 
-  export const StepOptionScalarFieldEnum: {
+  export const QuestionScalarFieldEnum: {
     id: 'id',
     stepId: 'stepId',
-    questionNum: 'questionNum',
+    order: 'order',
+    type: 'type',
+    question: 'question',
+    required: 'required',
+    pricingImpact: 'pricingImpact',
+    pricePerUnit: 'pricePerUnit',
+    unit: 'unit',
+    minValue: 'minValue',
+    maxValue: 'maxValue',
+    defaultValue: 'defaultValue',
+    conditionalOn: 'conditionalOn',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
+
+
+  export const StepOptionScalarFieldEnum: {
+    id: 'id',
+    questionId: 'questionId',
     label: 'label',
     value: 'value',
     price: 'price',
     imageUrl: 'imageUrl',
+    imagePublicId: 'imagePublicId',
     order: 'order',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -5039,7 +6152,8 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
-    baseImage?: StringNullableFilter<"Product"> | string | null
+    baseImageUrl?: StringNullableFilter<"Product"> | string | null
+    baseImagePublicId?: StringNullableFilter<"Product"> | string | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     steps?: FormStepListRelationFilter
@@ -5050,7 +6164,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
-    baseImage?: SortOrderInput | SortOrder
+    baseImageUrl?: SortOrderInput | SortOrder
+    baseImagePublicId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     steps?: FormStepOrderByRelationAggregateInput
@@ -5064,7 +6179,8 @@ export namespace Prisma {
     NOT?: ProductWhereInput | ProductWhereInput[]
     name?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
-    baseImage?: StringNullableFilter<"Product"> | string | null
+    baseImageUrl?: StringNullableFilter<"Product"> | string | null
+    baseImagePublicId?: StringNullableFilter<"Product"> | string | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     steps?: FormStepListRelationFilter
@@ -5075,7 +6191,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
-    baseImage?: SortOrderInput | SortOrder
+    baseImageUrl?: SortOrderInput | SortOrder
+    baseImagePublicId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProductCountOrderByAggregateInput
@@ -5091,7 +6208,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Product"> | string
     slug?: StringWithAggregatesFilter<"Product"> | string
     description?: StringNullableWithAggregatesFilter<"Product"> | string | null
-    baseImage?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    baseImageUrl?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    baseImagePublicId?: StringNullableWithAggregatesFilter<"Product"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
   }
@@ -5103,60 +6221,20 @@ export namespace Prisma {
     id?: StringFilter<"FormStep"> | string
     productId?: StringFilter<"FormStep"> | string
     order?: IntFilter<"FormStep"> | number
-    type1?: EnumStepTypeFilter<"FormStep"> | $Enums.StepType
-    question1?: StringFilter<"FormStep"> | string
-    required1?: BoolFilter<"FormStep"> | boolean
-    type2?: EnumStepTypeNullableFilter<"FormStep"> | $Enums.StepType | null
-    question2?: StringNullableFilter<"FormStep"> | string | null
-    required2?: BoolFilter<"FormStep"> | boolean
-    pricingImpact1?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
-    pricePerUnit1?: FloatNullableFilter<"FormStep"> | number | null
-    unit1?: StringNullableFilter<"FormStep"> | string | null
-    minValue1?: FloatNullableFilter<"FormStep"> | number | null
-    maxValue1?: FloatNullableFilter<"FormStep"> | number | null
-    defaultValue1?: FloatNullableFilter<"FormStep"> | number | null
-    pricingImpact2?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
-    pricePerUnit2?: FloatNullableFilter<"FormStep"> | number | null
-    unit2?: StringNullableFilter<"FormStep"> | string | null
-    minValue2?: FloatNullableFilter<"FormStep"> | number | null
-    maxValue2?: FloatNullableFilter<"FormStep"> | number | null
-    defaultValue2?: FloatNullableFilter<"FormStep"> | number | null
-    conditionalOn1?: JsonNullableFilter<"FormStep">
-    conditionalOn2?: JsonNullableFilter<"FormStep">
     createdAt?: DateTimeFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeFilter<"FormStep"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
-    options?: StepOptionListRelationFilter
+    questions?: QuestionListRelationFilter
   }
 
   export type FormStepOrderByWithRelationInput = {
     id?: SortOrder
     productId?: SortOrder
     order?: SortOrder
-    type1?: SortOrder
-    question1?: SortOrder
-    required1?: SortOrder
-    type2?: SortOrderInput | SortOrder
-    question2?: SortOrderInput | SortOrder
-    required2?: SortOrder
-    pricingImpact1?: SortOrder
-    pricePerUnit1?: SortOrderInput | SortOrder
-    unit1?: SortOrderInput | SortOrder
-    minValue1?: SortOrderInput | SortOrder
-    maxValue1?: SortOrderInput | SortOrder
-    defaultValue1?: SortOrderInput | SortOrder
-    pricingImpact2?: SortOrder
-    pricePerUnit2?: SortOrderInput | SortOrder
-    unit2?: SortOrderInput | SortOrder
-    minValue2?: SortOrderInput | SortOrder
-    maxValue2?: SortOrderInput | SortOrder
-    defaultValue2?: SortOrderInput | SortOrder
-    conditionalOn1?: SortOrderInput | SortOrder
-    conditionalOn2?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     product?: ProductOrderByWithRelationInput
-    options?: StepOptionOrderByRelationAggregateInput
+    questions?: QuestionOrderByRelationAggregateInput
   }
 
   export type FormStepWhereUniqueInput = Prisma.AtLeast<{
@@ -5167,56 +6245,16 @@ export namespace Prisma {
     NOT?: FormStepWhereInput | FormStepWhereInput[]
     productId?: StringFilter<"FormStep"> | string
     order?: IntFilter<"FormStep"> | number
-    type1?: EnumStepTypeFilter<"FormStep"> | $Enums.StepType
-    question1?: StringFilter<"FormStep"> | string
-    required1?: BoolFilter<"FormStep"> | boolean
-    type2?: EnumStepTypeNullableFilter<"FormStep"> | $Enums.StepType | null
-    question2?: StringNullableFilter<"FormStep"> | string | null
-    required2?: BoolFilter<"FormStep"> | boolean
-    pricingImpact1?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
-    pricePerUnit1?: FloatNullableFilter<"FormStep"> | number | null
-    unit1?: StringNullableFilter<"FormStep"> | string | null
-    minValue1?: FloatNullableFilter<"FormStep"> | number | null
-    maxValue1?: FloatNullableFilter<"FormStep"> | number | null
-    defaultValue1?: FloatNullableFilter<"FormStep"> | number | null
-    pricingImpact2?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
-    pricePerUnit2?: FloatNullableFilter<"FormStep"> | number | null
-    unit2?: StringNullableFilter<"FormStep"> | string | null
-    minValue2?: FloatNullableFilter<"FormStep"> | number | null
-    maxValue2?: FloatNullableFilter<"FormStep"> | number | null
-    defaultValue2?: FloatNullableFilter<"FormStep"> | number | null
-    conditionalOn1?: JsonNullableFilter<"FormStep">
-    conditionalOn2?: JsonNullableFilter<"FormStep">
     createdAt?: DateTimeFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeFilter<"FormStep"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
-    options?: StepOptionListRelationFilter
+    questions?: QuestionListRelationFilter
   }, "id" | "productId_order">
 
   export type FormStepOrderByWithAggregationInput = {
     id?: SortOrder
     productId?: SortOrder
     order?: SortOrder
-    type1?: SortOrder
-    question1?: SortOrder
-    required1?: SortOrder
-    type2?: SortOrderInput | SortOrder
-    question2?: SortOrderInput | SortOrder
-    required2?: SortOrder
-    pricingImpact1?: SortOrder
-    pricePerUnit1?: SortOrderInput | SortOrder
-    unit1?: SortOrderInput | SortOrder
-    minValue1?: SortOrderInput | SortOrder
-    maxValue1?: SortOrderInput | SortOrder
-    defaultValue1?: SortOrderInput | SortOrder
-    pricingImpact2?: SortOrder
-    pricePerUnit2?: SortOrderInput | SortOrder
-    unit2?: SortOrderInput | SortOrder
-    minValue2?: SortOrderInput | SortOrder
-    maxValue2?: SortOrderInput | SortOrder
-    defaultValue2?: SortOrderInput | SortOrder
-    conditionalOn1?: SortOrderInput | SortOrder
-    conditionalOn2?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: FormStepCountOrderByAggregateInput
@@ -5233,28 +6271,119 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"FormStep"> | string
     productId?: StringWithAggregatesFilter<"FormStep"> | string
     order?: IntWithAggregatesFilter<"FormStep"> | number
-    type1?: EnumStepTypeWithAggregatesFilter<"FormStep"> | $Enums.StepType
-    question1?: StringWithAggregatesFilter<"FormStep"> | string
-    required1?: BoolWithAggregatesFilter<"FormStep"> | boolean
-    type2?: EnumStepTypeNullableWithAggregatesFilter<"FormStep"> | $Enums.StepType | null
-    question2?: StringNullableWithAggregatesFilter<"FormStep"> | string | null
-    required2?: BoolWithAggregatesFilter<"FormStep"> | boolean
-    pricingImpact1?: EnumPricingImpactWithAggregatesFilter<"FormStep"> | $Enums.PricingImpact
-    pricePerUnit1?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
-    unit1?: StringNullableWithAggregatesFilter<"FormStep"> | string | null
-    minValue1?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
-    maxValue1?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
-    defaultValue1?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
-    pricingImpact2?: EnumPricingImpactWithAggregatesFilter<"FormStep"> | $Enums.PricingImpact
-    pricePerUnit2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
-    unit2?: StringNullableWithAggregatesFilter<"FormStep"> | string | null
-    minValue2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
-    maxValue2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
-    defaultValue2?: FloatNullableWithAggregatesFilter<"FormStep"> | number | null
-    conditionalOn1?: JsonNullableWithAggregatesFilter<"FormStep">
-    conditionalOn2?: JsonNullableWithAggregatesFilter<"FormStep">
     createdAt?: DateTimeWithAggregatesFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FormStep"> | Date | string
+  }
+
+  export type QuestionWhereInput = {
+    AND?: QuestionWhereInput | QuestionWhereInput[]
+    OR?: QuestionWhereInput[]
+    NOT?: QuestionWhereInput | QuestionWhereInput[]
+    id?: StringFilter<"Question"> | string
+    stepId?: StringFilter<"Question"> | string
+    order?: IntFilter<"Question"> | number
+    type?: EnumStepTypeFilter<"Question"> | $Enums.StepType
+    question?: StringFilter<"Question"> | string
+    required?: BoolFilter<"Question"> | boolean
+    pricingImpact?: EnumPricingImpactFilter<"Question"> | $Enums.PricingImpact
+    pricePerUnit?: FloatNullableFilter<"Question"> | number | null
+    unit?: StringNullableFilter<"Question"> | string | null
+    minValue?: FloatNullableFilter<"Question"> | number | null
+    maxValue?: FloatNullableFilter<"Question"> | number | null
+    defaultValue?: FloatNullableFilter<"Question"> | number | null
+    conditionalOn?: JsonNullableFilter<"Question">
+    createdAt?: DateTimeFilter<"Question"> | Date | string
+    updatedAt?: DateTimeFilter<"Question"> | Date | string
+    step?: XOR<FormStepScalarRelationFilter, FormStepWhereInput>
+    options?: StepOptionListRelationFilter
+  }
+
+  export type QuestionOrderByWithRelationInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    order?: SortOrder
+    type?: SortOrder
+    question?: SortOrder
+    required?: SortOrder
+    pricingImpact?: SortOrder
+    pricePerUnit?: SortOrderInput | SortOrder
+    unit?: SortOrderInput | SortOrder
+    minValue?: SortOrderInput | SortOrder
+    maxValue?: SortOrderInput | SortOrder
+    defaultValue?: SortOrderInput | SortOrder
+    conditionalOn?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    step?: FormStepOrderByWithRelationInput
+    options?: StepOptionOrderByRelationAggregateInput
+  }
+
+  export type QuestionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    stepId_order?: QuestionStepIdOrderCompoundUniqueInput
+    AND?: QuestionWhereInput | QuestionWhereInput[]
+    OR?: QuestionWhereInput[]
+    NOT?: QuestionWhereInput | QuestionWhereInput[]
+    stepId?: StringFilter<"Question"> | string
+    order?: IntFilter<"Question"> | number
+    type?: EnumStepTypeFilter<"Question"> | $Enums.StepType
+    question?: StringFilter<"Question"> | string
+    required?: BoolFilter<"Question"> | boolean
+    pricingImpact?: EnumPricingImpactFilter<"Question"> | $Enums.PricingImpact
+    pricePerUnit?: FloatNullableFilter<"Question"> | number | null
+    unit?: StringNullableFilter<"Question"> | string | null
+    minValue?: FloatNullableFilter<"Question"> | number | null
+    maxValue?: FloatNullableFilter<"Question"> | number | null
+    defaultValue?: FloatNullableFilter<"Question"> | number | null
+    conditionalOn?: JsonNullableFilter<"Question">
+    createdAt?: DateTimeFilter<"Question"> | Date | string
+    updatedAt?: DateTimeFilter<"Question"> | Date | string
+    step?: XOR<FormStepScalarRelationFilter, FormStepWhereInput>
+    options?: StepOptionListRelationFilter
+  }, "id" | "stepId_order">
+
+  export type QuestionOrderByWithAggregationInput = {
+    id?: SortOrder
+    stepId?: SortOrder
+    order?: SortOrder
+    type?: SortOrder
+    question?: SortOrder
+    required?: SortOrder
+    pricingImpact?: SortOrder
+    pricePerUnit?: SortOrderInput | SortOrder
+    unit?: SortOrderInput | SortOrder
+    minValue?: SortOrderInput | SortOrder
+    maxValue?: SortOrderInput | SortOrder
+    defaultValue?: SortOrderInput | SortOrder
+    conditionalOn?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: QuestionCountOrderByAggregateInput
+    _avg?: QuestionAvgOrderByAggregateInput
+    _max?: QuestionMaxOrderByAggregateInput
+    _min?: QuestionMinOrderByAggregateInput
+    _sum?: QuestionSumOrderByAggregateInput
+  }
+
+  export type QuestionScalarWhereWithAggregatesInput = {
+    AND?: QuestionScalarWhereWithAggregatesInput | QuestionScalarWhereWithAggregatesInput[]
+    OR?: QuestionScalarWhereWithAggregatesInput[]
+    NOT?: QuestionScalarWhereWithAggregatesInput | QuestionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Question"> | string
+    stepId?: StringWithAggregatesFilter<"Question"> | string
+    order?: IntWithAggregatesFilter<"Question"> | number
+    type?: EnumStepTypeWithAggregatesFilter<"Question"> | $Enums.StepType
+    question?: StringWithAggregatesFilter<"Question"> | string
+    required?: BoolWithAggregatesFilter<"Question"> | boolean
+    pricingImpact?: EnumPricingImpactWithAggregatesFilter<"Question"> | $Enums.PricingImpact
+    pricePerUnit?: FloatNullableWithAggregatesFilter<"Question"> | number | null
+    unit?: StringNullableWithAggregatesFilter<"Question"> | string | null
+    minValue?: FloatNullableWithAggregatesFilter<"Question"> | number | null
+    maxValue?: FloatNullableWithAggregatesFilter<"Question"> | number | null
+    defaultValue?: FloatNullableWithAggregatesFilter<"Question"> | number | null
+    conditionalOn?: JsonNullableWithAggregatesFilter<"Question">
+    createdAt?: DateTimeWithAggregatesFilter<"Question"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Question"> | Date | string
   }
 
   export type StepOptionWhereInput = {
@@ -5262,58 +6391,58 @@ export namespace Prisma {
     OR?: StepOptionWhereInput[]
     NOT?: StepOptionWhereInput | StepOptionWhereInput[]
     id?: StringFilter<"StepOption"> | string
-    stepId?: StringFilter<"StepOption"> | string
-    questionNum?: IntFilter<"StepOption"> | number
+    questionId?: StringFilter<"StepOption"> | string
     label?: StringFilter<"StepOption"> | string
     value?: StringFilter<"StepOption"> | string
     price?: FloatNullableFilter<"StepOption"> | number | null
     imageUrl?: StringNullableFilter<"StepOption"> | string | null
+    imagePublicId?: StringNullableFilter<"StepOption"> | string | null
     order?: IntFilter<"StepOption"> | number
     createdAt?: DateTimeFilter<"StepOption"> | Date | string
     updatedAt?: DateTimeFilter<"StepOption"> | Date | string
-    step?: XOR<FormStepScalarRelationFilter, FormStepWhereInput>
+    question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
   }
 
   export type StepOptionOrderByWithRelationInput = {
     id?: SortOrder
-    stepId?: SortOrder
-    questionNum?: SortOrder
+    questionId?: SortOrder
     label?: SortOrder
     value?: SortOrder
     price?: SortOrderInput | SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    imagePublicId?: SortOrderInput | SortOrder
     order?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    step?: FormStepOrderByWithRelationInput
+    question?: QuestionOrderByWithRelationInput
   }
 
   export type StepOptionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    stepId_questionNum_order?: StepOptionStepIdQuestionNumOrderCompoundUniqueInput
+    questionId_order?: StepOptionQuestionIdOrderCompoundUniqueInput
     AND?: StepOptionWhereInput | StepOptionWhereInput[]
     OR?: StepOptionWhereInput[]
     NOT?: StepOptionWhereInput | StepOptionWhereInput[]
-    stepId?: StringFilter<"StepOption"> | string
-    questionNum?: IntFilter<"StepOption"> | number
+    questionId?: StringFilter<"StepOption"> | string
     label?: StringFilter<"StepOption"> | string
     value?: StringFilter<"StepOption"> | string
     price?: FloatNullableFilter<"StepOption"> | number | null
     imageUrl?: StringNullableFilter<"StepOption"> | string | null
+    imagePublicId?: StringNullableFilter<"StepOption"> | string | null
     order?: IntFilter<"StepOption"> | number
     createdAt?: DateTimeFilter<"StepOption"> | Date | string
     updatedAt?: DateTimeFilter<"StepOption"> | Date | string
-    step?: XOR<FormStepScalarRelationFilter, FormStepWhereInput>
-  }, "id" | "stepId_questionNum_order">
+    question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
+  }, "id" | "questionId_order">
 
   export type StepOptionOrderByWithAggregationInput = {
     id?: SortOrder
-    stepId?: SortOrder
-    questionNum?: SortOrder
+    questionId?: SortOrder
     label?: SortOrder
     value?: SortOrder
     price?: SortOrderInput | SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    imagePublicId?: SortOrderInput | SortOrder
     order?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5329,12 +6458,12 @@ export namespace Prisma {
     OR?: StepOptionScalarWhereWithAggregatesInput[]
     NOT?: StepOptionScalarWhereWithAggregatesInput | StepOptionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"StepOption"> | string
-    stepId?: StringWithAggregatesFilter<"StepOption"> | string
-    questionNum?: IntWithAggregatesFilter<"StepOption"> | number
+    questionId?: StringWithAggregatesFilter<"StepOption"> | string
     label?: StringWithAggregatesFilter<"StepOption"> | string
     value?: StringWithAggregatesFilter<"StepOption"> | string
     price?: FloatNullableWithAggregatesFilter<"StepOption"> | number | null
     imageUrl?: StringNullableWithAggregatesFilter<"StepOption"> | string | null
+    imagePublicId?: StringNullableWithAggregatesFilter<"StepOption"> | string | null
     order?: IntWithAggregatesFilter<"StepOption"> | number
     createdAt?: DateTimeWithAggregatesFilter<"StepOption"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"StepOption"> | Date | string
@@ -5345,7 +6474,8 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
-    baseImage?: string | null
+    baseImageUrl?: string | null
+    baseImagePublicId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     steps?: FormStepCreateNestedManyWithoutProductInput
@@ -5356,7 +6486,8 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
-    baseImage?: string | null
+    baseImageUrl?: string | null
+    baseImagePublicId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     steps?: FormStepUncheckedCreateNestedManyWithoutProductInput
@@ -5367,7 +6498,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    baseImage?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: FormStepUpdateManyWithoutProductNestedInput
@@ -5378,7 +6510,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    baseImage?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: FormStepUncheckedUpdateManyWithoutProductNestedInput
@@ -5389,7 +6522,8 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
-    baseImage?: string | null
+    baseImageUrl?: string | null
+    baseImagePublicId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5399,7 +6533,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    baseImage?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5409,7 +6544,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    baseImage?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5417,143 +6553,43 @@ export namespace Prisma {
   export type FormStepCreateInput = {
     id?: string
     order: number
-    type1: $Enums.StepType
-    question1: string
-    required1?: boolean
-    type2?: $Enums.StepType | null
-    question2?: string | null
-    required2?: boolean
-    pricingImpact1?: $Enums.PricingImpact
-    pricePerUnit1?: number | null
-    unit1?: string | null
-    minValue1?: number | null
-    maxValue1?: number | null
-    defaultValue1?: number | null
-    pricingImpact2?: $Enums.PricingImpact
-    pricePerUnit2?: number | null
-    unit2?: string | null
-    minValue2?: number | null
-    maxValue2?: number | null
-    defaultValue2?: number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutStepsInput
-    options?: StepOptionCreateNestedManyWithoutStepInput
+    questions?: QuestionCreateNestedManyWithoutStepInput
   }
 
   export type FormStepUncheckedCreateInput = {
     id?: string
     productId: string
     order: number
-    type1: $Enums.StepType
-    question1: string
-    required1?: boolean
-    type2?: $Enums.StepType | null
-    question2?: string | null
-    required2?: boolean
-    pricingImpact1?: $Enums.PricingImpact
-    pricePerUnit1?: number | null
-    unit1?: string | null
-    minValue1?: number | null
-    maxValue1?: number | null
-    defaultValue1?: number | null
-    pricingImpact2?: $Enums.PricingImpact
-    pricePerUnit2?: number | null
-    unit2?: string | null
-    minValue2?: number | null
-    maxValue2?: number | null
-    defaultValue2?: number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    options?: StepOptionUncheckedCreateNestedManyWithoutStepInput
+    questions?: QuestionUncheckedCreateNestedManyWithoutStepInput
   }
 
   export type FormStepUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
-    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
-    question1?: StringFieldUpdateOperationsInput | string
-    required1?: BoolFieldUpdateOperationsInput | boolean
-    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
-    question2?: NullableStringFieldUpdateOperationsInput | string | null
-    required2?: BoolFieldUpdateOperationsInput | boolean
-    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit1?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit2?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutStepsNestedInput
-    options?: StepOptionUpdateManyWithoutStepNestedInput
+    questions?: QuestionUpdateManyWithoutStepNestedInput
   }
 
   export type FormStepUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
-    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
-    question1?: StringFieldUpdateOperationsInput | string
-    required1?: BoolFieldUpdateOperationsInput | boolean
-    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
-    question2?: NullableStringFieldUpdateOperationsInput | string | null
-    required2?: BoolFieldUpdateOperationsInput | boolean
-    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit1?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit2?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    options?: StepOptionUncheckedUpdateManyWithoutStepNestedInput
+    questions?: QuestionUncheckedUpdateManyWithoutStepNestedInput
   }
 
   export type FormStepCreateManyInput = {
     id?: string
     productId: string
     order: number
-    type1: $Enums.StepType
-    question1: string
-    required1?: boolean
-    type2?: $Enums.StepType | null
-    question2?: string | null
-    required2?: boolean
-    pricingImpact1?: $Enums.PricingImpact
-    pricePerUnit1?: number | null
-    unit1?: string | null
-    minValue1?: number | null
-    maxValue1?: number | null
-    defaultValue1?: number | null
-    pricingImpact2?: $Enums.PricingImpact
-    pricePerUnit2?: number | null
-    unit2?: string | null
-    minValue2?: number | null
-    maxValue2?: number | null
-    defaultValue2?: number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5561,26 +6597,6 @@ export namespace Prisma {
   export type FormStepUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
-    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
-    question1?: StringFieldUpdateOperationsInput | string
-    required1?: BoolFieldUpdateOperationsInput | boolean
-    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
-    question2?: NullableStringFieldUpdateOperationsInput | string | null
-    required2?: BoolFieldUpdateOperationsInput | boolean
-    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit1?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit2?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5589,51 +6605,160 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
-    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
-    question1?: StringFieldUpdateOperationsInput | string
-    required1?: BoolFieldUpdateOperationsInput | boolean
-    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
-    question2?: NullableStringFieldUpdateOperationsInput | string | null
-    required2?: BoolFieldUpdateOperationsInput | boolean
-    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit1?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit2?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuestionCreateInput = {
+    id?: string
+    order: number
+    type: $Enums.StepType
+    question: string
+    required?: boolean
+    pricingImpact?: $Enums.PricingImpact
+    pricePerUnit?: number | null
+    unit?: string | null
+    minValue?: number | null
+    maxValue?: number | null
+    defaultValue?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    step: FormStepCreateNestedOneWithoutQuestionsInput
+    options?: StepOptionCreateNestedManyWithoutQuestionInput
+  }
+
+  export type QuestionUncheckedCreateInput = {
+    id?: string
+    stepId: string
+    order: number
+    type: $Enums.StepType
+    question: string
+    required?: boolean
+    pricingImpact?: $Enums.PricingImpact
+    pricePerUnit?: number | null
+    unit?: string | null
+    minValue?: number | null
+    maxValue?: number | null
+    defaultValue?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    options?: StepOptionUncheckedCreateNestedManyWithoutQuestionInput
+  }
+
+  export type QuestionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    step?: FormStepUpdateOneRequiredWithoutQuestionsNestedInput
+    options?: StepOptionUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type QuestionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    options?: StepOptionUncheckedUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type QuestionCreateManyInput = {
+    id?: string
+    stepId: string
+    order: number
+    type: $Enums.StepType
+    question: string
+    required?: boolean
+    pricingImpact?: $Enums.PricingImpact
+    pricePerUnit?: number | null
+    unit?: string | null
+    minValue?: number | null
+    maxValue?: number | null
+    defaultValue?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuestionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuestionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StepOptionCreateInput = {
     id?: string
-    questionNum?: number
     label: string
     value: string
     price?: number | null
     imageUrl?: string | null
+    imagePublicId?: string | null
     order: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    step: FormStepCreateNestedOneWithoutOptionsInput
+    question: QuestionCreateNestedOneWithoutOptionsInput
   }
 
   export type StepOptionUncheckedCreateInput = {
     id?: string
-    stepId: string
-    questionNum?: number
+    questionId: string
     label: string
     value: string
     price?: number | null
     imageUrl?: string | null
+    imagePublicId?: string | null
     order: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5641,25 +6766,25 @@ export namespace Prisma {
 
   export type StepOptionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    questionNum?: IntFieldUpdateOperationsInput | number
     label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    step?: FormStepUpdateOneRequiredWithoutOptionsNestedInput
+    question?: QuestionUpdateOneRequiredWithoutOptionsNestedInput
   }
 
   export type StepOptionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    stepId?: StringFieldUpdateOperationsInput | string
-    questionNum?: IntFieldUpdateOperationsInput | number
+    questionId?: StringFieldUpdateOperationsInput | string
     label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5667,12 +6792,12 @@ export namespace Prisma {
 
   export type StepOptionCreateManyInput = {
     id?: string
-    stepId: string
-    questionNum?: number
+    questionId: string
     label: string
     value: string
     price?: number | null
     imageUrl?: string | null
+    imagePublicId?: string | null
     order: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5680,11 +6805,11 @@ export namespace Prisma {
 
   export type StepOptionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    questionNum?: IntFieldUpdateOperationsInput | number
     label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5692,12 +6817,12 @@ export namespace Prisma {
 
   export type StepOptionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    stepId?: StringFieldUpdateOperationsInput | string
-    questionNum?: IntFieldUpdateOperationsInput | number
+    questionId?: StringFieldUpdateOperationsInput | string
     label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5764,7 +6889,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
-    baseImage?: SortOrder
+    baseImageUrl?: SortOrder
+    baseImagePublicId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5774,7 +6900,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
-    baseImage?: SortOrder
+    baseImageUrl?: SortOrder
+    baseImagePublicId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5784,7 +6911,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
-    baseImage?: SortOrder
+    baseImageUrl?: SortOrder
+    baseImagePublicId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5850,6 +6978,74 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type ProductScalarRelationFilter = {
+    is?: ProductWhereInput
+    isNot?: ProductWhereInput
+  }
+
+  export type QuestionListRelationFilter = {
+    every?: QuestionWhereInput
+    some?: QuestionWhereInput
+    none?: QuestionWhereInput
+  }
+
+  export type QuestionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FormStepProductIdOrderCompoundUniqueInput = {
+    productId: string
+    order: number
+  }
+
+  export type FormStepCountOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FormStepAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type FormStepMaxOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FormStepMinOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FormStepSumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type EnumStepTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel>
     in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
@@ -5860,13 +7056,6 @@ export namespace Prisma {
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type EnumStepTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumStepTypeNullableFilter<$PrismaModel> | $Enums.StepType | null
   }
 
   export type EnumPricingImpactFilter<$PrismaModel = never> = {
@@ -5910,9 +7099,9 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type ProductScalarRelationFilter = {
-    is?: ProductWhereInput
-    isNot?: ProductWhereInput
+  export type FormStepScalarRelationFilter = {
+    is?: FormStepWhereInput
+    isNot?: FormStepWhereInput
   }
 
   export type StepOptionListRelationFilter = {
@@ -5925,129 +7114,77 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type FormStepProductIdOrderCompoundUniqueInput = {
-    productId: string
+  export type QuestionStepIdOrderCompoundUniqueInput = {
+    stepId: string
     order: number
   }
 
-  export type FormStepCountOrderByAggregateInput = {
+  export type QuestionCountOrderByAggregateInput = {
     id?: SortOrder
-    productId?: SortOrder
+    stepId?: SortOrder
     order?: SortOrder
-    type1?: SortOrder
-    question1?: SortOrder
-    required1?: SortOrder
-    type2?: SortOrder
-    question2?: SortOrder
-    required2?: SortOrder
-    pricingImpact1?: SortOrder
-    pricePerUnit1?: SortOrder
-    unit1?: SortOrder
-    minValue1?: SortOrder
-    maxValue1?: SortOrder
-    defaultValue1?: SortOrder
-    pricingImpact2?: SortOrder
-    pricePerUnit2?: SortOrder
-    unit2?: SortOrder
-    minValue2?: SortOrder
-    maxValue2?: SortOrder
-    defaultValue2?: SortOrder
-    conditionalOn1?: SortOrder
-    conditionalOn2?: SortOrder
+    type?: SortOrder
+    question?: SortOrder
+    required?: SortOrder
+    pricingImpact?: SortOrder
+    pricePerUnit?: SortOrder
+    unit?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    defaultValue?: SortOrder
+    conditionalOn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type FormStepAvgOrderByAggregateInput = {
+  export type QuestionAvgOrderByAggregateInput = {
     order?: SortOrder
-    pricePerUnit1?: SortOrder
-    minValue1?: SortOrder
-    maxValue1?: SortOrder
-    defaultValue1?: SortOrder
-    pricePerUnit2?: SortOrder
-    minValue2?: SortOrder
-    maxValue2?: SortOrder
-    defaultValue2?: SortOrder
+    pricePerUnit?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    defaultValue?: SortOrder
   }
 
-  export type FormStepMaxOrderByAggregateInput = {
+  export type QuestionMaxOrderByAggregateInput = {
     id?: SortOrder
-    productId?: SortOrder
+    stepId?: SortOrder
     order?: SortOrder
-    type1?: SortOrder
-    question1?: SortOrder
-    required1?: SortOrder
-    type2?: SortOrder
-    question2?: SortOrder
-    required2?: SortOrder
-    pricingImpact1?: SortOrder
-    pricePerUnit1?: SortOrder
-    unit1?: SortOrder
-    minValue1?: SortOrder
-    maxValue1?: SortOrder
-    defaultValue1?: SortOrder
-    pricingImpact2?: SortOrder
-    pricePerUnit2?: SortOrder
-    unit2?: SortOrder
-    minValue2?: SortOrder
-    maxValue2?: SortOrder
-    defaultValue2?: SortOrder
+    type?: SortOrder
+    question?: SortOrder
+    required?: SortOrder
+    pricingImpact?: SortOrder
+    pricePerUnit?: SortOrder
+    unit?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    defaultValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type FormStepMinOrderByAggregateInput = {
+  export type QuestionMinOrderByAggregateInput = {
     id?: SortOrder
-    productId?: SortOrder
+    stepId?: SortOrder
     order?: SortOrder
-    type1?: SortOrder
-    question1?: SortOrder
-    required1?: SortOrder
-    type2?: SortOrder
-    question2?: SortOrder
-    required2?: SortOrder
-    pricingImpact1?: SortOrder
-    pricePerUnit1?: SortOrder
-    unit1?: SortOrder
-    minValue1?: SortOrder
-    maxValue1?: SortOrder
-    defaultValue1?: SortOrder
-    pricingImpact2?: SortOrder
-    pricePerUnit2?: SortOrder
-    unit2?: SortOrder
-    minValue2?: SortOrder
-    maxValue2?: SortOrder
-    defaultValue2?: SortOrder
+    type?: SortOrder
+    question?: SortOrder
+    required?: SortOrder
+    pricingImpact?: SortOrder
+    pricePerUnit?: SortOrder
+    unit?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    defaultValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type FormStepSumOrderByAggregateInput = {
+  export type QuestionSumOrderByAggregateInput = {
     order?: SortOrder
-    pricePerUnit1?: SortOrder
-    minValue1?: SortOrder
-    maxValue1?: SortOrder
-    defaultValue1?: SortOrder
-    pricePerUnit2?: SortOrder
-    minValue2?: SortOrder
-    maxValue2?: SortOrder
-    defaultValue2?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
+    pricePerUnit?: SortOrder
+    minValue?: SortOrder
+    maxValue?: SortOrder
+    defaultValue?: SortOrder
   }
 
   export type EnumStepTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -6066,16 +7203,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type EnumStepTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumStepTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StepType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumStepTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnumStepTypeNullableFilter<$PrismaModel>
   }
 
   export type EnumPricingImpactWithAggregatesFilter<$PrismaModel = never> = {
@@ -6130,44 +7257,42 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
-  export type FormStepScalarRelationFilter = {
-    is?: FormStepWhereInput
-    isNot?: FormStepWhereInput
+  export type QuestionScalarRelationFilter = {
+    is?: QuestionWhereInput
+    isNot?: QuestionWhereInput
   }
 
-  export type StepOptionStepIdQuestionNumOrderCompoundUniqueInput = {
-    stepId: string
-    questionNum: number
+  export type StepOptionQuestionIdOrderCompoundUniqueInput = {
+    questionId: string
     order: number
   }
 
   export type StepOptionCountOrderByAggregateInput = {
     id?: SortOrder
-    stepId?: SortOrder
-    questionNum?: SortOrder
+    questionId?: SortOrder
     label?: SortOrder
     value?: SortOrder
     price?: SortOrder
     imageUrl?: SortOrder
+    imagePublicId?: SortOrder
     order?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type StepOptionAvgOrderByAggregateInput = {
-    questionNum?: SortOrder
     price?: SortOrder
     order?: SortOrder
   }
 
   export type StepOptionMaxOrderByAggregateInput = {
     id?: SortOrder
-    stepId?: SortOrder
-    questionNum?: SortOrder
+    questionId?: SortOrder
     label?: SortOrder
     value?: SortOrder
     price?: SortOrder
     imageUrl?: SortOrder
+    imagePublicId?: SortOrder
     order?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6175,19 +7300,18 @@ export namespace Prisma {
 
   export type StepOptionMinOrderByAggregateInput = {
     id?: SortOrder
-    stepId?: SortOrder
-    questionNum?: SortOrder
+    questionId?: SortOrder
     label?: SortOrder
     value?: SortOrder
     price?: SortOrder
     imageUrl?: SortOrder
+    imagePublicId?: SortOrder
     order?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type StepOptionSumOrderByAggregateInput = {
-    questionNum?: SortOrder
     price?: SortOrder
     order?: SortOrder
   }
@@ -6252,46 +7376,22 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput
   }
 
-  export type StepOptionCreateNestedManyWithoutStepInput = {
-    create?: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput> | StepOptionCreateWithoutStepInput[] | StepOptionUncheckedCreateWithoutStepInput[]
-    connectOrCreate?: StepOptionCreateOrConnectWithoutStepInput | StepOptionCreateOrConnectWithoutStepInput[]
-    createMany?: StepOptionCreateManyStepInputEnvelope
-    connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+  export type QuestionCreateNestedManyWithoutStepInput = {
+    create?: XOR<QuestionCreateWithoutStepInput, QuestionUncheckedCreateWithoutStepInput> | QuestionCreateWithoutStepInput[] | QuestionUncheckedCreateWithoutStepInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutStepInput | QuestionCreateOrConnectWithoutStepInput[]
+    createMany?: QuestionCreateManyStepInputEnvelope
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
   }
 
-  export type StepOptionUncheckedCreateNestedManyWithoutStepInput = {
-    create?: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput> | StepOptionCreateWithoutStepInput[] | StepOptionUncheckedCreateWithoutStepInput[]
-    connectOrCreate?: StepOptionCreateOrConnectWithoutStepInput | StepOptionCreateOrConnectWithoutStepInput[]
-    createMany?: StepOptionCreateManyStepInputEnvelope
-    connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+  export type QuestionUncheckedCreateNestedManyWithoutStepInput = {
+    create?: XOR<QuestionCreateWithoutStepInput, QuestionUncheckedCreateWithoutStepInput> | QuestionCreateWithoutStepInput[] | QuestionUncheckedCreateWithoutStepInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutStepInput | QuestionCreateOrConnectWithoutStepInput[]
+    createMany?: QuestionCreateManyStepInputEnvelope
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
     set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type EnumStepTypeFieldUpdateOperationsInput = {
-    set?: $Enums.StepType
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type NullableEnumStepTypeFieldUpdateOperationsInput = {
-    set?: $Enums.StepType | null
-  }
-
-  export type EnumPricingImpactFieldUpdateOperationsInput = {
-    set?: $Enums.PricingImpact
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
@@ -6306,46 +7406,122 @@ export namespace Prisma {
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutStepsInput, ProductUpdateWithoutStepsInput>, ProductUncheckedUpdateWithoutStepsInput>
   }
 
-  export type StepOptionUpdateManyWithoutStepNestedInput = {
-    create?: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput> | StepOptionCreateWithoutStepInput[] | StepOptionUncheckedCreateWithoutStepInput[]
-    connectOrCreate?: StepOptionCreateOrConnectWithoutStepInput | StepOptionCreateOrConnectWithoutStepInput[]
-    upsert?: StepOptionUpsertWithWhereUniqueWithoutStepInput | StepOptionUpsertWithWhereUniqueWithoutStepInput[]
-    createMany?: StepOptionCreateManyStepInputEnvelope
+  export type QuestionUpdateManyWithoutStepNestedInput = {
+    create?: XOR<QuestionCreateWithoutStepInput, QuestionUncheckedCreateWithoutStepInput> | QuestionCreateWithoutStepInput[] | QuestionUncheckedCreateWithoutStepInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutStepInput | QuestionCreateOrConnectWithoutStepInput[]
+    upsert?: QuestionUpsertWithWhereUniqueWithoutStepInput | QuestionUpsertWithWhereUniqueWithoutStepInput[]
+    createMany?: QuestionCreateManyStepInputEnvelope
+    set?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    disconnect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    delete?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    update?: QuestionUpdateWithWhereUniqueWithoutStepInput | QuestionUpdateWithWhereUniqueWithoutStepInput[]
+    updateMany?: QuestionUpdateManyWithWhereWithoutStepInput | QuestionUpdateManyWithWhereWithoutStepInput[]
+    deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+  }
+
+  export type QuestionUncheckedUpdateManyWithoutStepNestedInput = {
+    create?: XOR<QuestionCreateWithoutStepInput, QuestionUncheckedCreateWithoutStepInput> | QuestionCreateWithoutStepInput[] | QuestionUncheckedCreateWithoutStepInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutStepInput | QuestionCreateOrConnectWithoutStepInput[]
+    upsert?: QuestionUpsertWithWhereUniqueWithoutStepInput | QuestionUpsertWithWhereUniqueWithoutStepInput[]
+    createMany?: QuestionCreateManyStepInputEnvelope
+    set?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    disconnect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    delete?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    update?: QuestionUpdateWithWhereUniqueWithoutStepInput | QuestionUpdateWithWhereUniqueWithoutStepInput[]
+    updateMany?: QuestionUpdateManyWithWhereWithoutStepInput | QuestionUpdateManyWithWhereWithoutStepInput[]
+    deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+  }
+
+  export type FormStepCreateNestedOneWithoutQuestionsInput = {
+    create?: XOR<FormStepCreateWithoutQuestionsInput, FormStepUncheckedCreateWithoutQuestionsInput>
+    connectOrCreate?: FormStepCreateOrConnectWithoutQuestionsInput
+    connect?: FormStepWhereUniqueInput
+  }
+
+  export type StepOptionCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<StepOptionCreateWithoutQuestionInput, StepOptionUncheckedCreateWithoutQuestionInput> | StepOptionCreateWithoutQuestionInput[] | StepOptionUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: StepOptionCreateOrConnectWithoutQuestionInput | StepOptionCreateOrConnectWithoutQuestionInput[]
+    createMany?: StepOptionCreateManyQuestionInputEnvelope
+    connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+  }
+
+  export type StepOptionUncheckedCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<StepOptionCreateWithoutQuestionInput, StepOptionUncheckedCreateWithoutQuestionInput> | StepOptionCreateWithoutQuestionInput[] | StepOptionUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: StepOptionCreateOrConnectWithoutQuestionInput | StepOptionCreateOrConnectWithoutQuestionInput[]
+    createMany?: StepOptionCreateManyQuestionInputEnvelope
+    connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
+  }
+
+  export type EnumStepTypeFieldUpdateOperationsInput = {
+    set?: $Enums.StepType
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type EnumPricingImpactFieldUpdateOperationsInput = {
+    set?: $Enums.PricingImpact
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type FormStepUpdateOneRequiredWithoutQuestionsNestedInput = {
+    create?: XOR<FormStepCreateWithoutQuestionsInput, FormStepUncheckedCreateWithoutQuestionsInput>
+    connectOrCreate?: FormStepCreateOrConnectWithoutQuestionsInput
+    upsert?: FormStepUpsertWithoutQuestionsInput
+    connect?: FormStepWhereUniqueInput
+    update?: XOR<XOR<FormStepUpdateToOneWithWhereWithoutQuestionsInput, FormStepUpdateWithoutQuestionsInput>, FormStepUncheckedUpdateWithoutQuestionsInput>
+  }
+
+  export type StepOptionUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<StepOptionCreateWithoutQuestionInput, StepOptionUncheckedCreateWithoutQuestionInput> | StepOptionCreateWithoutQuestionInput[] | StepOptionUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: StepOptionCreateOrConnectWithoutQuestionInput | StepOptionCreateOrConnectWithoutQuestionInput[]
+    upsert?: StepOptionUpsertWithWhereUniqueWithoutQuestionInput | StepOptionUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: StepOptionCreateManyQuestionInputEnvelope
     set?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
     disconnect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
     delete?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
     connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
-    update?: StepOptionUpdateWithWhereUniqueWithoutStepInput | StepOptionUpdateWithWhereUniqueWithoutStepInput[]
-    updateMany?: StepOptionUpdateManyWithWhereWithoutStepInput | StepOptionUpdateManyWithWhereWithoutStepInput[]
+    update?: StepOptionUpdateWithWhereUniqueWithoutQuestionInput | StepOptionUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: StepOptionUpdateManyWithWhereWithoutQuestionInput | StepOptionUpdateManyWithWhereWithoutQuestionInput[]
     deleteMany?: StepOptionScalarWhereInput | StepOptionScalarWhereInput[]
   }
 
-  export type StepOptionUncheckedUpdateManyWithoutStepNestedInput = {
-    create?: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput> | StepOptionCreateWithoutStepInput[] | StepOptionUncheckedCreateWithoutStepInput[]
-    connectOrCreate?: StepOptionCreateOrConnectWithoutStepInput | StepOptionCreateOrConnectWithoutStepInput[]
-    upsert?: StepOptionUpsertWithWhereUniqueWithoutStepInput | StepOptionUpsertWithWhereUniqueWithoutStepInput[]
-    createMany?: StepOptionCreateManyStepInputEnvelope
+  export type StepOptionUncheckedUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<StepOptionCreateWithoutQuestionInput, StepOptionUncheckedCreateWithoutQuestionInput> | StepOptionCreateWithoutQuestionInput[] | StepOptionUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: StepOptionCreateOrConnectWithoutQuestionInput | StepOptionCreateOrConnectWithoutQuestionInput[]
+    upsert?: StepOptionUpsertWithWhereUniqueWithoutQuestionInput | StepOptionUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: StepOptionCreateManyQuestionInputEnvelope
     set?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
     disconnect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
     delete?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
     connect?: StepOptionWhereUniqueInput | StepOptionWhereUniqueInput[]
-    update?: StepOptionUpdateWithWhereUniqueWithoutStepInput | StepOptionUpdateWithWhereUniqueWithoutStepInput[]
-    updateMany?: StepOptionUpdateManyWithWhereWithoutStepInput | StepOptionUpdateManyWithWhereWithoutStepInput[]
+    update?: StepOptionUpdateWithWhereUniqueWithoutQuestionInput | StepOptionUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: StepOptionUpdateManyWithWhereWithoutQuestionInput | StepOptionUpdateManyWithWhereWithoutQuestionInput[]
     deleteMany?: StepOptionScalarWhereInput | StepOptionScalarWhereInput[]
   }
 
-  export type FormStepCreateNestedOneWithoutOptionsInput = {
-    create?: XOR<FormStepCreateWithoutOptionsInput, FormStepUncheckedCreateWithoutOptionsInput>
-    connectOrCreate?: FormStepCreateOrConnectWithoutOptionsInput
-    connect?: FormStepWhereUniqueInput
+  export type QuestionCreateNestedOneWithoutOptionsInput = {
+    create?: XOR<QuestionCreateWithoutOptionsInput, QuestionUncheckedCreateWithoutOptionsInput>
+    connectOrCreate?: QuestionCreateOrConnectWithoutOptionsInput
+    connect?: QuestionWhereUniqueInput
   }
 
-  export type FormStepUpdateOneRequiredWithoutOptionsNestedInput = {
-    create?: XOR<FormStepCreateWithoutOptionsInput, FormStepUncheckedCreateWithoutOptionsInput>
-    connectOrCreate?: FormStepCreateOrConnectWithoutOptionsInput
-    upsert?: FormStepUpsertWithoutOptionsInput
-    connect?: FormStepWhereUniqueInput
-    update?: XOR<XOR<FormStepUpdateToOneWithWhereWithoutOptionsInput, FormStepUpdateWithoutOptionsInput>, FormStepUncheckedUpdateWithoutOptionsInput>
+  export type QuestionUpdateOneRequiredWithoutOptionsNestedInput = {
+    create?: XOR<QuestionCreateWithoutOptionsInput, QuestionUncheckedCreateWithoutOptionsInput>
+    connectOrCreate?: QuestionCreateOrConnectWithoutOptionsInput
+    upsert?: QuestionUpsertWithoutOptionsInput
+    connect?: QuestionWhereUniqueInput
+    update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutOptionsInput, QuestionUpdateWithoutOptionsInput>, QuestionUncheckedUpdateWithoutOptionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -6457,43 +7633,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumStepTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStepTypeFilter<$PrismaModel> | $Enums.StepType
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedEnumStepTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumStepTypeNullableFilter<$PrismaModel> | $Enums.StepType | null
-  }
-
-  export type NestedEnumPricingImpactFilter<$PrismaModel = never> = {
-    equals?: $Enums.PricingImpact | EnumPricingImpactFieldRefInput<$PrismaModel>
-    in?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
-    not?: NestedEnumPricingImpactFilter<$PrismaModel> | $Enums.PricingImpact
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -6521,6 +7660,36 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedEnumStepTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStepTypeFilter<$PrismaModel> | $Enums.StepType
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumPricingImpactFilter<$PrismaModel = never> = {
+    equals?: $Enums.PricingImpact | EnumPricingImpactFieldRefInput<$PrismaModel>
+    in?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PricingImpact[] | ListEnumPricingImpactFieldRefInput<$PrismaModel>
+    not?: NestedEnumPricingImpactFilter<$PrismaModel> | $Enums.PricingImpact
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumStepTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel>
     in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
@@ -6537,16 +7706,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedEnumStepTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumStepTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StepType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumStepTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnumStepTypeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumPricingImpactWithAggregatesFilter<$PrismaModel = never> = {
@@ -6601,57 +7760,17 @@ export namespace Prisma {
   export type FormStepCreateWithoutProductInput = {
     id?: string
     order: number
-    type1: $Enums.StepType
-    question1: string
-    required1?: boolean
-    type2?: $Enums.StepType | null
-    question2?: string | null
-    required2?: boolean
-    pricingImpact1?: $Enums.PricingImpact
-    pricePerUnit1?: number | null
-    unit1?: string | null
-    minValue1?: number | null
-    maxValue1?: number | null
-    defaultValue1?: number | null
-    pricingImpact2?: $Enums.PricingImpact
-    pricePerUnit2?: number | null
-    unit2?: string | null
-    minValue2?: number | null
-    maxValue2?: number | null
-    defaultValue2?: number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    options?: StepOptionCreateNestedManyWithoutStepInput
+    questions?: QuestionCreateNestedManyWithoutStepInput
   }
 
   export type FormStepUncheckedCreateWithoutProductInput = {
     id?: string
     order: number
-    type1: $Enums.StepType
-    question1: string
-    required1?: boolean
-    type2?: $Enums.StepType | null
-    question2?: string | null
-    required2?: boolean
-    pricingImpact1?: $Enums.PricingImpact
-    pricePerUnit1?: number | null
-    unit1?: string | null
-    minValue1?: number | null
-    maxValue1?: number | null
-    defaultValue1?: number | null
-    pricingImpact2?: $Enums.PricingImpact
-    pricePerUnit2?: number | null
-    unit2?: string | null
-    minValue2?: number | null
-    maxValue2?: number | null
-    defaultValue2?: number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    options?: StepOptionUncheckedCreateNestedManyWithoutStepInput
+    questions?: QuestionUncheckedCreateNestedManyWithoutStepInput
   }
 
   export type FormStepCreateOrConnectWithoutProductInput = {
@@ -6687,26 +7806,6 @@ export namespace Prisma {
     id?: StringFilter<"FormStep"> | string
     productId?: StringFilter<"FormStep"> | string
     order?: IntFilter<"FormStep"> | number
-    type1?: EnumStepTypeFilter<"FormStep"> | $Enums.StepType
-    question1?: StringFilter<"FormStep"> | string
-    required1?: BoolFilter<"FormStep"> | boolean
-    type2?: EnumStepTypeNullableFilter<"FormStep"> | $Enums.StepType | null
-    question2?: StringNullableFilter<"FormStep"> | string | null
-    required2?: BoolFilter<"FormStep"> | boolean
-    pricingImpact1?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
-    pricePerUnit1?: FloatNullableFilter<"FormStep"> | number | null
-    unit1?: StringNullableFilter<"FormStep"> | string | null
-    minValue1?: FloatNullableFilter<"FormStep"> | number | null
-    maxValue1?: FloatNullableFilter<"FormStep"> | number | null
-    defaultValue1?: FloatNullableFilter<"FormStep"> | number | null
-    pricingImpact2?: EnumPricingImpactFilter<"FormStep"> | $Enums.PricingImpact
-    pricePerUnit2?: FloatNullableFilter<"FormStep"> | number | null
-    unit2?: StringNullableFilter<"FormStep"> | string | null
-    minValue2?: FloatNullableFilter<"FormStep"> | number | null
-    maxValue2?: FloatNullableFilter<"FormStep"> | number | null
-    defaultValue2?: FloatNullableFilter<"FormStep"> | number | null
-    conditionalOn1?: JsonNullableFilter<"FormStep">
-    conditionalOn2?: JsonNullableFilter<"FormStep">
     createdAt?: DateTimeFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeFilter<"FormStep"> | Date | string
   }
@@ -6716,7 +7815,8 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
-    baseImage?: string | null
+    baseImageUrl?: string | null
+    baseImagePublicId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6726,7 +7826,8 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
-    baseImage?: string | null
+    baseImageUrl?: string | null
+    baseImagePublicId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6736,37 +7837,49 @@ export namespace Prisma {
     create: XOR<ProductCreateWithoutStepsInput, ProductUncheckedCreateWithoutStepsInput>
   }
 
-  export type StepOptionCreateWithoutStepInput = {
+  export type QuestionCreateWithoutStepInput = {
     id?: string
-    questionNum?: number
-    label: string
-    value: string
-    price?: number | null
-    imageUrl?: string | null
     order: number
+    type: $Enums.StepType
+    question: string
+    required?: boolean
+    pricingImpact?: $Enums.PricingImpact
+    pricePerUnit?: number | null
+    unit?: string | null
+    minValue?: number | null
+    maxValue?: number | null
+    defaultValue?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    options?: StepOptionCreateNestedManyWithoutQuestionInput
   }
 
-  export type StepOptionUncheckedCreateWithoutStepInput = {
+  export type QuestionUncheckedCreateWithoutStepInput = {
     id?: string
-    questionNum?: number
-    label: string
-    value: string
-    price?: number | null
-    imageUrl?: string | null
     order: number
+    type: $Enums.StepType
+    question: string
+    required?: boolean
+    pricingImpact?: $Enums.PricingImpact
+    pricePerUnit?: number | null
+    unit?: string | null
+    minValue?: number | null
+    maxValue?: number | null
+    defaultValue?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    options?: StepOptionUncheckedCreateNestedManyWithoutQuestionInput
   }
 
-  export type StepOptionCreateOrConnectWithoutStepInput = {
-    where: StepOptionWhereUniqueInput
-    create: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput>
+  export type QuestionCreateOrConnectWithoutStepInput = {
+    where: QuestionWhereUniqueInput
+    create: XOR<QuestionCreateWithoutStepInput, QuestionUncheckedCreateWithoutStepInput>
   }
 
-  export type StepOptionCreateManyStepInputEnvelope = {
-    data: StepOptionCreateManyStepInput | StepOptionCreateManyStepInput[]
+  export type QuestionCreateManyStepInputEnvelope = {
+    data: QuestionCreateManyStepInput | QuestionCreateManyStepInput[]
     skipDuplicates?: boolean
   }
 
@@ -6786,7 +7899,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    baseImage?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6796,25 +7910,145 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    baseImage?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type StepOptionUpsertWithWhereUniqueWithoutStepInput = {
-    where: StepOptionWhereUniqueInput
-    update: XOR<StepOptionUpdateWithoutStepInput, StepOptionUncheckedUpdateWithoutStepInput>
-    create: XOR<StepOptionCreateWithoutStepInput, StepOptionUncheckedCreateWithoutStepInput>
+  export type QuestionUpsertWithWhereUniqueWithoutStepInput = {
+    where: QuestionWhereUniqueInput
+    update: XOR<QuestionUpdateWithoutStepInput, QuestionUncheckedUpdateWithoutStepInput>
+    create: XOR<QuestionCreateWithoutStepInput, QuestionUncheckedCreateWithoutStepInput>
   }
 
-  export type StepOptionUpdateWithWhereUniqueWithoutStepInput = {
-    where: StepOptionWhereUniqueInput
-    data: XOR<StepOptionUpdateWithoutStepInput, StepOptionUncheckedUpdateWithoutStepInput>
+  export type QuestionUpdateWithWhereUniqueWithoutStepInput = {
+    where: QuestionWhereUniqueInput
+    data: XOR<QuestionUpdateWithoutStepInput, QuestionUncheckedUpdateWithoutStepInput>
   }
 
-  export type StepOptionUpdateManyWithWhereWithoutStepInput = {
+  export type QuestionUpdateManyWithWhereWithoutStepInput = {
+    where: QuestionScalarWhereInput
+    data: XOR<QuestionUpdateManyMutationInput, QuestionUncheckedUpdateManyWithoutStepInput>
+  }
+
+  export type QuestionScalarWhereInput = {
+    AND?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+    OR?: QuestionScalarWhereInput[]
+    NOT?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+    id?: StringFilter<"Question"> | string
+    stepId?: StringFilter<"Question"> | string
+    order?: IntFilter<"Question"> | number
+    type?: EnumStepTypeFilter<"Question"> | $Enums.StepType
+    question?: StringFilter<"Question"> | string
+    required?: BoolFilter<"Question"> | boolean
+    pricingImpact?: EnumPricingImpactFilter<"Question"> | $Enums.PricingImpact
+    pricePerUnit?: FloatNullableFilter<"Question"> | number | null
+    unit?: StringNullableFilter<"Question"> | string | null
+    minValue?: FloatNullableFilter<"Question"> | number | null
+    maxValue?: FloatNullableFilter<"Question"> | number | null
+    defaultValue?: FloatNullableFilter<"Question"> | number | null
+    conditionalOn?: JsonNullableFilter<"Question">
+    createdAt?: DateTimeFilter<"Question"> | Date | string
+    updatedAt?: DateTimeFilter<"Question"> | Date | string
+  }
+
+  export type FormStepCreateWithoutQuestionsInput = {
+    id?: string
+    order: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutStepsInput
+  }
+
+  export type FormStepUncheckedCreateWithoutQuestionsInput = {
+    id?: string
+    productId: string
+    order: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormStepCreateOrConnectWithoutQuestionsInput = {
+    where: FormStepWhereUniqueInput
+    create: XOR<FormStepCreateWithoutQuestionsInput, FormStepUncheckedCreateWithoutQuestionsInput>
+  }
+
+  export type StepOptionCreateWithoutQuestionInput = {
+    id?: string
+    label: string
+    value: string
+    price?: number | null
+    imageUrl?: string | null
+    imagePublicId?: string | null
+    order: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepOptionUncheckedCreateWithoutQuestionInput = {
+    id?: string
+    label: string
+    value: string
+    price?: number | null
+    imageUrl?: string | null
+    imagePublicId?: string | null
+    order: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StepOptionCreateOrConnectWithoutQuestionInput = {
+    where: StepOptionWhereUniqueInput
+    create: XOR<StepOptionCreateWithoutQuestionInput, StepOptionUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type StepOptionCreateManyQuestionInputEnvelope = {
+    data: StepOptionCreateManyQuestionInput | StepOptionCreateManyQuestionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FormStepUpsertWithoutQuestionsInput = {
+    update: XOR<FormStepUpdateWithoutQuestionsInput, FormStepUncheckedUpdateWithoutQuestionsInput>
+    create: XOR<FormStepCreateWithoutQuestionsInput, FormStepUncheckedCreateWithoutQuestionsInput>
+    where?: FormStepWhereInput
+  }
+
+  export type FormStepUpdateToOneWithWhereWithoutQuestionsInput = {
+    where?: FormStepWhereInput
+    data: XOR<FormStepUpdateWithoutQuestionsInput, FormStepUncheckedUpdateWithoutQuestionsInput>
+  }
+
+  export type FormStepUpdateWithoutQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutStepsNestedInput
+  }
+
+  export type FormStepUncheckedUpdateWithoutQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepOptionUpsertWithWhereUniqueWithoutQuestionInput = {
+    where: StepOptionWhereUniqueInput
+    update: XOR<StepOptionUpdateWithoutQuestionInput, StepOptionUncheckedUpdateWithoutQuestionInput>
+    create: XOR<StepOptionCreateWithoutQuestionInput, StepOptionUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type StepOptionUpdateWithWhereUniqueWithoutQuestionInput = {
+    where: StepOptionWhereUniqueInput
+    data: XOR<StepOptionUpdateWithoutQuestionInput, StepOptionUncheckedUpdateWithoutQuestionInput>
+  }
+
+  export type StepOptionUpdateManyWithWhereWithoutQuestionInput = {
     where: StepOptionScalarWhereInput
-    data: XOR<StepOptionUpdateManyMutationInput, StepOptionUncheckedUpdateManyWithoutStepInput>
+    data: XOR<StepOptionUpdateManyMutationInput, StepOptionUncheckedUpdateManyWithoutQuestionInput>
   }
 
   export type StepOptionScalarWhereInput = {
@@ -6822,141 +8056,101 @@ export namespace Prisma {
     OR?: StepOptionScalarWhereInput[]
     NOT?: StepOptionScalarWhereInput | StepOptionScalarWhereInput[]
     id?: StringFilter<"StepOption"> | string
-    stepId?: StringFilter<"StepOption"> | string
-    questionNum?: IntFilter<"StepOption"> | number
+    questionId?: StringFilter<"StepOption"> | string
     label?: StringFilter<"StepOption"> | string
     value?: StringFilter<"StepOption"> | string
     price?: FloatNullableFilter<"StepOption"> | number | null
     imageUrl?: StringNullableFilter<"StepOption"> | string | null
+    imagePublicId?: StringNullableFilter<"StepOption"> | string | null
     order?: IntFilter<"StepOption"> | number
     createdAt?: DateTimeFilter<"StepOption"> | Date | string
     updatedAt?: DateTimeFilter<"StepOption"> | Date | string
   }
 
-  export type FormStepCreateWithoutOptionsInput = {
+  export type QuestionCreateWithoutOptionsInput = {
     id?: string
     order: number
-    type1: $Enums.StepType
-    question1: string
-    required1?: boolean
-    type2?: $Enums.StepType | null
-    question2?: string | null
-    required2?: boolean
-    pricingImpact1?: $Enums.PricingImpact
-    pricePerUnit1?: number | null
-    unit1?: string | null
-    minValue1?: number | null
-    maxValue1?: number | null
-    defaultValue1?: number | null
-    pricingImpact2?: $Enums.PricingImpact
-    pricePerUnit2?: number | null
-    unit2?: string | null
-    minValue2?: number | null
-    maxValue2?: number | null
-    defaultValue2?: number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
+    type: $Enums.StepType
+    question: string
+    required?: boolean
+    pricingImpact?: $Enums.PricingImpact
+    pricePerUnit?: number | null
+    unit?: string | null
+    minValue?: number | null
+    maxValue?: number | null
+    defaultValue?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    product: ProductCreateNestedOneWithoutStepsInput
+    step: FormStepCreateNestedOneWithoutQuestionsInput
   }
 
-  export type FormStepUncheckedCreateWithoutOptionsInput = {
+  export type QuestionUncheckedCreateWithoutOptionsInput = {
     id?: string
-    productId: string
+    stepId: string
     order: number
-    type1: $Enums.StepType
-    question1: string
-    required1?: boolean
-    type2?: $Enums.StepType | null
-    question2?: string | null
-    required2?: boolean
-    pricingImpact1?: $Enums.PricingImpact
-    pricePerUnit1?: number | null
-    unit1?: string | null
-    minValue1?: number | null
-    maxValue1?: number | null
-    defaultValue1?: number | null
-    pricingImpact2?: $Enums.PricingImpact
-    pricePerUnit2?: number | null
-    unit2?: string | null
-    minValue2?: number | null
-    maxValue2?: number | null
-    defaultValue2?: number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
+    type: $Enums.StepType
+    question: string
+    required?: boolean
+    pricingImpact?: $Enums.PricingImpact
+    pricePerUnit?: number | null
+    unit?: string | null
+    minValue?: number | null
+    maxValue?: number | null
+    defaultValue?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type FormStepCreateOrConnectWithoutOptionsInput = {
-    where: FormStepWhereUniqueInput
-    create: XOR<FormStepCreateWithoutOptionsInput, FormStepUncheckedCreateWithoutOptionsInput>
+  export type QuestionCreateOrConnectWithoutOptionsInput = {
+    where: QuestionWhereUniqueInput
+    create: XOR<QuestionCreateWithoutOptionsInput, QuestionUncheckedCreateWithoutOptionsInput>
   }
 
-  export type FormStepUpsertWithoutOptionsInput = {
-    update: XOR<FormStepUpdateWithoutOptionsInput, FormStepUncheckedUpdateWithoutOptionsInput>
-    create: XOR<FormStepCreateWithoutOptionsInput, FormStepUncheckedCreateWithoutOptionsInput>
-    where?: FormStepWhereInput
+  export type QuestionUpsertWithoutOptionsInput = {
+    update: XOR<QuestionUpdateWithoutOptionsInput, QuestionUncheckedUpdateWithoutOptionsInput>
+    create: XOR<QuestionCreateWithoutOptionsInput, QuestionUncheckedCreateWithoutOptionsInput>
+    where?: QuestionWhereInput
   }
 
-  export type FormStepUpdateToOneWithWhereWithoutOptionsInput = {
-    where?: FormStepWhereInput
-    data: XOR<FormStepUpdateWithoutOptionsInput, FormStepUncheckedUpdateWithoutOptionsInput>
+  export type QuestionUpdateToOneWithWhereWithoutOptionsInput = {
+    where?: QuestionWhereInput
+    data: XOR<QuestionUpdateWithoutOptionsInput, QuestionUncheckedUpdateWithoutOptionsInput>
   }
 
-  export type FormStepUpdateWithoutOptionsInput = {
+  export type QuestionUpdateWithoutOptionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
-    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
-    question1?: StringFieldUpdateOperationsInput | string
-    required1?: BoolFieldUpdateOperationsInput | boolean
-    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
-    question2?: NullableStringFieldUpdateOperationsInput | string | null
-    required2?: BoolFieldUpdateOperationsInput | boolean
-    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit1?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit2?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
+    type?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    product?: ProductUpdateOneRequiredWithoutStepsNestedInput
+    step?: FormStepUpdateOneRequiredWithoutQuestionsNestedInput
   }
 
-  export type FormStepUncheckedUpdateWithoutOptionsInput = {
+  export type QuestionUncheckedUpdateWithoutOptionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    productId?: StringFieldUpdateOperationsInput | string
+    stepId?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
-    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
-    question1?: StringFieldUpdateOperationsInput | string
-    required1?: BoolFieldUpdateOperationsInput | boolean
-    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
-    question2?: NullableStringFieldUpdateOperationsInput | string | null
-    required2?: BoolFieldUpdateOperationsInput | boolean
-    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit1?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit2?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
+    type?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6964,26 +8158,6 @@ export namespace Prisma {
   export type FormStepCreateManyProductInput = {
     id?: string
     order: number
-    type1: $Enums.StepType
-    question1: string
-    required1?: boolean
-    type2?: $Enums.StepType | null
-    question2?: string | null
-    required2?: boolean
-    pricingImpact1?: $Enums.PricingImpact
-    pricePerUnit1?: number | null
-    unit1?: string | null
-    minValue1?: number | null
-    maxValue1?: number | null
-    defaultValue1?: number | null
-    pricingImpact2?: $Enums.PricingImpact
-    pricePerUnit2?: number | null
-    unit2?: string | null
-    minValue2?: number | null
-    maxValue2?: number | null
-    defaultValue2?: number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6991,129 +8165,139 @@ export namespace Prisma {
   export type FormStepUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
-    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
-    question1?: StringFieldUpdateOperationsInput | string
-    required1?: BoolFieldUpdateOperationsInput | boolean
-    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
-    question2?: NullableStringFieldUpdateOperationsInput | string | null
-    required2?: BoolFieldUpdateOperationsInput | boolean
-    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit1?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit2?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    options?: StepOptionUpdateManyWithoutStepNestedInput
+    questions?: QuestionUpdateManyWithoutStepNestedInput
   }
 
   export type FormStepUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
-    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
-    question1?: StringFieldUpdateOperationsInput | string
-    required1?: BoolFieldUpdateOperationsInput | boolean
-    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
-    question2?: NullableStringFieldUpdateOperationsInput | string | null
-    required2?: BoolFieldUpdateOperationsInput | boolean
-    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit1?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit2?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    options?: StepOptionUncheckedUpdateManyWithoutStepNestedInput
+    questions?: QuestionUncheckedUpdateManyWithoutStepNestedInput
   }
 
   export type FormStepUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
-    type1?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
-    question1?: StringFieldUpdateOperationsInput | string
-    required1?: BoolFieldUpdateOperationsInput | boolean
-    type2?: NullableEnumStepTypeFieldUpdateOperationsInput | $Enums.StepType | null
-    question2?: NullableStringFieldUpdateOperationsInput | string | null
-    required2?: BoolFieldUpdateOperationsInput | boolean
-    pricingImpact1?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit1?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit1?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue1?: NullableFloatFieldUpdateOperationsInput | number | null
-    pricingImpact2?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
-    pricePerUnit2?: NullableFloatFieldUpdateOperationsInput | number | null
-    unit2?: NullableStringFieldUpdateOperationsInput | string | null
-    minValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    maxValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    defaultValue2?: NullableFloatFieldUpdateOperationsInput | number | null
-    conditionalOn1?: NullableJsonNullValueInput | InputJsonValue
-    conditionalOn2?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type StepOptionCreateManyStepInput = {
+  export type QuestionCreateManyStepInput = {
     id?: string
-    questionNum?: number
+    order: number
+    type: $Enums.StepType
+    question: string
+    required?: boolean
+    pricingImpact?: $Enums.PricingImpact
+    pricePerUnit?: number | null
+    unit?: string | null
+    minValue?: number | null
+    maxValue?: number | null
+    defaultValue?: number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuestionUpdateWithoutStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    options?: StepOptionUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type QuestionUncheckedUpdateWithoutStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    options?: StepOptionUncheckedUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type QuestionUncheckedUpdateManyWithoutStepInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    type?: EnumStepTypeFieldUpdateOperationsInput | $Enums.StepType
+    question?: StringFieldUpdateOperationsInput | string
+    required?: BoolFieldUpdateOperationsInput | boolean
+    pricingImpact?: EnumPricingImpactFieldUpdateOperationsInput | $Enums.PricingImpact
+    pricePerUnit?: NullableFloatFieldUpdateOperationsInput | number | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    minValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    conditionalOn?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StepOptionCreateManyQuestionInput = {
+    id?: string
     label: string
     value: string
     price?: number | null
     imageUrl?: string | null
+    imagePublicId?: string | null
     order: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type StepOptionUpdateWithoutStepInput = {
+  export type StepOptionUpdateWithoutQuestionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    questionNum?: IntFieldUpdateOperationsInput | number
     label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type StepOptionUncheckedUpdateWithoutStepInput = {
+  export type StepOptionUncheckedUpdateWithoutQuestionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    questionNum?: IntFieldUpdateOperationsInput | number
     label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type StepOptionUncheckedUpdateManyWithoutStepInput = {
+  export type StepOptionUncheckedUpdateManyWithoutQuestionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    questionNum?: IntFieldUpdateOperationsInput | number
     label?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
