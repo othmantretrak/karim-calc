@@ -129,18 +129,18 @@ export function QuestionFields({
                             <Label>Default Value</Label>
                             <Input
                                 type="number"
-                                value={question.defaultValue || ''}
+                                value={question.defaultValue || 0}
                                 onChange={(e) => handleUpdate({ defaultValue: parseFloat(e.target.value) || null })}
-                                placeholder="1"
+                                placeholder="0"
                             />
                         </div>
                         <div className="space-y-2">
                             <Label>Min Value</Label>
                             <Input
                                 type="number"
-                                value={question.minValue || ''}
+                                value={question.minValue || 0}
                                 onChange={(e) => handleUpdate({ minValue: parseFloat(e.target.value) || null })}
-                                placeholder="1"
+                                placeholder="0"
                             />
                         </div>
                         <div className="space-y-2">

@@ -178,7 +178,7 @@ export default function HomePage({ products }: HomePageProps) {
         if (currentStepIndex === 0) return false;
         if (currentStepIndex > visibleSteps.length) return true;
 
-        const currentStep = visibleSteps[currentStepIndex - 1];
+        const currentStep = visibleSteps[currentStepIndex];
         if (!currentStep) return true;
 
         return !isStepComplete(currentStep);
@@ -213,6 +213,7 @@ export default function HomePage({ products }: HomePageProps) {
                         value={answer as string || ''}
                         onValueChange={(value) => handleAnswer(questionId, value)}
                         disabled={isDisabled}
+                        required
                     >
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder={`Select ${questionText.toLowerCase()}`} />
@@ -320,7 +321,7 @@ export default function HomePage({ products }: HomePageProps) {
         }
 
         if (type === 'NUMBER') {
-            const numValue = typeof answer === 'number' ? answer : (answer ? parseFloat(answer as string) : defaultValue || 1)
+            const numValue = typeof answer === 'number' ? answer : (answer ? parseFloat(answer as string) : minValue || 0)
 
             return (
                 <div key={questionId} className="space-y-2">
@@ -331,13 +332,14 @@ export default function HomePage({ products }: HomePageProps) {
                     <Input
                         id={questionId}
                         type="number"
-                        min={minValue || 1}
+                        min={minValue || 0}
                         max={maxValue || undefined}
+                        required
                         step="1"
                         value={numValue}
                         onChange={(e) => {
-                            const value = parseInt(e.target.value) || (minValue || 1)
-                            handleAnswer(questionId, Math.max(minValue || 1, value))
+                            const value = parseInt(e.target.value) || (minValue || 0)
+                            handleAnswer(questionId, Math.max(minValue || 0, value))
                         }}
                         className="w-full"
                         disabled={isDisabled}
@@ -580,6 +582,9 @@ export default function HomePage({ products }: HomePageProps) {
                                 <p>allComplete: {allComplete ? 'Yes' : 'No'}</p>
                                 <p>currentStepIndex: {currentStepIndex}</p>
                                 <p>visibleSteps length: {visibleSteps.length}</p>
+                                <pre className="text-xs bg-gray-100 p-2 rounded mt-2 overflow-auto">
+                                    {JSON.stringify({ answers }, null, 2)}
+                                </pre>
                             </div>
                         )}
 
