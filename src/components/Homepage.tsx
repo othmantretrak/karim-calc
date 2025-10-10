@@ -24,6 +24,7 @@ import RenderQuestion from './calculator/RenderQuestion'
 import NoProduct from './calculator/NoProduct'
 import ImageUpload from './calculator/ImageUpload'
 import { set } from 'zod'
+import Comments from './calculator/Comments'
 
 interface HomePageProps {
     products: Product[]
@@ -169,8 +170,8 @@ export default function HomePage({ products }: HomePageProps) {
             </div>
 
             <div className="w-full max-w-md mx-auto">
-                <Card className="overflow-hidden shadow-xl py-0">
-                    <CardHeader className="bg-gradient-to-r from-green-700 to-green-800 text-white text-center">
+                <Card className=" shadow-xl py-0">
+                    <CardHeader className="bg-gradient-to-r rounded-t-lg from-green-700 to-green-800 text-white text-center">
                         <div className="flex items-center justify-center gap-2 mb-2 my-5">
                             <Calculator className="w-5 h-5" />
                             <CardTitle className="text-lg">Snel uw prijs berekenen!</CardTitle>
@@ -209,7 +210,7 @@ export default function HomePage({ products }: HomePageProps) {
                         )}
 
                         {/* Dynamic Steps */}
-                        {currentStepIndex >= 0 && visibleSteps.map((step, index) => {
+                        {currentStepIndex >= 0 && !showImageUpload && !showComments && visibleSteps.map((step, index) => {
                             if (index !== currentStepIndex) return null;
 
                             const visibleQuestions = getVisibleQuestionsForStep(step, answers);
@@ -225,7 +226,7 @@ export default function HomePage({ products }: HomePageProps) {
                         })}
 
                         {/* LastStep Component */}
-                        {currentStepIndex === visibleSteps.length && currentStepIndex !== 0 && (
+                        {currentStepIndex === visibleSteps.length && currentStepIndex !== 0 && !showImageUpload && !showComments && (
                             <LastStep
                                 isActive
                                 onChange={(id, value) => handleAnswer(id, value)}
@@ -246,9 +247,20 @@ export default function HomePage({ products }: HomePageProps) {
 
                         {/* Thank You Component */}
                         {showThankYou && <Thankyou />}
+                        {/* Image Upload Modal */}
+                        {showImageUpload && (
+
+                            <ImageUpload setShowImageUpload={setShowImageUpload} />
+
+                        )}
+
+                        {/* Comments Modal */}
+                        {showComments && (
+                            <Comments setShowComments={setShowComments} setComments={setComments} comments={comments} />
+                        )}
 
                         {/* Debug Information */}
-                        {process.env.NODE_ENV === 'development' && (
+                        {/*   {process.env.NODE_ENV === 'development' && (
                             <div className="border-t pt-4">
                                 <h3 className="text-lg font-semibold">Debug Information</h3>
                                 <p>allComplete: {allComplete ? 'Yes' : 'No'}</p>
@@ -258,7 +270,7 @@ export default function HomePage({ products }: HomePageProps) {
                                     {JSON.stringify({ answers }, null, 2)}
                                 </pre>
                             </div>
-                        )}
+                        )} */}
 
                         {/* Price Display */}
                         {(priceInfo.total > 0 || priceInfo.partial > 0) && !showThankYou && (
@@ -299,50 +311,7 @@ export default function HomePage({ products }: HomePageProps) {
                 </Card>
             </div>
 
-            {/* Image Upload Modal */}
-            {showImageUpload && (
 
-                <ImageUpload setShowImageUpload={setShowImageUpload} />
-
-            )}
-
-            {/* Comments Modal */}
-            {showComments && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-                        <div className="bg-gradient-to-r from-green-700 to-green-800 text-white text-center py-6 rounded-t-lg">
-                            <h2 className="text-lg font-semibold">Snel uw prijs berekenen!</h2>
-                        </div>
-
-                        <div className="p-6 space-y-4">
-                            <button
-                                onClick={() => setShowComments(false)}
-                                className="flex items-center text-sm text-gray-600 hover:text-gray-900"
-                            >
-                                <ArrowLeft className="w-4 h-4 mr-2" />
-                                Ga terug
-                            </button>
-
-                            <div>
-                                <label className="block font-medium mb-2">Comments</label>
-                                <textarea
-                                    value={comments}
-                                    onChange={(e) => setComments(e.target.value)}
-                                    placeholder="Laat hier je opmerking(en) achter"
-                                    className="w-full border border-gray-300 rounded-lg p-3 h-32 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
-                                />
-                            </div>
-
-                            <button
-                                onClick={() => setShowComments(false)}
-                                className="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded font-medium"
-                            >
-                                Opslaan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     )
 }

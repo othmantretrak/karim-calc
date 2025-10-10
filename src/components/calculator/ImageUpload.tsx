@@ -6,10 +6,7 @@ import React from 'react'
 
 function ImageUpload({ setShowImageUpload }: { setShowImageUpload: React.Dispatch<React.SetStateAction<boolean>> }) {
 
-    const {
-
-        uploadedImages
-    } = useStore()
+    const { uploadedImages } = useStore()
 
     return (
         <div className="p-6 space-y-4">
