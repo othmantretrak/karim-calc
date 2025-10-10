@@ -278,7 +278,19 @@ export function QuestionFields({
                                 </div>
                             ))}
                         </div>
+
                     )}
+                    <div className='w-full flex justify-end'>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => addOption(step.tempId, question.tempId)}
+                        >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add Option
+                        </Button>
+                    </div>
                 </div>
             )}
 
