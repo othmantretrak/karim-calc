@@ -103,7 +103,7 @@ const LastStep: React.FC<LastStepProps> = ({
             </div>
 
             {/* Foto / Opmerkingen buttons (only here) */}
-            <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-4 text-sm mt-4">
                 <button
                     type="button"
                     onClick={() => onOpenImageUpload?.()}

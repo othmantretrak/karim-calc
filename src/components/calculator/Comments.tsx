@@ -21,7 +21,7 @@ function Comments({ comments, setComments, setShowComments }: CommentsProps) {
             </button>
 
             <div>
-                <label className="block font-medium mb-2">Comments</label>
+                <label className="block font-medium mb-2">Opmerkingen</label>
                 <textarea
                     value={comments}
                     onChange={(e) => setComments(e.target.value)}

@@ -153,7 +153,7 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
                                 })}
                             </div>
                             <div className="mt-3 flex justify-end">
-                                <button type="button" className="text-sm px-3 py-1 bg-green-700 text-white rounded" onClick={() => setOpenMultiSelect(null)}>Done</button>
+                                <button type="button" className="text-sm px-3 py-1 bg-green-700 text-white rounded" onClick={() => setOpenMultiSelect(null)}>Klaar</button>
                             </div>
                         </div>
                     )}
@@ -178,7 +178,7 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
                     max={maxValue || undefined}
                     required
                     step="1"
-                    value={numValue}
+                    value={numValue === 0 ? "" : numValue}
                     onChange={(e) => {
                         const value = parseInt(e.target.value) || (minValue || 0)
                         handleAnswer(questionId, Math.max(minValue || 0, value))
