@@ -344,7 +344,6 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
                                         key={step.tempId}
                                         step={step}
                                         index={index}
-                                        totalSteps={steps.length}
                                         allSteps={steps} // Pass all steps for conditional logic options
                                         updateStep={updateStep}
                                         deleteStep={deleteStep}
