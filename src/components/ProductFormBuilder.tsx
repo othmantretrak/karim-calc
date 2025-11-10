@@ -44,6 +44,7 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
     const [productDescription, setProductDescription] = useState(initialData?.description || '')
     const [steps, setSteps] = useState<StepFormData[]>(initialData?.steps || [])
     const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(!!initialData?.slug)
+    const [status, setStatus] = useState<string>(initialData?.status || 'draft')
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -259,6 +260,7 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
                 name: productName,
                 slug,
                 description: productDescription,
+                status,
                 steps: steps.map(({ tempId: stepTempId, ...s }) => ({
                     ...s,
                     tempId: stepTempId, // Pass tempId for server-side mapping
@@ -292,6 +294,16 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
         <form onSubmit={handleSubmit} className="space-y-6">
             {/* 3. Submission Header */}
             <div className="flex justify-end gap-4">
+                {/* Also show published checkbox in header for convenience */}
+                <label className="flex items-center space-x-2">
+                    <input
+                        type="checkbox"
+                        checked={status === "published"}
+                        onChange={(e) => setStatus(e.target.checked ? "published" : "draft")}
+                        disabled={isSubmitting}
+                    />
+                    <span>Published</span>
+                </label>
                 <Button
                     type="button"
                     variant="outline"
@@ -370,6 +382,16 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
 
             {/* 3. Submission Footer */}
             <div className="flex justify-end gap-4">
+                {/* Also show published checkbox in footer for convenience */}
+                <label className="flex items-center space-x-2">
+                    <input
+                        type="checkbox"
+                        checked={status === "published"}
+                        onChange={(e) => setStatus(e.target.checked ? "published" : "draft")}
+                        className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                    />
+                    <span className="text-sm">Published</span>
+                </label>
                 <Button
                     type="button"
                     variant="outline"

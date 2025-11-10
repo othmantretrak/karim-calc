@@ -4,8 +4,12 @@ import HomePage from '@/components/Homepage'
 import { Product, Question } from './types/formBuilder'
 
 export default async function Page() {
-  // Fetch all products with their form steps and options
+  // Fetch all products with their form steps and options where status is 'published'
+
   const productsData = await prisma.product.findMany({
+    where: {
+      status: 'published'
+    },
     include: {
       steps: {
         orderBy: {

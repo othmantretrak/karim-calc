@@ -43,6 +43,7 @@ interface ProductFormData {
     name: string;
     slug: string;
     description?: string;
+    status?: string;
     steps: StepData[];
 }
 
@@ -66,6 +67,7 @@ export async function createProduct(formData: ProductFormData) {
                     name: formData.name,
                     slug: formData.slug,
                     description: formData.description || null,
+                    status: formData.status || 'draft',
                 },
             });
 
@@ -170,6 +172,7 @@ export async function updateProduct(productId: string, formData: ProductFormData
                     name: formData.name,
                     slug: formData.slug,
                     description: formData.description || null,
+                    status: formData.status || 'draft',
                 },
             });
 

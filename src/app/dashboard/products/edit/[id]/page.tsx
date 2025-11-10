@@ -15,6 +15,7 @@ function mapProductToInitialData(product: Awaited<ReturnType<typeof getProductBy
         name: product.name,
         slug: product.slug,
         description: product.description,
+        status: product.status,
         steps: product.steps.map(step => ({
             tempId: step.id, // Use real ID as tempId
             order: step.order,

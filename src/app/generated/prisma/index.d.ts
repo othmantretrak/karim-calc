@@ -1275,6 +1275,7 @@ export namespace Prisma {
     description: string | null
     baseImageUrl: string | null
     baseImagePublicId: string | null
+    status: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1286,6 +1287,7 @@ export namespace Prisma {
     description: string | null
     baseImageUrl: string | null
     baseImagePublicId: string | null
+    status: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1297,6 +1299,7 @@ export namespace Prisma {
     description: number
     baseImageUrl: number
     baseImagePublicId: number
+    status: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1310,6 +1313,7 @@ export namespace Prisma {
     description?: true
     baseImageUrl?: true
     baseImagePublicId?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1321,6 +1325,7 @@ export namespace Prisma {
     description?: true
     baseImageUrl?: true
     baseImagePublicId?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1332,6 +1337,7 @@ export namespace Prisma {
     description?: true
     baseImageUrl?: true
     baseImagePublicId?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1416,6 +1422,7 @@ export namespace Prisma {
     description: string | null
     baseImageUrl: string | null
     baseImagePublicId: string | null
+    status: string
     createdAt: Date
     updatedAt: Date
     _count: ProductCountAggregateOutputType | null
@@ -1444,6 +1451,7 @@ export namespace Prisma {
     description?: boolean
     baseImageUrl?: boolean
     baseImagePublicId?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     steps?: boolean | Product$stepsArgs<ExtArgs>
@@ -1457,6 +1465,7 @@ export namespace Prisma {
     description?: boolean
     baseImageUrl?: boolean
     baseImagePublicId?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["product"]>
@@ -1468,6 +1477,7 @@ export namespace Prisma {
     description?: boolean
     baseImageUrl?: boolean
     baseImagePublicId?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["product"]>
@@ -1479,11 +1489,12 @@ export namespace Prisma {
     description?: boolean
     baseImageUrl?: boolean
     baseImagePublicId?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "baseImageUrl" | "baseImagePublicId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "baseImageUrl" | "baseImagePublicId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     steps?: boolean | Product$stepsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -1503,6 +1514,7 @@ export namespace Prisma {
       description: string | null
       baseImageUrl: string | null
       baseImagePublicId: string | null
+      status: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["product"]>
@@ -1935,6 +1947,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Product", 'String'>
     readonly baseImageUrl: FieldRef<"Product", 'String'>
     readonly baseImagePublicId: FieldRef<"Product", 'String'>
+    readonly status: FieldRef<"Product", 'String'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
   }
@@ -5935,6 +5948,7 @@ export namespace Prisma {
     description: 'description',
     baseImageUrl: 'baseImageUrl',
     baseImagePublicId: 'baseImagePublicId',
+    status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -6154,6 +6168,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Product"> | string | null
     baseImageUrl?: StringNullableFilter<"Product"> | string | null
     baseImagePublicId?: StringNullableFilter<"Product"> | string | null
+    status?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     steps?: FormStepListRelationFilter
@@ -6166,6 +6181,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     baseImageUrl?: SortOrderInput | SortOrder
     baseImagePublicId?: SortOrderInput | SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     steps?: FormStepOrderByRelationAggregateInput
@@ -6181,6 +6197,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Product"> | string | null
     baseImageUrl?: StringNullableFilter<"Product"> | string | null
     baseImagePublicId?: StringNullableFilter<"Product"> | string | null
+    status?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     steps?: FormStepListRelationFilter
@@ -6193,6 +6210,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     baseImageUrl?: SortOrderInput | SortOrder
     baseImagePublicId?: SortOrderInput | SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProductCountOrderByAggregateInput
@@ -6210,6 +6228,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Product"> | string | null
     baseImageUrl?: StringNullableWithAggregatesFilter<"Product"> | string | null
     baseImagePublicId?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    status?: StringWithAggregatesFilter<"Product"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
   }
@@ -6476,6 +6495,7 @@ export namespace Prisma {
     description?: string | null
     baseImageUrl?: string | null
     baseImagePublicId?: string | null
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     steps?: FormStepCreateNestedManyWithoutProductInput
@@ -6488,6 +6508,7 @@ export namespace Prisma {
     description?: string | null
     baseImageUrl?: string | null
     baseImagePublicId?: string | null
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     steps?: FormStepUncheckedCreateNestedManyWithoutProductInput
@@ -6500,6 +6521,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: FormStepUpdateManyWithoutProductNestedInput
@@ -6512,6 +6534,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: FormStepUncheckedUpdateManyWithoutProductNestedInput
@@ -6524,6 +6547,7 @@ export namespace Prisma {
     description?: string | null
     baseImageUrl?: string | null
     baseImagePublicId?: string | null
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6535,6 +6559,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6546,6 +6571,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6891,6 +6917,7 @@ export namespace Prisma {
     description?: SortOrder
     baseImageUrl?: SortOrder
     baseImagePublicId?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6902,6 +6929,7 @@ export namespace Prisma {
     description?: SortOrder
     baseImageUrl?: SortOrder
     baseImagePublicId?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6913,6 +6941,7 @@ export namespace Prisma {
     description?: SortOrder
     baseImageUrl?: SortOrder
     baseImagePublicId?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7817,6 +7846,7 @@ export namespace Prisma {
     description?: string | null
     baseImageUrl?: string | null
     baseImagePublicId?: string | null
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7828,6 +7858,7 @@ export namespace Prisma {
     description?: string | null
     baseImageUrl?: string | null
     baseImagePublicId?: string | null
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7901,6 +7932,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7912,6 +7944,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     baseImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     baseImagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

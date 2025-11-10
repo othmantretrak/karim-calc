@@ -15,6 +15,7 @@ export interface ProductTableData {
     id: string;
     name: string;
     slug: string;
+    status: string;
     createdAt: Date;
     steps: Array<{ id: string }>; // Array of steps (we only need the count)
 }
@@ -92,6 +93,13 @@ export const productColumns: ColumnDef<ProductTableData>[] = [
                 {row.original.steps?.length || 0}
             </div>
         ),
+    },
+    {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => {
+            return <div>{row.original.status || 'draft'}</div>
+        },
     },
     {
         accessorKey: "createdAt",

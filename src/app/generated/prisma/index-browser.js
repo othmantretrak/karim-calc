@@ -127,6 +127,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   description: 'description',
   baseImageUrl: 'baseImageUrl',
   baseImagePublicId: 'baseImagePublicId',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
