@@ -18,6 +18,7 @@ import {
     UpdateOptionHandler,
     DeleteOptionHandler
 } from '@/app/types/productFormTypes';
+import { DeleteConfirmation } from '../DeleteConfirmation';
 
 interface FormStepEditorProps {
     step: StepFormData;
@@ -90,14 +91,11 @@ export function FormStepEditor({
                             <ChevronDown className={`w-4 h-4 transition-transform ${!collapsed ? 'rotate-180' : ''}`} />
                         </Button>
                         {/* Delete Step Control */}
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => deleteStep(step.tempId)}
-                        >
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                        </Button>
+                        <DeleteConfirmation
+                            onConfirm={() => deleteStep(step.tempId)}
+                            title="Delete Step"
+                            description={`Are you sure you want to delete Step ${index + 1}? This will remove all questions in this step. This action cannot be undone.`}
+                        />
                     </div>
                 </div>
             </CardHeader>
@@ -106,7 +104,7 @@ export function FormStepEditor({
 
                     {step.questions.map((question, qIndex) => (
                         <QuestionFields
-                            key={question.tempId}
+                            key={`${question.tempId}-${qIndex}`}
                             step={step}
                             question={question}
                             questionNum={qIndex + 1}

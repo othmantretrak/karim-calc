@@ -25,6 +25,7 @@ import NoProduct from './calculator/NoProduct'
 import ImageUpload from './calculator/ImageUpload'
 import { set } from 'zod'
 import Comments from './calculator/Comments'
+import { isContactFormValid } from '@/lib/utils'
 
 interface HomePageProps {
     products: Product[]
@@ -129,14 +130,7 @@ export default function HomePage({ products }: HomePageProps) {
 
 
 
-    const isContactFormValid = () => {
-        return contactInfo.email &&
-            contactInfo.telephone &&
-            contactInfo.surname &&
-            contactInfo.zipCode &&
-            contactInfo.street &&
-            contactInfo.residence
-    }
+
 
     const isNextDisabled = useMemo(() => {
         if (!productSlug) return true;
@@ -273,14 +267,17 @@ export default function HomePage({ products }: HomePageProps) {
                         )} */}
 
                         {/* Price Display */}
-                        {(priceInfo.total > 0 || priceInfo.partial > 0) && !showThankYou && (
+                        {!showThankYou && (
                             <div className="border-t pt-4">
                                 <div className="flex justify-between items-center text-lg font-semibold">
                                     <span>Totaal incl. btw.</span>
-                                    <span className="text-green-600">
+                                    {(priceInfo.total > 0 || priceInfo.partial > 0) ? <span className="text-green-600">
                                         {!priceInfo.isComplete && '~'} €
                                         {(priceInfo.isComplete ? priceInfo.total : priceInfo.partial).toFixed(2)}
-                                    </span>
+                                    </span> : <span className="text-green-600">
+                                        €0.00
+
+                                    </span>}
                                 </div>
                             </div>
                         )}
@@ -301,7 +298,7 @@ export default function HomePage({ products }: HomePageProps) {
                                         Volgende
                                     </Button>
                                 ) : (
-                                    <Button onClick={() => { setShowThankYou(true) }} disabled={!isContactFormValid()}>
+                                    <Button onClick={() => { setShowThankYou(true) }} disabled={!isContactFormValid(contactInfo)}>
                                         Volgende
                                     </Button>
                                 )}

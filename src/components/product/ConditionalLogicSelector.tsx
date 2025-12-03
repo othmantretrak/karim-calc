@@ -61,9 +61,9 @@ export function ConditionalLogicSelector({
                 <SelectContent>
                     <SelectItem value="none">Always show (Default)</SelectItem>
                     {availableParentQuestions.map(({ step: parentStep, question: parentQuestion }) => (
-                        parentQuestion.options.map(opt => (
+                        parentQuestion.options.map((opt, index) => (
                             <SelectItem
-                                key={`${parentQuestion.tempId}-${opt.tempId}`}
+                                key={`${parentQuestion.tempId}-${opt.tempId}-${index}`}
                                 value={JSON.stringify({ questionId: parentQuestion.tempId, value: opt.value })}
                             >
                                 Show if Step {parentStep.order + 1} Q{parentQuestion.order + 1} = {opt.label}

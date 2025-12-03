@@ -94,8 +94,41 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
         const selectedValues = typeof answer === 'string' && answer !== '' ? (answer as string).split(',') : [];
         const toggleValue = (val: string) => {
             const set = new Set(selectedValues);
-            if (set.has(val)) set.delete(val);
-            else set.add(val);
+
+            // Check if the clicked option is a "no" option (case-insensitive)
+            const isNoOption = val.toLowerCase().includes('nee') ||
+                options.find(opt => opt.value === val)?.label.toLowerCase().includes('nee');
+
+            // Check if any currently selected option is a "no" option
+            const hasNoOptionSelected = selectedValues.some(selectedVal => {
+                const opt = options.find(o => o.value === selectedVal);
+                return opt && (selectedVal.toLowerCase().includes('nee') || opt.label.toLowerCase().includes('nee'));
+            });
+
+            if (isNoOption) {
+                // If clicking a "no" option, clear all selections and only select this one
+                set.clear();
+                set.add(val);
+            } else {
+                // If clicking a regular option
+                if (hasNoOptionSelected) {
+                    // Remove the "no" option first
+                    selectedValues.forEach(selectedVal => {
+                        const opt = options.find(o => o.value === selectedVal);
+                        if (opt && (selectedVal.toLowerCase().includes('nee') || opt.label.toLowerCase().includes('nee'))) {
+                            set.delete(selectedVal);
+                        }
+                    });
+                }
+
+                // Toggle the clicked option
+                if (set.has(val)) {
+                    set.delete(val);
+                } else {
+                    set.add(val);
+                }
+            }
+
             const arr = Array.from(set);
             handleAnswer(questionId, arr.join(','));
         };
@@ -112,10 +145,39 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
                         className="w-full text-left"
                     >
                         <div className="border-input flex w-full items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm">
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm text-muted-foreground">{selectedValues.length > 0 ? `${selectedValues.length} geselecteerd` : `Select ${questionText.toLowerCase()}`}</span>
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                                {selectedValues.length > 0 ? (
+                                    <span className="text-sm truncate">
+                                        {selectedValues.map(val => {
+                                            const option = options.find(opt => opt.value === val);
+                                            return option?.label || val;
+                                        }).join(', ')}
+                                    </span>
+                                ) : (
+                                    <span className="text-sm text-muted-foreground">
+                                        Kies er een
+                                    </span>
+                                )}
                             </div>
-                            <svg className="w-4 h-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                                {selectedValues.length > 0 && (
+                                    <span
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleAnswer(questionId, '');
+                                        }}
+                                        className="p-1 hover:bg-gray-200 rounded transition-colors"
+                                        aria-label="Clear selection"
+                                    >
+                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M18 6L6 18M6 6l12 12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </span>
+                                )}
+                                <svg className="w-4 h-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M6 9l6 6 6-6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </div>
                         </div>
                     </button>
                     {openMultiSelect === questionId && (

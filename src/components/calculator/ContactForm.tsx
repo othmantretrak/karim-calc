@@ -1,5 +1,5 @@
 import { ArrowLeft } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 import useStore from '@/lib/store'
 
 interface ContactFormProps {
@@ -12,6 +12,15 @@ function ContactForm({ onBack, onSubmit }: ContactFormProps) {
     const setContactField = useStore(s => s.setContactField)
     const showThankYou = useStore(s => s.showThankYou)
     const setShowThankYou = useStore(s => s.setShowThankYou)
+
+    const [focused, setFocused] = useState<string | null>(null)
+
+    const isEmailValid = contactInfo.email.includes('@')
+    const isTelephoneValid = /^\d{1,10}$/.test(contactInfo.telephone)
+    const isZipValid = /^\d{4}\s?[a-zA-Z]{2}$/.test(contactInfo.zipCode)
+    const isStreetValid = contactInfo.street.trim() !== ''
+    const isResidenceValid = contactInfo.residence.trim() !== ''
+    const isSurnameValid = !/\d/.test(contactInfo.surname)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -41,8 +50,13 @@ function ContactForm({ onBack, onSubmit }: ContactFormProps) {
                         value={contactInfo.email}
                         onChange={(e) => setContactField('email', e.target.value)}
                         required
+                        onFocus={() => setFocused('email')}
+                        onBlur={() => setFocused(null)}
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
+                    {focused === 'email' && !isEmailValid && (
+                        <p className="text-sm text-red-500 mt-1">Voer een geldig e-mailadres in (moet &quot;@&quot; bevatten).</p>
+                    )}
                 </div>
 
                 <div>
@@ -55,8 +69,13 @@ function ContactForm({ onBack, onSubmit }: ContactFormProps) {
                         value={contactInfo.telephone}
                         onChange={(e) => setContactField('telephone', e.target.value)}
                         required
+                        onFocus={() => setFocused('telephone')}
+                        onBlur={() => setFocused(null)}
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
+                    {focused === 'telephone' && !isTelephoneValid && (
+                        <p className="text-sm text-red-500 mt-1">Voer een geldig telefoonnummer in (1–10 cijfers).</p>
+                    )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -70,8 +89,13 @@ function ContactForm({ onBack, onSubmit }: ContactFormProps) {
                             value={contactInfo.surname}
                             onChange={(e) => setContactField('surname', e.target.value)}
                             required
+                            onFocus={() => setFocused('surname')}
+                            onBlur={() => setFocused(null)}
                             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
+                        {focused === 'surname' && !isSurnameValid && (
+                            <p className="text-sm text-red-500 mt-1">Achternaam mag geen cijfers bevatten.</p>
+                        )}
                     </div>
                     <div>
                         <label className="block font-medium mb-2">
@@ -83,8 +107,13 @@ function ContactForm({ onBack, onSubmit }: ContactFormProps) {
                             value={contactInfo.zipCode}
                             onChange={(e) => setContactField('zipCode', e.target.value)}
                             required
+                            onFocus={() => setFocused('zipCode')}
+                            onBlur={() => setFocused(null)}
                             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
+                        {focused === 'zipCode' && !isZipValid && (
+                            <p className="text-sm text-red-500 mt-1">Voer een geldige postcode in (bv. 1234 AB).</p>
+                        )}
                     </div>
                 </div>
 
@@ -99,8 +128,13 @@ function ContactForm({ onBack, onSubmit }: ContactFormProps) {
                             value={contactInfo.street}
                             onChange={(e) => setContactField('street', e.target.value)}
                             required
+                            onFocus={() => setFocused('street')}
+                            onBlur={() => setFocused(null)}
                             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
+                        {focused === 'street' && !isStreetValid && (
+                            <p className="text-sm text-red-500 mt-1">Straat en huisnummer mogen niet leeg zijn.</p>
+                        )}
                     </div>
                     <div>
                         <label className="block font-medium mb-2">
@@ -112,8 +146,13 @@ function ContactForm({ onBack, onSubmit }: ContactFormProps) {
                             value={contactInfo.residence}
                             onChange={(e) => setContactField('residence', e.target.value)}
                             required
+                            onFocus={() => setFocused('residence')}
+                            onBlur={() => setFocused(null)}
                             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
+                        {focused === 'residence' && !isResidenceValid && (
+                            <p className="text-sm text-red-500 mt-1">Woonplaats mag niet leeg zijn.</p>
+                        )}
                     </div>
                 </div>
             </form>

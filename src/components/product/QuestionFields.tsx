@@ -16,6 +16,7 @@ import { Plus, Trash2, Image as ImageIcon } from 'lucide-react';
 import { AddOptionHandler } from '@/app/types/productFormTypes';
 import { ConditionalLogicSelector } from './ConditionalLogicSelector';
 import { uploadToCloudinary } from '@/app/utils/cloudinary';
+import { DeleteConfirmation } from '../DeleteConfirmation';
 
 interface QuestionFieldsProps {
     step: StepFormData;
@@ -53,14 +54,11 @@ export function QuestionFields({
             <div className="flex justify-between items-center">
                 <h4 className="font-medium">Question {questionNum}</h4>
                 {step.questions.length > 1 && (
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => deleteQuestion(step.tempId, question.tempId)}
-                    >
-                        <Trash2 className="w-4 h-4 text-destructive" />
-                    </Button>
+                    <DeleteConfirmation
+                        onConfirm={() => deleteQuestion(step.tempId, question.tempId)}
+                        title="Delete Question"
+                        description={`Are you sure you want to delete Question ${questionNum}? This action cannot be undone.`}
+                    />
                 )}
             </div>
 
@@ -191,8 +189,8 @@ export function QuestionFields({
                         <p className="text-sm text-muted-foreground">No options added yet.</p>
                     ) : (
                         <div className="space-y-3">
-                            {options.map((option) => (
-                                <div key={option.tempId} className="p-3 border rounded-lg bg-white space-y-2">
+                            {options.map((option, index) => (
+                                <div key={`${option.tempId}-${index}`} className="p-3 border rounded-lg bg-white space-y-2">
                                     <div className="flex gap-2 items-start">
                                         <div className="flex-1">
                                             <Label className="text-xs text-muted-foreground mb-1">Label *</Label>
