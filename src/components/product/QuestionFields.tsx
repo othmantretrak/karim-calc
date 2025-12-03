@@ -51,55 +51,56 @@ export function QuestionFields({
 
     return (
         <div className="space-y-4 p-4 border rounded-lg bg-muted/30">
-            <div className="flex justify-between items-center">
-                <h4 className="font-medium">Question {questionNum}</h4>
-                {step.questions.length > 1 && (
-                    <DeleteConfirmation
-                        onConfirm={() => deleteQuestion(step.tempId, question.tempId)}
-                        title="Delete Question"
-                        description={`Are you sure you want to delete Question ${questionNum}? This action cannot be undone.`}
-                    />
-                )}
-            </div>
-
-            {/* Type and Pricing Impact Selects */}
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label>Question Type *</Label>
-                    <Select
-                        value={type}
-                        onValueChange={(value: 'SELECT' | 'NUMBER' | 'CHECKBOX') => handleUpdate({ type: value })}
-                    >
-                        <SelectTrigger>
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="SELECT">Dropdown Selection</SelectItem>
-                            <SelectItem value="NUMBER">Number Input</SelectItem>
-                            <SelectItem value="CHECKBOX">Checkbox</SelectItem>
-                        </SelectContent>
-                    </Select>
+            <div className="bg-primary/20 p-3 rounded-lg space-y-4">
+                <div className="flex justify-between items-center">
+                    <h4 className="font-medium">Question {questionNum}</h4>
+                    {step.questions.length > 1 && (
+                        <DeleteConfirmation
+                            onConfirm={() => deleteQuestion(step.tempId, question.tempId)}
+                            title="Delete Question"
+                            description={`Are you sure you want to delete Question ${questionNum}? This action cannot be undone.`}
+                        />
+                    )}
                 </div>
 
-                <div className="space-y-2">
-                    <Label>Pricing Impact *</Label>
-                    <Select
-                        value={pricingImpact}
-                        onValueChange={(value: any) => handleUpdate({ pricingImpact: value })}
-                    >
-                        <SelectTrigger>
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="BASE">Base Price (Options define the base)</SelectItem>
-                            <SelectItem value="MULTIPLIER">Multiplier (Scales the total)</SelectItem>
-                            <SelectItem value="ADDITIVE">Additive (Adds fixed cost)</SelectItem>
-                            <SelectItem value="NONE">None</SelectItem>
-                        </SelectContent>
-                    </Select>
+                {/* Type and Pricing Impact Selects */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label>Question Type *</Label>
+                        <Select
+                            value={type}
+                            onValueChange={(value: 'SELECT' | 'NUMBER' | 'CHECKBOX') => handleUpdate({ type: value })}
+                        >
+                            <SelectTrigger>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="SELECT">Dropdown Selection</SelectItem>
+                                <SelectItem value="NUMBER">Number Input</SelectItem>
+                                <SelectItem value="CHECKBOX">Checkbox</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label>Pricing Impact *</Label>
+                        <Select
+                            value={pricingImpact}
+                            onValueChange={(value: any) => handleUpdate({ pricingImpact: value })}
+                        >
+                            <SelectTrigger>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="BASE">Base Price (Options define the base)</SelectItem>
+                                <SelectItem value="MULTIPLIER">Multiplier (Scales the total)</SelectItem>
+                                <SelectItem value="ADDITIVE">Additive (Adds fixed cost)</SelectItem>
+                                <SelectItem value="NONE">None</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
             </div>
-
             {/* Question Label */}
             <div className="space-y-2">
                 <Label>Question *</Label>
