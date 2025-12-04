@@ -121,9 +121,13 @@ export function getVisibleQuestionsForStep(step: FormStep, answers: Record<strin
 
             // If the referenced question is a checkbox multi-select saved as comma-separated values,
             // check whether the required value is included.
-            if (typeof actualAnswer === 'string' && actualAnswer.includes(',')) {
-                const parts = actualAnswer.split(',').filter(Boolean);
-                return parts.includes(String(value));
+            if (typeof actualAnswer === 'string' && actualAnswer.startsWith('[')) {
+                try {
+                    const parts = JSON.parse(actualAnswer);
+                    return Array.isArray(parts) && parts.includes(String(value));
+                } catch {
+                    return false;
+                }
             }
 
             return actualAnswer === value;

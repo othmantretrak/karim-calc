@@ -60,7 +60,7 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
                     required
                 >
                     <SelectTrigger className="w-full">
-                        <SelectValue placeholder={`Select ${questionText.toLowerCase()}`} />
+                        <SelectValue placeholder={`Kies er een`} />
                     </SelectTrigger>
                     <SelectContent className='w-full'>
                         {options.map((option) => (
@@ -91,7 +91,20 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
     }
 
     if (type === 'CHECKBOX') {
-        const selectedValues = typeof answer === 'string' && answer !== '' ? (answer as string).split(',') : [];
+        // Parse the answer - support both JSON array and legacy comma-separated format
+        let selectedValues: string[] = [];
+
+        if (typeof answer === 'string' && answer !== '') {
+            try {
+                // Try parsing as JSON first
+                const parsed = JSON.parse(answer);
+                selectedValues = Array.isArray(parsed) ? parsed : [];
+            } catch {
+                // Fallback to comma-separated for backward compatibility
+                selectedValues = answer.split(',');
+            }
+        }
+
         const toggleValue = (val: string) => {
             const set = new Set(selectedValues);
 
@@ -130,7 +143,8 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
             }
 
             const arr = Array.from(set);
-            handleAnswer(questionId, arr.join(','));
+            // Save as JSON array
+            handleAnswer(questionId, JSON.stringify(arr));
         };
         return (
             <div key={questionId} className="space-y-2">

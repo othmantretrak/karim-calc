@@ -168,7 +168,7 @@ export default function ProductCalculator({ product }: ProductCalculatorProps) {
                         disabled={isDisabled}
                     >
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder={`Select ${questionText.toLowerCase()}`} />
+                            <SelectValue placeholder={`Kies er een`} />
                         </SelectTrigger>
                         <SelectContent>
                             {options.map((option) => (
