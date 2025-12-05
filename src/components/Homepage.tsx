@@ -48,6 +48,7 @@ export default function HomePage({ products }: HomePageProps) {
     const [showImageUpload, setShowImageUpload] = useState(false)
     const [showComments, setShowComments] = useState(false);
     const [isLastStepComplete, setIsLastStepComplete] = useState(false);
+    const [isOnRequest, setIsOnRequest] = useState(false);
 
     // When the product slug changes (e.g., on first selection or reset), reset the step index.
     useEffect(() => {
@@ -55,7 +56,13 @@ export default function HomePage({ products }: HomePageProps) {
             setCurrentStepIndex(0);
         }
     }, [productSlug]);
+    // set isOnRequest to true when answer value contains "op aanvraag"
+    useEffect(() => {
+        console.log("Answers updated:", answers);
+        const onRequest = Object.values(answers).some(answer => typeof answer === 'string' && answer.toLowerCase().includes('op-aanvraag'));
+        setIsOnRequest(onRequest);
 
+    }, [answers]);
     // Get selected product
     const selectedProduct = useMemo(() => {
         return products.find(p => p.slug === productSlug)
@@ -134,7 +141,7 @@ export default function HomePage({ products }: HomePageProps) {
 
     const isNextDisabled = useMemo(() => {
         if (!productSlug) return true;
-        if (currentStepIndex === 0) return false;
+        //if (currentStepIndex === 0) return false;
         if (currentStepIndex > visibleSteps.length) return true;
 
         // NEW: Handle LastStep case
@@ -154,7 +161,7 @@ export default function HomePage({ products }: HomePageProps) {
             <NoProduct />
         )
     }
-
+    console.log("Rendering Homepage with products:", products);
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
             <div className="absolute top-4 left-4">
@@ -171,13 +178,14 @@ export default function HomePage({ products }: HomePageProps) {
                             <CardTitle className="text-lg">Snel uw prijs berekenen!</CardTitle>
                         </div>
                     </CardHeader>
-
-                    {selectedProduct && (
-                        <div className='flex flex-col items-end mr-5'>
-                            <Progress value={((currentStepIndex) / visibleSteps.length) * 100} className="w-40" />
-                        </div>
-                    )}
-
+                    <div className="flex items-center justify-between px-6 pt-4">
+                        <p className="text-sm text-[#9ca3af]">{visibleSteps[currentStepIndex]?.description}</p>
+                        {selectedProduct && (
+                            <div className='flex flex-col items-end mr-5'>
+                                <Progress value={((currentStepIndex) / visibleSteps.length) * 100} className="w-40" />
+                            </div>
+                        )}
+                    </div>
                     <CardContent className="p-6 space-y-6">
                         {/* Product Selection */}
                         {currentStepIndex === 0 && (
@@ -269,16 +277,21 @@ export default function HomePage({ products }: HomePageProps) {
                         {/* Price Display */}
                         {!showThankYou && (
                             <div className="border-t pt-4">
-                                <div className="flex justify-between items-center text-lg font-semibold">
-                                    <span>Totaal incl. btw.</span>
-                                    {(priceInfo.total > 0 || priceInfo.partial > 0) ? <span className="text-green-600">
-                                        {!priceInfo.isComplete && '~'} €
-                                        {(priceInfo.isComplete ? priceInfo.total : priceInfo.partial).toFixed(2)}
-                                    </span> : <span className="text-green-600">
-                                        €0.00
+                                {isOnRequest ? (
+                                    <div className="flex justify-between items-center text-lg font-semibold">
+                                        <span className="text-card-foreground">Berekening volgt na aanvraag</span>
+                                    </div>
+                                ) : (
+                                    <div className="flex justify-between items-center text-lg font-semibold">
+                                        <span>Totaal incl. btw.</span>
+                                        {(priceInfo.total > 0 || priceInfo.partial > 0) ? <span className="text-card-foreground">
+                                            {!priceInfo.isComplete && '~'} €
+                                            {(priceInfo.isComplete ? priceInfo.total : priceInfo.partial).toFixed(2)}
+                                        </span> : <span className="text-card-foreground">
+                                            €0.00
 
-                                    </span>}
-                                </div>
+                                        </span>}
+                                    </div>)}
                             </div>
                         )}
 

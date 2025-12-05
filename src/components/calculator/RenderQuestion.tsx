@@ -209,17 +209,17 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
                                                     <span className="text-sm text-muted-foreground">€{option.price.toFixed(2)}</span>
                                                 )}
                                                 {option.imageUrl && (
-                                                    <div className="group">
+                                                    <div className="group relative">
                                                         <img
                                                             src={option.imageUrl}
                                                             alt={option.label}
-                                                            className="w-8 h-8 object-cover rounded transform transition-transform duration-200 group-hover:scale-150"
+                                                            className="w-8 h-8 object-cover rounded transform transition-transform duration-200 group-hover:scale-200"
                                                         />
-                                                        <img
+                                                        {/* <img
                                                             src={option.imageUrl}
                                                             alt={option.label}
-                                                            className="absolute w-0.5 h-0.5 object-cover transform transition-transform duration-200 group-hover:scale-10000 right-15"
-                                                        />
+                                                            className="absolute w-0.5 h-0.5 object-cover transform transition-transform duration-200 group-hover:scale-1000 right-15 bottom-0 z-10"
+                                                        /> */}
                                                     </div>
                                                 )}
                                                 <input type="checkbox" checked={checked} onChange={() => toggleValue(option.value)} />
@@ -270,6 +270,48 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
                         </div>
                     </div>
                 )}
+            </div>
+        )
+    }
+
+    if (type === 'TEXT') {
+        return (
+            <div key={questionId} className="space-y-2">
+                <Label htmlFor={questionId} className="font-semibold">
+                    {questionText}
+                    <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                    id={questionId}
+                    type="text"
+                    value={answer as string || ''}
+                    onChange={(e) => handleAnswer(questionId, e.target.value)}
+                    className="w-full"
+                    disabled={isDisabled}
+                    required
+                />
+            </div>
+        )
+    }
+
+    if (type === 'FILE_UPLOAD') {
+        return (
+            <div key={questionId} className="space-y-2">
+                <Label htmlFor={questionId} className="font-semibold">
+                    {questionText}
+                    <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                    id={questionId}
+                    type="file"
+                    onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        handleAnswer(questionId, file ? file.name : '')
+                    }}
+                    className="w-full"
+                    disabled={isDisabled}
+                    required
+                />
             </div>
         )
     }

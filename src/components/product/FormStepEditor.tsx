@@ -40,6 +40,7 @@ export function FormStepEditor({
     index,
     allSteps,
     deleteStep,
+    updateStep,
     addQuestion,
     updateQuestion,
     deleteQuestion,
@@ -64,19 +65,28 @@ export function FormStepEditor({
     };
 
     const [collapsed, setCollapsed] = useState(false);
-
+    // Local state only - no parent updates until form submit
+    const [localDescription, setLocalDescription] = useState(step.description || '');
+    console.log('Rendering FormStepEditor for step:', step);
     return (
         <Card ref={setNodeRef} style={style} className="border-2 relative">
             <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2" {...attributes} {...listeners}>
-                        <GripVertical className="w-5 h-5 text-muted-foreground cursor-grab" />
+                    <div className="flex items-center gap-2">
+                        <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
+                            <GripVertical className="w-5 h-5 text-muted-foreground" />
+                        </div>
                         <span className="font-semibold">
-                            {`Step ${index + 1}`}
-                            {step.questions && step.questions.length > 0 && (
-                                <> - &quot;{(step.questions[0].question || '').toString().slice(0, 50)}{(step.questions[0].question || '').length > 50 ? '...' : ''}&quot;</>
-                            )}
+                            Step {index + 1}
                         </span>
+                        <input
+                            type="text"
+                            name={`step-${step.tempId}-description`}
+                            value={localDescription}
+                            onChange={(e) => setLocalDescription(e.target.value)}
+                            placeholder="Step description"
+                            className="ml-2 p-1 border rounded flex-1"
+                        />
                     </div>
                     <div className="flex items-center gap-2">
                         {/* Collapse/Expand Toggle */}

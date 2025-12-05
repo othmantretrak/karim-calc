@@ -19,6 +19,7 @@ function mapProductToInitialData(product: Awaited<ReturnType<typeof getProductBy
         steps: product.steps.map(step => ({
             tempId: step.id, // Use real ID as tempId
             order: step.order,
+            description: step.description || null,
             questions: step.questions.map(question => ({
                 tempId: question.id, // Use real ID as tempId
                 order: question.order,

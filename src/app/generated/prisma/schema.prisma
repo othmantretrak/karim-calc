@@ -28,12 +28,12 @@ model Product {
 }
 
 model FormStep {
-  id        String @id @default(cuid())
-  productId String
-  order     Int // Order of the step in the form
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  productId   String
+  order       Int // Order of the step in the form
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
   product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -58,6 +58,15 @@ model Question {
   minValue      Float?
   maxValue      Float?
   defaultValue  Float?
+  placeholder   String?
+  minLength     Int?
+  maxLength     Int?
+  multiline     Boolean?
+
+  // FILE_UPLOAD type fields
+  acceptedFileTypes String?
+  maxFileSize       Int?
+  allowMultiple     Boolean?
 
   // Conditional logic - format: { questionId: "xxx", value: "yes" }
   conditionalOn Json?
@@ -77,6 +86,7 @@ enum StepType {
   NUMBER // Number input
   TEXT // Text input (future use)
   CHECKBOX // Multiple selection (future use)
+  FILE_UPLOAD // File upload (future use)
 }
 
 enum PricingImpact {

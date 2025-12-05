@@ -6,7 +6,7 @@ import React from 'react'
 
 function ImageUpload({ setShowImageUpload }: { setShowImageUpload: React.Dispatch<React.SetStateAction<boolean>> }) {
 
-    const { uploadedImages } = useStore()
+    const { uploadedImages, removeUploadedImage } = useStore()
 
     return (
         <div className="p-6 space-y-4">
@@ -42,7 +42,15 @@ function ImageUpload({ setShowImageUpload }: { setShowImageUpload: React.Dispatc
             {uploadedImages.length > 0 && (
                 <div className="grid grid-cols-3 gap-2">
                     {uploadedImages.map((img, idx) => (
-                        <img key={idx} src={img} alt="" className="w-full h-24 object-cover rounded" />
+                        <div key={idx} className="relative group">
+                            <img src={img} alt="" className="w-full h-24 object-cover rounded" />
+                            <button
+                                onClick={() => removeUploadedImage(img)}
+                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-70 group-hover:opacity-100 transition-opacity"
+                            >
+                                ✕
+                            </button>
+                        </div>
                     ))}
                 </div>
             )}

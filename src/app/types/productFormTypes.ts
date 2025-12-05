@@ -13,7 +13,7 @@ export interface OptionData {
 export interface QuestionFormData {
     tempId: string;
     order: number;
-    type: 'SELECT' | 'NUMBER' | 'CHECKBOX';
+    type: 'SELECT' | 'NUMBER' | 'CHECKBOX' | 'TEXT' | 'FILE_UPLOAD';
     question: string;
     required: boolean;
     pricingImpact: 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE';
@@ -24,11 +24,22 @@ export interface QuestionFormData {
     defaultValue: number | null;
     conditionalOn: any; // Will be { questionId: string, value: any }
     options: OptionData[];
+    // TEXT type fields
+    placeholder?: string | null;
+    minLength?: number | null;
+    maxLength?: number | null;
+    multiline?: boolean;
+
+    // FILE_UPLOAD type fields
+    acceptedFileTypes?: string | null;
+    maxFileSize?: number | null;
+    allowMultiple?: boolean;
 }
 
 export interface StepFormData {
     tempId: string;
     order: number;
+    description?: string;
     questions: QuestionFormData[];
 }
 

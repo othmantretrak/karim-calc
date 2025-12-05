@@ -20,6 +20,7 @@ interface StoreState {
   uploadedImages: string[]
   setUploadedImages: (images: string[]) => void
   addUploadedImage: (image: string) => void
+  removeUploadedImage: (image: string) => void
   comments: string
   setComments: (c: string) => void
   showThankYou: boolean
@@ -50,6 +51,8 @@ const useStore = create<StoreState>((set) => ({
   uploadedImages: [],
   setUploadedImages: (images) => set({ uploadedImages: images }),
   addUploadedImage: (image) => set((s) => ({ uploadedImages: [...s.uploadedImages, image] })),
+  removeUploadedImage: (image) =>
+    set((s) => ({ uploadedImages: s.uploadedImages.filter((img) => img !== image) })),
   comments: '',
   setComments: (c) => set({ comments: c }),
   showThankYou: false,

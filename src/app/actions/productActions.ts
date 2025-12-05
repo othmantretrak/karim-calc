@@ -19,7 +19,7 @@ interface QuestionData {
     tempId?: string;
     id?: string;
     order: number;
-    type: 'SELECT' | 'NUMBER' | 'CHECKBOX';
+    type: 'SELECT' | 'NUMBER' | 'CHECKBOX' | 'TEXT' | 'FILE_UPLOAD';
     question: string;
     required: boolean;
     pricingImpact: 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE';
@@ -35,6 +35,7 @@ interface QuestionData {
 interface StepData {
     tempId?: string;
     id?: string;
+    description?: string | null;
     order: number;
     questions: QuestionData[];
 }
@@ -78,6 +79,7 @@ export async function createProduct(formData: ProductFormData) {
                 const step = await tx.formStep.create({
                     data: {
                         productId: product.id,
+                        description: stepData.description || null,
                         order: stepData.order,
                     },
                 });
@@ -187,6 +189,7 @@ export async function updateProduct(productId: string, formData: ProductFormData
                 const step = await tx.formStep.create({
                     data: {
                         productId: productId,
+                        description: stepData.description || null,
                         order: stepData.order,
                     },
                 });

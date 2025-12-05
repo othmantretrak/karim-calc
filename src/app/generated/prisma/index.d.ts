@@ -42,7 +42,8 @@ export namespace $Enums {
   SELECT: 'SELECT',
   NUMBER: 'NUMBER',
   TEXT: 'TEXT',
-  CHECKBOX: 'CHECKBOX'
+  CHECKBOX: 'CHECKBOX',
+  FILE_UPLOAD: 'FILE_UPLOAD'
 };
 
 export type StepType = (typeof StepType)[keyof typeof StepType]
@@ -2404,6 +2405,7 @@ export namespace Prisma {
     id: string | null
     productId: string | null
     order: number | null
+    description: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2412,6 +2414,7 @@ export namespace Prisma {
     id: string | null
     productId: string | null
     order: number | null
+    description: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2420,6 +2423,7 @@ export namespace Prisma {
     id: number
     productId: number
     order: number
+    description: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2438,6 +2442,7 @@ export namespace Prisma {
     id?: true
     productId?: true
     order?: true
+    description?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2446,6 +2451,7 @@ export namespace Prisma {
     id?: true
     productId?: true
     order?: true
+    description?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2454,6 +2460,7 @@ export namespace Prisma {
     id?: true
     productId?: true
     order?: true
+    description?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2549,6 +2556,7 @@ export namespace Prisma {
     id: string
     productId: string
     order: number
+    description: string | null
     createdAt: Date
     updatedAt: Date
     _count: FormStepCountAggregateOutputType | null
@@ -2576,6 +2584,7 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     order?: boolean
+    description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -2587,6 +2596,7 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     order?: boolean
+    description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -2596,6 +2606,7 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     order?: boolean
+    description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -2605,11 +2616,12 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     order?: boolean
+    description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type FormStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["formStep"]>
+  export type FormStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "order" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["formStep"]>
   export type FormStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     questions?: boolean | FormStep$questionsArgs<ExtArgs>
@@ -2632,6 +2644,7 @@ export namespace Prisma {
       id: string
       productId: string
       order: number
+      description: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["formStep"]>
@@ -3062,6 +3075,7 @@ export namespace Prisma {
     readonly id: FieldRef<"FormStep", 'String'>
     readonly productId: FieldRef<"FormStep", 'String'>
     readonly order: FieldRef<"FormStep", 'Int'>
+    readonly description: FieldRef<"FormStep", 'String'>
     readonly createdAt: FieldRef<"FormStep", 'DateTime'>
     readonly updatedAt: FieldRef<"FormStep", 'DateTime'>
   }
@@ -3520,6 +3534,9 @@ export namespace Prisma {
     minValue: number | null
     maxValue: number | null
     defaultValue: number | null
+    minLength: number | null
+    maxLength: number | null
+    maxFileSize: number | null
   }
 
   export type QuestionSumAggregateOutputType = {
@@ -3528,6 +3545,9 @@ export namespace Prisma {
     minValue: number | null
     maxValue: number | null
     defaultValue: number | null
+    minLength: number | null
+    maxLength: number | null
+    maxFileSize: number | null
   }
 
   export type QuestionMinAggregateOutputType = {
@@ -3543,6 +3563,13 @@ export namespace Prisma {
     minValue: number | null
     maxValue: number | null
     defaultValue: number | null
+    placeholder: string | null
+    minLength: number | null
+    maxLength: number | null
+    multiline: boolean | null
+    acceptedFileTypes: string | null
+    maxFileSize: number | null
+    allowMultiple: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3560,6 +3587,13 @@ export namespace Prisma {
     minValue: number | null
     maxValue: number | null
     defaultValue: number | null
+    placeholder: string | null
+    minLength: number | null
+    maxLength: number | null
+    multiline: boolean | null
+    acceptedFileTypes: string | null
+    maxFileSize: number | null
+    allowMultiple: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3577,6 +3611,13 @@ export namespace Prisma {
     minValue: number
     maxValue: number
     defaultValue: number
+    placeholder: number
+    minLength: number
+    maxLength: number
+    multiline: number
+    acceptedFileTypes: number
+    maxFileSize: number
+    allowMultiple: number
     conditionalOn: number
     createdAt: number
     updatedAt: number
@@ -3590,6 +3631,9 @@ export namespace Prisma {
     minValue?: true
     maxValue?: true
     defaultValue?: true
+    minLength?: true
+    maxLength?: true
+    maxFileSize?: true
   }
 
   export type QuestionSumAggregateInputType = {
@@ -3598,6 +3642,9 @@ export namespace Prisma {
     minValue?: true
     maxValue?: true
     defaultValue?: true
+    minLength?: true
+    maxLength?: true
+    maxFileSize?: true
   }
 
   export type QuestionMinAggregateInputType = {
@@ -3613,6 +3660,13 @@ export namespace Prisma {
     minValue?: true
     maxValue?: true
     defaultValue?: true
+    placeholder?: true
+    minLength?: true
+    maxLength?: true
+    multiline?: true
+    acceptedFileTypes?: true
+    maxFileSize?: true
+    allowMultiple?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3630,6 +3684,13 @@ export namespace Prisma {
     minValue?: true
     maxValue?: true
     defaultValue?: true
+    placeholder?: true
+    minLength?: true
+    maxLength?: true
+    multiline?: true
+    acceptedFileTypes?: true
+    maxFileSize?: true
+    allowMultiple?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3647,6 +3708,13 @@ export namespace Prisma {
     minValue?: true
     maxValue?: true
     defaultValue?: true
+    placeholder?: true
+    minLength?: true
+    maxLength?: true
+    multiline?: true
+    acceptedFileTypes?: true
+    maxFileSize?: true
+    allowMultiple?: true
     conditionalOn?: true
     createdAt?: true
     updatedAt?: true
@@ -3752,6 +3820,13 @@ export namespace Prisma {
     minValue: number | null
     maxValue: number | null
     defaultValue: number | null
+    placeholder: string | null
+    minLength: number | null
+    maxLength: number | null
+    multiline: boolean | null
+    acceptedFileTypes: string | null
+    maxFileSize: number | null
+    allowMultiple: boolean | null
     conditionalOn: JsonValue | null
     createdAt: Date
     updatedAt: Date
@@ -3789,6 +3864,13 @@ export namespace Prisma {
     minValue?: boolean
     maxValue?: boolean
     defaultValue?: boolean
+    placeholder?: boolean
+    minLength?: boolean
+    maxLength?: boolean
+    multiline?: boolean
+    acceptedFileTypes?: boolean
+    maxFileSize?: boolean
+    allowMultiple?: boolean
     conditionalOn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3810,6 +3892,13 @@ export namespace Prisma {
     minValue?: boolean
     maxValue?: boolean
     defaultValue?: boolean
+    placeholder?: boolean
+    minLength?: boolean
+    maxLength?: boolean
+    multiline?: boolean
+    acceptedFileTypes?: boolean
+    maxFileSize?: boolean
+    allowMultiple?: boolean
     conditionalOn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3829,6 +3918,13 @@ export namespace Prisma {
     minValue?: boolean
     maxValue?: boolean
     defaultValue?: boolean
+    placeholder?: boolean
+    minLength?: boolean
+    maxLength?: boolean
+    multiline?: boolean
+    acceptedFileTypes?: boolean
+    maxFileSize?: boolean
+    allowMultiple?: boolean
     conditionalOn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3848,12 +3944,19 @@ export namespace Prisma {
     minValue?: boolean
     maxValue?: boolean
     defaultValue?: boolean
+    placeholder?: boolean
+    minLength?: boolean
+    maxLength?: boolean
+    multiline?: boolean
+    acceptedFileTypes?: boolean
+    maxFileSize?: boolean
+    allowMultiple?: boolean
     conditionalOn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "stepId" | "order" | "type" | "question" | "required" | "pricingImpact" | "pricePerUnit" | "unit" | "minValue" | "maxValue" | "defaultValue" | "conditionalOn" | "createdAt" | "updatedAt", ExtArgs["result"]["question"]>
+  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "stepId" | "order" | "type" | "question" | "required" | "pricingImpact" | "pricePerUnit" | "unit" | "minValue" | "maxValue" | "defaultValue" | "placeholder" | "minLength" | "maxLength" | "multiline" | "acceptedFileTypes" | "maxFileSize" | "allowMultiple" | "conditionalOn" | "createdAt" | "updatedAt", ExtArgs["result"]["question"]>
   export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     step?: boolean | FormStepDefaultArgs<ExtArgs>
     options?: boolean | Question$optionsArgs<ExtArgs>
@@ -3885,6 +3988,13 @@ export namespace Prisma {
       minValue: number | null
       maxValue: number | null
       defaultValue: number | null
+      placeholder: string | null
+      minLength: number | null
+      maxLength: number | null
+      multiline: boolean | null
+      acceptedFileTypes: string | null
+      maxFileSize: number | null
+      allowMultiple: boolean | null
       conditionalOn: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
@@ -4325,6 +4435,13 @@ export namespace Prisma {
     readonly minValue: FieldRef<"Question", 'Float'>
     readonly maxValue: FieldRef<"Question", 'Float'>
     readonly defaultValue: FieldRef<"Question", 'Float'>
+    readonly placeholder: FieldRef<"Question", 'String'>
+    readonly minLength: FieldRef<"Question", 'Int'>
+    readonly maxLength: FieldRef<"Question", 'Int'>
+    readonly multiline: FieldRef<"Question", 'Boolean'>
+    readonly acceptedFileTypes: FieldRef<"Question", 'String'>
+    readonly maxFileSize: FieldRef<"Question", 'Int'>
+    readonly allowMultiple: FieldRef<"Question", 'Boolean'>
     readonly conditionalOn: FieldRef<"Question", 'Json'>
     readonly createdAt: FieldRef<"Question", 'DateTime'>
     readonly updatedAt: FieldRef<"Question", 'DateTime'>
@@ -5960,6 +6077,7 @@ export namespace Prisma {
     id: 'id',
     productId: 'productId',
     order: 'order',
+    description: 'description',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -5980,6 +6098,13 @@ export namespace Prisma {
     minValue: 'minValue',
     maxValue: 'maxValue',
     defaultValue: 'defaultValue',
+    placeholder: 'placeholder',
+    minLength: 'minLength',
+    maxLength: 'maxLength',
+    multiline: 'multiline',
+    acceptedFileTypes: 'acceptedFileTypes',
+    maxFileSize: 'maxFileSize',
+    allowMultiple: 'allowMultiple',
     conditionalOn: 'conditionalOn',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -6240,6 +6365,7 @@ export namespace Prisma {
     id?: StringFilter<"FormStep"> | string
     productId?: StringFilter<"FormStep"> | string
     order?: IntFilter<"FormStep"> | number
+    description?: StringNullableFilter<"FormStep"> | string | null
     createdAt?: DateTimeFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeFilter<"FormStep"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -6250,6 +6376,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     order?: SortOrder
+    description?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     product?: ProductOrderByWithRelationInput
@@ -6264,6 +6391,7 @@ export namespace Prisma {
     NOT?: FormStepWhereInput | FormStepWhereInput[]
     productId?: StringFilter<"FormStep"> | string
     order?: IntFilter<"FormStep"> | number
+    description?: StringNullableFilter<"FormStep"> | string | null
     createdAt?: DateTimeFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeFilter<"FormStep"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -6274,6 +6402,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     order?: SortOrder
+    description?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: FormStepCountOrderByAggregateInput
@@ -6290,6 +6419,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"FormStep"> | string
     productId?: StringWithAggregatesFilter<"FormStep"> | string
     order?: IntWithAggregatesFilter<"FormStep"> | number
+    description?: StringNullableWithAggregatesFilter<"FormStep"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FormStep"> | Date | string
   }
@@ -6310,6 +6440,13 @@ export namespace Prisma {
     minValue?: FloatNullableFilter<"Question"> | number | null
     maxValue?: FloatNullableFilter<"Question"> | number | null
     defaultValue?: FloatNullableFilter<"Question"> | number | null
+    placeholder?: StringNullableFilter<"Question"> | string | null
+    minLength?: IntNullableFilter<"Question"> | number | null
+    maxLength?: IntNullableFilter<"Question"> | number | null
+    multiline?: BoolNullableFilter<"Question"> | boolean | null
+    acceptedFileTypes?: StringNullableFilter<"Question"> | string | null
+    maxFileSize?: IntNullableFilter<"Question"> | number | null
+    allowMultiple?: BoolNullableFilter<"Question"> | boolean | null
     conditionalOn?: JsonNullableFilter<"Question">
     createdAt?: DateTimeFilter<"Question"> | Date | string
     updatedAt?: DateTimeFilter<"Question"> | Date | string
@@ -6330,6 +6467,13 @@ export namespace Prisma {
     minValue?: SortOrderInput | SortOrder
     maxValue?: SortOrderInput | SortOrder
     defaultValue?: SortOrderInput | SortOrder
+    placeholder?: SortOrderInput | SortOrder
+    minLength?: SortOrderInput | SortOrder
+    maxLength?: SortOrderInput | SortOrder
+    multiline?: SortOrderInput | SortOrder
+    acceptedFileTypes?: SortOrderInput | SortOrder
+    maxFileSize?: SortOrderInput | SortOrder
+    allowMultiple?: SortOrderInput | SortOrder
     conditionalOn?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6354,6 +6498,13 @@ export namespace Prisma {
     minValue?: FloatNullableFilter<"Question"> | number | null
     maxValue?: FloatNullableFilter<"Question"> | number | null
     defaultValue?: FloatNullableFilter<"Question"> | number | null
+    placeholder?: StringNullableFilter<"Question"> | string | null
+    minLength?: IntNullableFilter<"Question"> | number | null
+    maxLength?: IntNullableFilter<"Question"> | number | null
+    multiline?: BoolNullableFilter<"Question"> | boolean | null
+    acceptedFileTypes?: StringNullableFilter<"Question"> | string | null
+    maxFileSize?: IntNullableFilter<"Question"> | number | null
+    allowMultiple?: BoolNullableFilter<"Question"> | boolean | null
     conditionalOn?: JsonNullableFilter<"Question">
     createdAt?: DateTimeFilter<"Question"> | Date | string
     updatedAt?: DateTimeFilter<"Question"> | Date | string
@@ -6374,6 +6525,13 @@ export namespace Prisma {
     minValue?: SortOrderInput | SortOrder
     maxValue?: SortOrderInput | SortOrder
     defaultValue?: SortOrderInput | SortOrder
+    placeholder?: SortOrderInput | SortOrder
+    minLength?: SortOrderInput | SortOrder
+    maxLength?: SortOrderInput | SortOrder
+    multiline?: SortOrderInput | SortOrder
+    acceptedFileTypes?: SortOrderInput | SortOrder
+    maxFileSize?: SortOrderInput | SortOrder
+    allowMultiple?: SortOrderInput | SortOrder
     conditionalOn?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6400,6 +6558,13 @@ export namespace Prisma {
     minValue?: FloatNullableWithAggregatesFilter<"Question"> | number | null
     maxValue?: FloatNullableWithAggregatesFilter<"Question"> | number | null
     defaultValue?: FloatNullableWithAggregatesFilter<"Question"> | number | null
+    placeholder?: StringNullableWithAggregatesFilter<"Question"> | string | null
+    minLength?: IntNullableWithAggregatesFilter<"Question"> | number | null
+    maxLength?: IntNullableWithAggregatesFilter<"Question"> | number | null
+    multiline?: BoolNullableWithAggregatesFilter<"Question"> | boolean | null
+    acceptedFileTypes?: StringNullableWithAggregatesFilter<"Question"> | string | null
+    maxFileSize?: IntNullableWithAggregatesFilter<"Question"> | number | null
+    allowMultiple?: BoolNullableWithAggregatesFilter<"Question"> | boolean | null
     conditionalOn?: JsonNullableWithAggregatesFilter<"Question">
     createdAt?: DateTimeWithAggregatesFilter<"Question"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Question"> | Date | string
@@ -6579,6 +6744,7 @@ export namespace Prisma {
   export type FormStepCreateInput = {
     id?: string
     order: number
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutStepsInput
@@ -6589,6 +6755,7 @@ export namespace Prisma {
     id?: string
     productId: string
     order: number
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     questions?: QuestionUncheckedCreateNestedManyWithoutStepInput
@@ -6597,6 +6764,7 @@ export namespace Prisma {
   export type FormStepUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutStepsNestedInput
@@ -6607,6 +6775,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     questions?: QuestionUncheckedUpdateManyWithoutStepNestedInput
@@ -6616,6 +6785,7 @@ export namespace Prisma {
     id?: string
     productId: string
     order: number
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6623,6 +6793,7 @@ export namespace Prisma {
   export type FormStepUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6631,6 +6802,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6647,6 +6819,13 @@ export namespace Prisma {
     minValue?: number | null
     maxValue?: number | null
     defaultValue?: number | null
+    placeholder?: string | null
+    minLength?: number | null
+    maxLength?: number | null
+    multiline?: boolean | null
+    acceptedFileTypes?: string | null
+    maxFileSize?: number | null
+    allowMultiple?: boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6667,6 +6846,13 @@ export namespace Prisma {
     minValue?: number | null
     maxValue?: number | null
     defaultValue?: number | null
+    placeholder?: string | null
+    minLength?: number | null
+    maxLength?: number | null
+    multiline?: boolean | null
+    acceptedFileTypes?: string | null
+    maxFileSize?: number | null
+    allowMultiple?: boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6685,6 +6871,13 @@ export namespace Prisma {
     minValue?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    placeholder?: NullableStringFieldUpdateOperationsInput | string | null
+    minLength?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLength?: NullableIntFieldUpdateOperationsInput | number | null
+    multiline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acceptedFileTypes?: NullableStringFieldUpdateOperationsInput | string | null
+    maxFileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    allowMultiple?: NullableBoolFieldUpdateOperationsInput | boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6705,6 +6898,13 @@ export namespace Prisma {
     minValue?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    placeholder?: NullableStringFieldUpdateOperationsInput | string | null
+    minLength?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLength?: NullableIntFieldUpdateOperationsInput | number | null
+    multiline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acceptedFileTypes?: NullableStringFieldUpdateOperationsInput | string | null
+    maxFileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    allowMultiple?: NullableBoolFieldUpdateOperationsInput | boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6724,6 +6924,13 @@ export namespace Prisma {
     minValue?: number | null
     maxValue?: number | null
     defaultValue?: number | null
+    placeholder?: string | null
+    minLength?: number | null
+    maxLength?: number | null
+    multiline?: boolean | null
+    acceptedFileTypes?: string | null
+    maxFileSize?: number | null
+    allowMultiple?: boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6741,6 +6948,13 @@ export namespace Prisma {
     minValue?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    placeholder?: NullableStringFieldUpdateOperationsInput | string | null
+    minLength?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLength?: NullableIntFieldUpdateOperationsInput | number | null
+    multiline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acceptedFileTypes?: NullableStringFieldUpdateOperationsInput | string | null
+    maxFileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    allowMultiple?: NullableBoolFieldUpdateOperationsInput | boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6759,6 +6973,13 @@ export namespace Prisma {
     minValue?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    placeholder?: NullableStringFieldUpdateOperationsInput | string | null
+    minLength?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLength?: NullableIntFieldUpdateOperationsInput | number | null
+    multiline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acceptedFileTypes?: NullableStringFieldUpdateOperationsInput | string | null
+    maxFileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    allowMultiple?: NullableBoolFieldUpdateOperationsInput | boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7031,6 +7252,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     order?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7043,6 +7265,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     order?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7051,6 +7274,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     order?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7103,6 +7327,22 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -7161,6 +7401,13 @@ export namespace Prisma {
     minValue?: SortOrder
     maxValue?: SortOrder
     defaultValue?: SortOrder
+    placeholder?: SortOrder
+    minLength?: SortOrder
+    maxLength?: SortOrder
+    multiline?: SortOrder
+    acceptedFileTypes?: SortOrder
+    maxFileSize?: SortOrder
+    allowMultiple?: SortOrder
     conditionalOn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7172,6 +7419,9 @@ export namespace Prisma {
     minValue?: SortOrder
     maxValue?: SortOrder
     defaultValue?: SortOrder
+    minLength?: SortOrder
+    maxLength?: SortOrder
+    maxFileSize?: SortOrder
   }
 
   export type QuestionMaxOrderByAggregateInput = {
@@ -7187,6 +7437,13 @@ export namespace Prisma {
     minValue?: SortOrder
     maxValue?: SortOrder
     defaultValue?: SortOrder
+    placeholder?: SortOrder
+    minLength?: SortOrder
+    maxLength?: SortOrder
+    multiline?: SortOrder
+    acceptedFileTypes?: SortOrder
+    maxFileSize?: SortOrder
+    allowMultiple?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7204,6 +7461,13 @@ export namespace Prisma {
     minValue?: SortOrder
     maxValue?: SortOrder
     defaultValue?: SortOrder
+    placeholder?: SortOrder
+    minLength?: SortOrder
+    maxLength?: SortOrder
+    multiline?: SortOrder
+    acceptedFileTypes?: SortOrder
+    maxFileSize?: SortOrder
+    allowMultiple?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7214,6 +7478,9 @@ export namespace Prisma {
     minValue?: SortOrder
     maxValue?: SortOrder
     defaultValue?: SortOrder
+    minLength?: SortOrder
+    maxLength?: SortOrder
+    maxFileSize?: SortOrder
   }
 
   export type EnumStepTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -7258,6 +7525,30 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -7503,6 +7794,18 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
   export type FormStepUpdateOneRequiredWithoutQuestionsNestedInput = {
     create?: XOR<FormStepCreateWithoutQuestionsInput, FormStepUncheckedCreateWithoutQuestionsInput>
     connectOrCreate?: FormStepCreateOrConnectWithoutQuestionsInput
@@ -7719,6 +8022,11 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedEnumStepTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StepType | EnumStepTypeFieldRefInput<$PrismaModel>
     in?: $Enums.StepType[] | ListEnumStepTypeFieldRefInput<$PrismaModel>
@@ -7762,6 +8070,30 @@ export namespace Prisma {
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -7789,6 +8121,7 @@ export namespace Prisma {
   export type FormStepCreateWithoutProductInput = {
     id?: string
     order: number
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     questions?: QuestionCreateNestedManyWithoutStepInput
@@ -7797,6 +8130,7 @@ export namespace Prisma {
   export type FormStepUncheckedCreateWithoutProductInput = {
     id?: string
     order: number
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     questions?: QuestionUncheckedCreateNestedManyWithoutStepInput
@@ -7835,6 +8169,7 @@ export namespace Prisma {
     id?: StringFilter<"FormStep"> | string
     productId?: StringFilter<"FormStep"> | string
     order?: IntFilter<"FormStep"> | number
+    description?: StringNullableFilter<"FormStep"> | string | null
     createdAt?: DateTimeFilter<"FormStep"> | Date | string
     updatedAt?: DateTimeFilter<"FormStep"> | Date | string
   }
@@ -7880,6 +8215,13 @@ export namespace Prisma {
     minValue?: number | null
     maxValue?: number | null
     defaultValue?: number | null
+    placeholder?: string | null
+    minLength?: number | null
+    maxLength?: number | null
+    multiline?: boolean | null
+    acceptedFileTypes?: string | null
+    maxFileSize?: number | null
+    allowMultiple?: boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7898,6 +8240,13 @@ export namespace Prisma {
     minValue?: number | null
     maxValue?: number | null
     defaultValue?: number | null
+    placeholder?: string | null
+    minLength?: number | null
+    maxLength?: number | null
+    multiline?: boolean | null
+    acceptedFileTypes?: string | null
+    maxFileSize?: number | null
+    allowMultiple?: boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7981,6 +8330,13 @@ export namespace Prisma {
     minValue?: FloatNullableFilter<"Question"> | number | null
     maxValue?: FloatNullableFilter<"Question"> | number | null
     defaultValue?: FloatNullableFilter<"Question"> | number | null
+    placeholder?: StringNullableFilter<"Question"> | string | null
+    minLength?: IntNullableFilter<"Question"> | number | null
+    maxLength?: IntNullableFilter<"Question"> | number | null
+    multiline?: BoolNullableFilter<"Question"> | boolean | null
+    acceptedFileTypes?: StringNullableFilter<"Question"> | string | null
+    maxFileSize?: IntNullableFilter<"Question"> | number | null
+    allowMultiple?: BoolNullableFilter<"Question"> | boolean | null
     conditionalOn?: JsonNullableFilter<"Question">
     createdAt?: DateTimeFilter<"Question"> | Date | string
     updatedAt?: DateTimeFilter<"Question"> | Date | string
@@ -7989,6 +8345,7 @@ export namespace Prisma {
   export type FormStepCreateWithoutQuestionsInput = {
     id?: string
     order: number
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutStepsInput
@@ -7998,6 +8355,7 @@ export namespace Prisma {
     id?: string
     productId: string
     order: number
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8055,6 +8413,7 @@ export namespace Prisma {
   export type FormStepUpdateWithoutQuestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutStepsNestedInput
@@ -8064,6 +8423,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8112,6 +8472,13 @@ export namespace Prisma {
     minValue?: number | null
     maxValue?: number | null
     defaultValue?: number | null
+    placeholder?: string | null
+    minLength?: number | null
+    maxLength?: number | null
+    multiline?: boolean | null
+    acceptedFileTypes?: string | null
+    maxFileSize?: number | null
+    allowMultiple?: boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8131,6 +8498,13 @@ export namespace Prisma {
     minValue?: number | null
     maxValue?: number | null
     defaultValue?: number | null
+    placeholder?: string | null
+    minLength?: number | null
+    maxLength?: number | null
+    multiline?: boolean | null
+    acceptedFileTypes?: string | null
+    maxFileSize?: number | null
+    allowMultiple?: boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8164,6 +8538,13 @@ export namespace Prisma {
     minValue?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    placeholder?: NullableStringFieldUpdateOperationsInput | string | null
+    minLength?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLength?: NullableIntFieldUpdateOperationsInput | number | null
+    multiline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acceptedFileTypes?: NullableStringFieldUpdateOperationsInput | string | null
+    maxFileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    allowMultiple?: NullableBoolFieldUpdateOperationsInput | boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8183,6 +8564,13 @@ export namespace Prisma {
     minValue?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    placeholder?: NullableStringFieldUpdateOperationsInput | string | null
+    minLength?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLength?: NullableIntFieldUpdateOperationsInput | number | null
+    multiline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acceptedFileTypes?: NullableStringFieldUpdateOperationsInput | string | null
+    maxFileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    allowMultiple?: NullableBoolFieldUpdateOperationsInput | boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8191,6 +8579,7 @@ export namespace Prisma {
   export type FormStepCreateManyProductInput = {
     id?: string
     order: number
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8198,6 +8587,7 @@ export namespace Prisma {
   export type FormStepUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     questions?: QuestionUpdateManyWithoutStepNestedInput
@@ -8206,6 +8596,7 @@ export namespace Prisma {
   export type FormStepUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     questions?: QuestionUncheckedUpdateManyWithoutStepNestedInput
@@ -8214,6 +8605,7 @@ export namespace Prisma {
   export type FormStepUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8230,6 +8622,13 @@ export namespace Prisma {
     minValue?: number | null
     maxValue?: number | null
     defaultValue?: number | null
+    placeholder?: string | null
+    minLength?: number | null
+    maxLength?: number | null
+    multiline?: boolean | null
+    acceptedFileTypes?: string | null
+    maxFileSize?: number | null
+    allowMultiple?: boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8247,6 +8646,13 @@ export namespace Prisma {
     minValue?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    placeholder?: NullableStringFieldUpdateOperationsInput | string | null
+    minLength?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLength?: NullableIntFieldUpdateOperationsInput | number | null
+    multiline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acceptedFileTypes?: NullableStringFieldUpdateOperationsInput | string | null
+    maxFileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    allowMultiple?: NullableBoolFieldUpdateOperationsInput | boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8265,6 +8671,13 @@ export namespace Prisma {
     minValue?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    placeholder?: NullableStringFieldUpdateOperationsInput | string | null
+    minLength?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLength?: NullableIntFieldUpdateOperationsInput | number | null
+    multiline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acceptedFileTypes?: NullableStringFieldUpdateOperationsInput | string | null
+    maxFileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    allowMultiple?: NullableBoolFieldUpdateOperationsInput | boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8283,6 +8696,13 @@ export namespace Prisma {
     minValue?: NullableFloatFieldUpdateOperationsInput | number | null
     maxValue?: NullableFloatFieldUpdateOperationsInput | number | null
     defaultValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    placeholder?: NullableStringFieldUpdateOperationsInput | string | null
+    minLength?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLength?: NullableIntFieldUpdateOperationsInput | number | null
+    multiline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acceptedFileTypes?: NullableStringFieldUpdateOperationsInput | string | null
+    maxFileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    allowMultiple?: NullableBoolFieldUpdateOperationsInput | boolean | null
     conditionalOn?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

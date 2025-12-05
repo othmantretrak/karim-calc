@@ -69,7 +69,7 @@ export function QuestionFields({
                         <Label>Question Type *</Label>
                         <Select
                             value={type}
-                            onValueChange={(value: 'SELECT' | 'NUMBER' | 'CHECKBOX') => handleUpdate({ type: value })}
+                            onValueChange={(value: 'SELECT' | 'NUMBER' | 'CHECKBOX' | 'TEXT' | 'FILE_UPLOAD') => handleUpdate({ type: value })}
                         >
                             <SelectTrigger>
                                 <SelectValue />
@@ -78,6 +78,8 @@ export function QuestionFields({
                                 <SelectItem value="SELECT">Dropdown Selection</SelectItem>
                                 <SelectItem value="NUMBER">Number Input</SelectItem>
                                 <SelectItem value="CHECKBOX">Checkbox</SelectItem>
+                                <SelectItem value="TEXT">Text Input</SelectItem>
+                                <SelectItem value="FILE_UPLOAD">File Upload</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -111,6 +113,38 @@ export function QuestionFields({
                     required
                 />
             </div>
+
+            {/* TEXT Input Specific Fields */}
+            {type === 'TEXT' && (
+                <div className="space-y-4">
+                    <div className="space-y-2">
+                        <Label>Placeholder Text (Optional)</Label>
+                        <Input
+                            value={question.placeholder || ''}
+                            onChange={(e) => handleUpdate({ placeholder: e.target.value || null })}
+                            placeholder="e.g., Enter your text here..."
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* FILE_UPLOAD Specific Fields */}
+            {type === 'FILE_UPLOAD' && (
+                <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            id={`multiple-files-${question.tempId}`}
+                            checked={question.allowMultiple || false}
+                            onChange={(e) => handleUpdate({ allowMultiple: e.target.checked })}
+                            className="w-4 h-4"
+                        />
+                        <Label htmlFor={`multiple-files-${question.tempId}`} className="cursor-pointer">
+                            Allow multiple files
+                        </Label>
+                    </div>
+                </div>
+            )}
 
             {/* NUMBER Input Specific Fields */}
             {type === 'NUMBER' && (
@@ -236,30 +270,20 @@ export function QuestionFields({
                                             <ImageIcon className="w-3 h-3" />
                                             Image URL (Optional)
                                         </Label>
-                                        {/* <Input
-                                            value={option.imageUrl || ''}
-                                            onChange={(e) => updateOption(step.tempId, question.tempId, option.tempId, {
-                                                imageUrl: e.target.value || null
-                                            })}
-                                            placeholder="https://example.com/image.jpg"
-                                            className="text-sm"
-                                        /> */}
                                         <Input
                                             type="file"
                                             accept="image/*"
                                             onChange={(e) => {
                                                 const file = e.target.files ? e.target.files[0] : null;
                                                 if (file) {
-                                                    //const imageUrl = URL.createObjectURL(file);
                                                     uploadToCloudinary(file).then((data) => {
                                                         updateOption(step.tempId, question.tempId, option.tempId, {
                                                             imageUrl: data.secure_url
                                                         });
                                                     });
-
                                                 }
                                             }}
-                                            className="text-sm"
+                                            className="text-sm w-fit bg-green-300"
                                         />
                                         {option.imageUrl && (
                                             <div className="mt-2">
@@ -277,7 +301,6 @@ export function QuestionFields({
                                 </div>
                             ))}
                         </div>
-
                     )}
                     <div className='w-full flex justify-end'>
                         <Button

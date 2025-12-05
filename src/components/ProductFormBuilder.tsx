@@ -86,6 +86,7 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
         const newStep: StepFormData = {
             tempId: `step-${Date.now()}`,
             order: steps.length,
+            description: '',
             questions: [newQuestion],
         };
         setSteps([...steps, newStep]);
@@ -254,20 +255,30 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
         try {
             const slug = productSlug || productName.toLowerCase().replace(/\s+/g, '-');
 
-            // In a real scenario, you'd need a robust way to map temp question IDs to real DB IDs
-            // For this refactoring, we'll assume the server action can handle temp IDs or they are already mapped
+            // Get form data to capture local state from inputs
+            const formData = new FormData(e.target as HTMLFormElement);
+
+            // Build steps with descriptions from form inputs
+            const stepsWithDescriptions = steps.map((step) => {
+                const descriptionFromForm = formData.get(`step-${step.tempId}-description`) as string;
+                return {
+                    ...step,
+                    description: descriptionFromForm || step.description || '',
+                };
+            });
+
             const data = {
                 name: productName,
                 slug,
                 description: productDescription,
                 status,
-                steps: steps.map(({ tempId: stepTempId, ...s }) => ({
+                steps: stepsWithDescriptions.map(({ tempId: stepTempId, ...s }) => ({
                     ...s,
-                    tempId: stepTempId, // Pass tempId for server-side mapping
+                    tempId: stepTempId,
                     questions: s.questions.map(({ tempId: questionTempId, options, ...q }) => ({
                         ...q,
-                        tempId: questionTempId, // Pass tempId for server-side mapping
-                        options: options.map(({ tempId, ...o }) => o), // Correctly strip tempId from options
+                        tempId: questionTempId,
+                        options: options.map(({ tempId, ...o }) => o),
                     })),
                 })),
             };
@@ -356,7 +367,7 @@ export default function ProductFormBuilder({ initialData, isEdit = false }: Prod
                                         key={step.tempId}
                                         step={step}
                                         index={index}
-                                        allSteps={steps} // Pass all steps for conditional logic options
+                                        allSteps={steps}
                                         updateStep={updateStep}
                                         deleteStep={deleteStep}
                                         moveStep={moveStep}

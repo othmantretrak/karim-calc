@@ -136,6 +136,7 @@ exports.Prisma.FormStepScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
   order: 'order',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -153,6 +154,13 @@ exports.Prisma.QuestionScalarFieldEnum = {
   minValue: 'minValue',
   maxValue: 'maxValue',
   defaultValue: 'defaultValue',
+  placeholder: 'placeholder',
+  minLength: 'minLength',
+  maxLength: 'maxLength',
+  multiline: 'multiline',
+  acceptedFileTypes: 'acceptedFileTypes',
+  maxFileSize: 'maxFileSize',
+  allowMultiple: 'allowMultiple',
   conditionalOn: 'conditionalOn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -200,7 +208,8 @@ exports.StepType = exports.$Enums.StepType = {
   SELECT: 'SELECT',
   NUMBER: 'NUMBER',
   TEXT: 'TEXT',
-  CHECKBOX: 'CHECKBOX'
+  CHECKBOX: 'CHECKBOX',
+  FILE_UPLOAD: 'FILE_UPLOAD'
 };
 
 exports.PricingImpact = exports.$Enums.PricingImpact = {
