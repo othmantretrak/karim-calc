@@ -1,6 +1,6 @@
 // app/types/formBuilder.ts
 
-export type StepType = 'SELECT' | 'NUMBER' | 'TEXT' | 'CHECKBOX'
+export type StepType = 'SELECT' | 'NUMBER' | 'TEXT' | 'CHECKBOX' | 'FILE_UPLOAD'
 export type PricingImpact = 'BASE' | 'MULTIPLIER' | 'ADDITIVE' | 'NONE'
 
 // StepOption now belongs to a Question
