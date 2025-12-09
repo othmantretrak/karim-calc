@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Question } from '@/app/types/formBuilder';
 import useStore from '@/lib/store';
 import { Input } from '../ui/input';
+import { uploadToCloudinary } from '@/app/utils/cloudinary';
 
 type RenderQuestionProps = {
     question: Question
@@ -295,26 +296,72 @@ const RenderQuestion: React.FC<RenderQuestionProps> = ({ question, isDisabled = 
     }
 
     if (type === 'FILE_UPLOAD') {
+        const file = answer as string || '';
+        const isImage = file && /\.(jpg|jpeg|png|gif|webp)$/i.test(file);
+
         return (
             <div key={questionId} className="space-y-2">
                 <Label htmlFor={questionId} className="font-semibold">
                     {questionText}
                     <span className="text-red-500">*</span>
                 </Label>
-                <Input
-                    id={questionId}
-                    type="file"
-                    onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        handleAnswer(questionId, file ? file.name : '')
-                    }}
-                    className="w-full"
-                    disabled={isDisabled}
-                    required
-                />
+                <div className="space-y-2">
+                    <Input
+                        id={questionId}
+                        type="file"
+                        accept="image/*"
+                        onChange={async (e) => {
+                            const uploadedFile = e.target.files?.[0];
+                            if (uploadedFile) {
+                                try {
+                                    // Show loading state (optional)
+                                    handleAnswer(questionId, 'uploading...');
+
+                                    // Upload to Cloudinary
+                                    const result = await uploadToCloudinary(uploadedFile);
+
+                                    // Store the secure_url from Cloudinary
+                                    handleAnswer(questionId, result.secure_url);
+                                } catch (error) {
+                                    console.error('Upload failed:', error);
+                                    alert('Failed to upload image. Please try again.');
+                                    handleAnswer(questionId, '');
+                                }
+                            } else {
+                                handleAnswer(questionId, '');
+                            }
+                        }}
+                        className="w-full"
+                        disabled={isDisabled}
+                        required
+                    />
+                    {file && file !== 'uploading...' && isImage && (
+                        <div className="relative inline-block">
+                            <img
+                                src={file}
+                                alt="uploaded"
+                                className="w-32 h-32 object-cover rounded-md border"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => handleAnswer(questionId, '')}
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                                aria-label="Delete image"
+                            >
+                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M18 6L6 18M6 6l12 12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
+                    {file === 'uploading...' && (
+                        <p className="text-sm text-gray-500">Uploading image...</p>
+                    )}
+                </div>
             </div>
         )
     }
+
 
     return null
 }
