@@ -3,18 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buru Construction | Premium Architecture & Build</title>
+    <title>Buru Construction | Advanced Structural Solutions</title>
 
-    <!-- Custom Fonts: Syne (Brutalist Modern), Playfair (Elegant Italics), Inter (Clean Body) -->
+    <!-- Fonts: Manrope for technical/industrial look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@1,500;1,600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;700;800&display=swap"
       rel="stylesheet"
-    />
-
-    <!-- FontAwesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
 
     <!-- Tailwind CSS -->
@@ -23,687 +19,744 @@
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: {
-              syne: ["Syne", "sans-serif"],
-              inter: ["Inter", "sans-serif"],
-              playfair: ["Playfair Display", "serif"],
-            },
+            fontFamily: { sans: ["Manrope", "sans-serif"] },
             colors: {
-              brand: {
-                dark: "#121212", // Rich Black
-                light: "#EFECE6", // Warm Off-White (Arisca signature)
-                accent: "#FF4A1C", // Vibrant Construction Orange
-              },
+              background: "#050505",
+              surface: "#111111",
+              accent: "#ff3b00", // Industrial Safety Orange
+              text: "#f4f4f5",
             },
           },
         },
       };
     </script>
 
-    <!-- Lenis & GSAP Libraries for Webflow-style Animations -->
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <!-- Core Animation Libraries -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- SplitType for Character-level animations -->
+    <script src="https://unpkg.com/split-type"></script>
 
     <style>
-      /* Smooth Scroll Base */
-      html.lenis {
-        height: auto;
-      }
-      .lenis.lenis-smooth {
-        scroll-behavior: auto;
-      }
+      /* Base Reset & Custom Scrollbar */
+      :root {
+        cursor: none;
+      } /* Hide default cursor */
       body {
-        background-color: #efece6;
-        color: #121212;
+        background-color: #050505;
+        color: #f4f4f5;
         overflow-x: hidden;
       }
+      ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+      }
 
-      /* GSAP Initial States (prevents flickering before JS loads) */
-      .gsap-reveal,
-      .scroll-reveal-text {
-        transform: translateY(100%);
-        display: block;
-      }
-      .gsap-fade,
-      .scroll-fade-up {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      .gsap-img-reveal-overlay,
-      .scroll-img-overlay {
-        position: absolute;
+      /* Custom Cursor */
+      .cursor-dot {
+        position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
-        background: #efece6;
-        z-index: 10;
+        width: 6px;
+        height: 6px;
+        background-color: white;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: difference;
       }
-      .dark-section .scroll-img-overlay {
-        background: #121212;
+      .cursor-ring {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.3s ease,
+          height 0.3s ease,
+          background-color 0.3s ease;
+        mix-blend-mode: difference;
+      }
+      .cursor-hover .cursor-ring {
+        width: 80px;
+        height: 80px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: transparent;
       }
 
-      /* Arisca-style Circular Hover Button */
-      .circle-btn {
-        position: relative;
+      /* Preloader */
+      #preloader {
+        position: fixed;
+        inset: 0;
+        background: #050505;
+        z-index: 10000;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        padding: 4vw;
+      }
+      #loader-text {
+        font-size: 10vw;
+        font-weight: 800;
+        line-height: 0.8;
+        letter-spacing: -0.05em;
+      }
+
+      /* Video Overlay */
+      .video-overlay {
+        background: linear-gradient(to bottom, rgba(5, 5, 5, 0.2), #050505);
+      }
+
+      /* Typography & Splitting */
+      .char {
+        transform: translateY(110%);
+        transition: transform 0.5s;
+      }
+      .clip-text {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+      }
+
+      /* Magnetic Button */
+      .magnetic-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 130px;
-        height: 130px;
+        width: 150px;
+        height: 150px;
         border-radius: 50%;
-        border: 1px solid #121212;
-        transition: all 0.6s cubic-bezier(0.3, 1, 0.3, 1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
         overflow: hidden;
-        text-align: center;
+        transition: border-color 0.3s;
       }
-      .circle-btn:hover {
-        background-color: #ff4a1c;
-        border-color: #ff4a1c;
-        color: #efece6;
-        transform: scale(1.05);
+      .magnetic-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: #ff3b00;
+        transform: scale(0);
+        transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+        z-index: -1;
       }
-      .circle-btn i {
-        transition: transform 0.4s ease;
+      .magnetic-btn:hover {
+        border-color: transparent;
       }
-      .circle-btn:hover i {
-        transform: translateX(4px) rotate(-45deg);
+      .magnetic-btn:hover::before {
+        transform: scale(1);
       }
-
-      .circle-btn-light {
-        border-color: #efece6;
-        color: #efece6;
-      }
-      .circle-btn-light:hover {
-        background-color: #efece6;
-        color: #121212;
-        border-color: #efece6;
+      .magnetic-text {
+        transition: color 0.3s;
       }
 
-      /* Infinite Marquee */
-      .marquee-container {
-        width: 100vw;
-        overflow: hidden;
-        white-space: nowrap;
-        display: flex;
-      }
-      .marquee-content {
-        display: inline-block;
-        animation: marquee 15s linear infinite;
-      }
-      @keyframes marquee {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(-33.3333%);
-        }
-      }
-
-      /* Image Hover Effect */
-      .project-card img {
-        transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      .project-card:hover img {
-        transform: scale(1.08);
+      /* Utility */
+      .mix-diff {
+        mix-blend-mode: difference;
       }
     </style>
   </head>
-  <body
-    class="font-inter antialiased selection:bg-brand-accent selection:text-white"
-  >
+  <body class="antialiased selection:bg-accent selection:text-white">
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
+    <!-- Preloader -->
+    <div id="preloader">
+      <div id="loader-text">0%</div>
+    </div>
+
     <!-- Navigation -->
     <nav
-      class="fixed top-0 w-full p-6 md:px-12 flex justify-between items-center z-50 mix-blend-difference text-brand-light"
+      class="fixed top-0 w-full p-8 flex justify-between items-center z-50 mix-diff hover-target"
     >
-      <a
-        href="#"
-        class="font-syne font-bold text-2xl uppercase tracking-tighter hover:text-brand-accent transition-colors duration-300"
-        >Buru.</a
-      >
-      <div
-        class="hidden md:flex gap-10 font-inter text-xs uppercase tracking-[0.2em] font-medium"
-      >
-        <a
-          href="#about"
-          class="hover:text-brand-accent transition-colors duration-300"
-          >About</a
-        >
-        <a
-          href="#work"
-          class="hover:text-brand-accent transition-colors duration-300"
-          >Works</a
-        >
-        <a
-          href="#services"
-          class="hover:text-brand-accent transition-colors duration-300"
-          >Services</a
-        >
+      <div class="text-2xl font-extrabold tracking-tighter uppercase">
+        Buru.
+      </div>
+      <div class="flex gap-8 text-sm font-semibold tracking-widest uppercase">
+        <a href="#" class="hover-target">Industries</a>
+        <a href="#" class="hover-target">Solutions</a>
+        <a href="#" class="hover-target">Sustainability</a>
       </div>
       <a
-        href="#contact"
-        class="font-inter text-xs uppercase tracking-[0.2em] font-medium hover:text-brand-accent transition-colors duration-300"
-        >Get in touch</a
+        href="#"
+        class="text-sm font-semibold tracking-widest uppercase hover-target border-b border-white pb-1"
+        >Sign In to Pro</a
       >
     </nav>
 
     <!-- Hero Section -->
-    <section
-      class="h-screen relative pt-32 pb-10 px-6 md:px-12 flex flex-col justify-center"
-    >
-      <div class="max-w-7xl mx-auto w-full relative z-10">
-        <!-- Animated Typograpy -->
-        <div class="overflow-hidden mb-[-2vw]">
-          <h1
-            class="font-syne text-[11vw] leading-none font-extrabold uppercase tracking-tighter gsap-reveal text-brand-dark"
-          >
-            Building
-          </h1>
-        </div>
-        <div class="overflow-hidden flex items-center gap-4 md:gap-8 mb-[-2vw]">
-          <h1
-            class="font-playfair italic text-[11vw] leading-none text-brand-accent lowercase gsap-reveal"
-          >
-            the
-          </h1>
-          <h1
-            class="font-syne text-[11vw] leading-none font-extrabold uppercase tracking-tighter gsap-reveal text-brand-dark"
-          >
-            Future
-          </h1>
-        </div>
-        <div class="overflow-hidden">
-          <h1
-            class="font-syne text-[11vw] leading-none font-extrabold uppercase tracking-tighter gsap-reveal text-brand-dark"
-          >
-            Today.
-          </h1>
-        </div>
+    <section class="relative w-full h-screen overflow-hidden bg-background">
+      <!-- Background Video -->
+      <video
+        autoplay
+        loop
+        muted
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover opacity-80"
+        id="hero-video"
+      >
+        <source
+          src="https://assets.mixkit.co/videos/4165/4165-720.mp4"
+          type="video/mp4"
+        />
+      </video>
+      <div class="absolute inset-0 video-overlay"></div>
 
+      <!-- Huge Hero Typography -->
+      <div
+        class="absolute inset-0 flex flex-col items-center justify-center z-10 mix-diff pointer-events-none"
+      >
+        <div class="clip-text">
+          <h1
+            class="text-[15vw] leading-[0.8] font-extrabold uppercase tracking-tighter hero-text"
+          >
+            Buru
+          </h1>
+        </div>
+        <div class="clip-text mt-4">
+          <h2
+            class="text-[3vw] leading-none font-medium uppercase tracking-[0.5em] text-gray-300 hero-text"
+          >
+            Construction
+          </h2>
+        </div>
+      </div>
+
+      <div
+        class="absolute bottom-10 left-8 z-10 text-xs font-bold uppercase tracking-widest mix-diff"
+      >
+        <span class="block mb-2">Scroll to explore</span>
+        <div class="w-[1px] h-16 bg-white overflow-hidden origin-top">
+          <div class="w-full h-full bg-accent scroll-line"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Massive Intro Text (Relats Style) -->
+    <section class="py-[20vh] px-8 md:px-[10vw] bg-background relative z-20">
+      <h2
+        class="text-4xl md:text-[5vw] leading- font-medium tracking-tight split-text w-full max-w-[90%]"
+      >
+        We are global leaders in the engineering of structural solutions for
+        safety, longevity, and modern aesthetics.
+      </h2>
+      <div class="mt-20 flex justify-end">
+        <a href="#" class="magnetic-btn hover-target">
+          <span
+            class="magnetic-text text-sm font-bold tracking-widest uppercase text-center leading-tight"
+            >Watch<br />Video</span
+          >
+        </a>
+      </div>
+    </section>
+
+    <!-- Horizontal Scroll Section (Industries) -->
+    <section
+      id="horizontal-sec"
+      class="h-screen bg-surface flex flex-nowrap overflow-hidden relative"
+    >
+      <!-- Panel 1: Title -->
+      <div
+        class="panel w-screen h-screen flex-shrink-0 flex items-center justify-start pl-[10vw]"
+      >
+        <div>
+          <p
+            class="text-accent text-sm font-bold tracking-[0.2em] uppercase mb-4"
+          >
+            Our Industries
+          </p>
+          <h2
+            class="text-[8vw] leading-[0.9] font-extrabold uppercase tracking-tighter"
+          >
+            Staying<br />Ahead<br />Of the<br />Curve.
+          </h2>
+        </div>
+      </div>
+
+      <!-- Panel 2: Commercial -->
+      <div
+        class="panel w-[80vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-10"
+      >
+        <div class="relative w-full h-[60vh] overflow-hidden group">
+          <img
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
+            class="w-full h-full object-cover scale-110 img-parallax"
+            alt="Commercial"
+          />
+          <div
+            class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition duration-700"
+          ></div>
+        </div>
         <div
-          class="mt-12 md:mt-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-10"
+          class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
+        >
+          <h3 class="text-4xl font-bold uppercase">
+            Commercial<br />& Corporate
+          </h3>
+          <span class="text-gray-400 font-mono text-sm">87 Projects</span>
+        </div>
+      </div>
+
+      <!-- Panel 3: Infrastructure -->
+      <div
+        class="panel w-[80vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-10"
+      >
+        <div class="relative w-full h-[60vh] overflow-hidden group">
+          <img
+            src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/6.webp"
+            class="w-full h-full object-cover scale-110 img-parallax"
+            alt="Infrastructure"
+          />
+          <div
+            class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition duration-700"
+          ></div>
+        </div>
+        <div
+          class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
+        >
+          <h3 class="text-4xl font-bold uppercase">Industrial<br />& Energy</h3>
+          <span class="text-gray-400 font-mono text-sm">46 Projects</span>
+        </div>
+      </div>
+
+      <!-- Panel 4: Residential -->
+      <div
+        class="panel w-[80vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-10 pr-[10vw]"
+      >
+        <div class="relative w-full h-[60vh] overflow-hidden group">
+          <img
+            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
+            class="w-full h-full object-cover scale-110 img-parallax"
+            alt="Residential"
+          />
+          <div
+            class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition duration-700"
+          ></div>
+        </div>
+        <div
+          class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
+        >
+          <h3 class="text-4xl font-bold uppercase">Modern<br />Residential</h3>
+          <span class="text-gray-400 font-mono text-sm">112 Projects</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sticky Pinned Section (Solutions) -->
+    <section class="bg-background relative text-white">
+      <div class="flex flex-col md:flex-row w-full">
+        <!-- Left Side (Sticky) -->
+        <div
+          class="w-full md:w-1/2 h-screen sticky top-0 flex flex-col justify-center pl-8 md:pl-[10vw] pr-8 border-r border-white/10 z-10 bg-background"
         >
           <p
-            class="max-w-sm font-inter text-sm md:text-base leading-relaxed text-gray-600 gsap-fade"
+            class="text-accent text-sm font-bold tracking-[0.2em] uppercase mb-4"
           >
-            Designed to spark ideas. Buru is a modern construction and
-            architectural agency creating innovative, functional, and highly
-            sustainable spaces.
+            Core Competencies
           </p>
-          <a href="#work" class="circle-btn gsap-fade">
-            <span
-              class="text-xs font-bold uppercase tracking-widest flex flex-col items-center gap-2"
-            >
-              Explore <i class="fa-solid fa-arrow-right text-lg"></i>
-            </span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Floating Parallax Image -->
-      <div
-        class="absolute top-24 right-10 md:right-24 w-1/3 md:w-1/4 aspect-[3/4] overflow-hidden hidden sm:block rounded-sm pointer-events-none"
-      >
-        <div class="gsap-img-reveal-overlay"></div>
-        <div class="w-full h-full scroll-parallax" data-speed="0.15">
-          <img
-            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-            alt="Architecture"
-            class="w-full h-full object-cover scale-125"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Infinite Marquee Section -->
-    <div
-      class="py-12 border-y border-brand-dark/10 bg-brand-dark text-brand-light"
-    >
-      <div class="marquee-container">
-        <div
-          class="marquee-content flex gap-12 font-syne text-5xl md:text-7xl uppercase font-bold tracking-wider"
-        >
-          <span>• ARCHITECTURE</span><span>• CONSTRUCTION</span
-          ><span>• INNOVATION</span><span>• RENOVATION</span>
-          <!-- Duplicates for seamless loop -->
-          <span>• ARCHITECTURE</span><span>• CONSTRUCTION</span
-          ><span>• INNOVATION</span><span>• RENOVATION</span>
-          <span>• ARCHITECTURE</span><span>• CONSTRUCTION</span
-          ><span>• INNOVATION</span><span>• RENOVATION</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- About Section (Large Typography & Image) -->
-    <section id="about" class="py-32 px-6 md:px-12">
-      <div
-        class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 items-center"
-      >
-        <div class="w-full lg:w-1/2">
-          <div class="overflow-hidden mb-2">
-            <h2
-              class="font-syne text-6xl md:text-8xl font-bold uppercase leading-[0.85] scroll-reveal-text"
-            >
-              Structural
-            </h2>
-          </div>
-          <div class="overflow-hidden mb-2">
-            <h2
-              class="font-playfair italic text-6xl md:text-8xl text-brand-accent lowercase leading-[0.85] scroll-reveal-text"
-            >
-              harmony in
-            </h2>
-          </div>
-          <div class="overflow-hidden mb-10">
-            <h2
-              class="font-syne text-6xl md:text-8xl font-bold uppercase leading-[0.85] scroll-reveal-text"
-            >
-              Every build.
-            </h2>
-          </div>
-          <p class="font-inter text-lg text-gray-600 max-w-md scroll-fade-up">
-            We pride ourselves on delivering projects on time and to the highest
-            standards. From small residential renovations to massive commercial
-            structures, our expert team brings structural perfection.
-          </p>
-          <div class="mt-12 scroll-fade-up">
-            <a
-              href="#services"
-              class="border-b-2 border-brand-dark pb-1 text-sm uppercase font-syne font-bold tracking-[0.2em] hover:text-brand-accent hover:border-brand-accent transition-colors duration-300"
-              >Discover Our Services</a
-            >
-          </div>
-        </div>
-
-        <div
-          class="w-full lg:w-1/2 h-[70vh] md:h-[90vh] relative overflow-hidden rounded group"
-        >
-          <div class="scroll-img-overlay"></div>
-          <div class="w-full h-full scroll-parallax" data-speed="0.1">
-            <img
-              src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/6.webp"
-              alt="About"
-              class="w-full h-full object-cover scale-[1.15] transition-transform duration-1000 group-hover:scale-100"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured Projects (Dark Section) -->
-    <section
-      id="work"
-      class="py-32 px-6 md:px-12 bg-brand-dark text-brand-light dark-section"
-    >
-      <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <div
-          class="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-10 scroll-fade-up"
-        >
-          <div>
-            <h2
-              class="font-syne text-5xl md:text-7xl font-bold uppercase leading-none"
-            >
-              Featured
-            </h2>
-            <h2
-              class="font-playfair italic text-5xl md:text-7xl text-brand-accent lowercase leading-none mt-2"
-            >
-              works.
-            </h2>
-          </div>
-          <a href="#" class="circle-btn circle-btn-light hidden md:inline-flex">
-            <span class="text-xs font-bold uppercase tracking-widest"
-              >View All</span
-            >
+          <h2
+            class="text-5xl md:text-[5vw] leading-[0.9] font-extrabold uppercase tracking-tighter mb-8"
+          >
+            Sustainable<br />Solutions<br />for the<br />Future.
+          </h2>
+          <a
+            href="#"
+            class="inline-flex items-center gap-4 text-sm font-bold uppercase tracking-widest hover-target group"
+          >
+            Explore Catalog
+            <div
+              class="w-8 h-[1px] bg-white group-hover:w-12 group-hover:bg-accent transition-all duration-300"
+            ></div>
           </a>
         </div>
 
-        <!-- Staggered Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-32">
-          <!-- Project 1 -->
-          <div class="mt-0 project-card scroll-fade-up group cursor-pointer">
-            <div class="relative overflow-hidden aspect-[4/5] mb-8 rounded">
-              <div class="scroll-img-overlay"></div>
-              <img
-                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                alt="Lunexa Villa"
-                class="w-full h-full object-cover"
-              />
-              <!-- Hover Reveal Arrow -->
-              <div
-                class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center z-20"
-              >
-                <div
-                  class="w-24 h-24 bg-brand-accent rounded-full flex items-center justify-center text-white -rotate-45 translate-y-8 group-hover:translate-y-0 transition-all duration-500 ease-out"
-                >
-                  <i class="fa-solid fa-arrow-right text-3xl"></i>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-col gap-2">
-              <div
-                class="flex justify-between items-center border-b border-white/20 pb-4"
-              >
-                <h3 class="font-syne text-3xl md:text-4xl uppercase font-bold">
-                  Lunexa Villa
-                </h3>
-                <span class="font-inter text-sm text-gray-400">2023</span>
-              </div>
-              <p class="font-playfair italic text-gray-400 text-lg">
-                Residential Architecture
-              </p>
-            </div>
-          </div>
-
-          <!-- Project 2 (Staggered down) -->
+        <!-- Right Side (Scrollable Cards) -->
+        <div class="w-full md:w-1/2 relative z-0">
+          <!-- Card 1 -->
           <div
-            class="md:mt-40 project-card scroll-fade-up group cursor-pointer"
+            class="h-screen w-full flex items-center justify-center p-10 border-b border-white/10"
           >
-            <div class="relative overflow-hidden aspect-[4/5] mb-8 rounded">
-              <div class="scroll-img-overlay"></div>
+            <div
+              class="w-full h-[70vh] relative group cursor-pointer hover-target"
+            >
               <img
                 src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/12.webp"
-                alt="The Creatify"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-700"
               />
-              <!-- Hover Reveal Arrow -->
               <div
-                class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center z-20"
+                class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black/90 to-transparent"
               >
-                <div
-                  class="w-24 h-24 bg-brand-accent rounded-full flex items-center justify-center text-white -rotate-45 translate-y-8 group-hover:translate-y-0 transition-all duration-500 ease-out"
-                >
-                  <i class="fa-solid fa-arrow-right text-3xl"></i>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-col gap-2">
-              <div
-                class="flex justify-between items-center border-b border-white/20 pb-4"
-              >
-                <h3 class="font-syne text-3xl md:text-4xl uppercase font-bold">
-                  The Creatify
+                <h3 class="text-3xl font-bold uppercase">
+                  Structural Integration
                 </h3>
-                <span class="font-inter text-sm text-gray-400">2023</span>
+                <p class="text-gray-400 mt-2 font-medium">
+                  Advanced load-bearing technologies.
+                </p>
               </div>
-              <p class="font-playfair italic text-gray-400 text-lg">
-                Commercial Space
-              </p>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Interactive Services Section -->
-    <section id="services" class="py-32 px-6 md:px-12 bg-brand-light">
-      <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20">
-        <div class="w-full lg:w-1/3">
-          <h2
-            class="font-syne text-5xl md:text-6xl font-bold uppercase mb-4 scroll-fade-up leading-tight"
+          <!-- Card 2 -->
+          <div
+            class="h-screen w-full flex items-center justify-center p-10 border-b border-white/10"
           >
-            Our<br /><span
-              class="font-playfair italic text-brand-accent lowercase text-5xl md:text-6xl"
-              >Expertise</span
+            <div
+              class="w-full h-[70vh] relative group cursor-pointer hover-target"
             >
-          </h2>
-          <p class="font-inter text-gray-600 mb-8 scroll-fade-up text-lg">
-            We cover all phases of construction, ensuring the highest level of
-            quality and precision in every build we undertake.
-          </p>
-        </div>
-
-        <div class="w-full lg:w-2/3 flex flex-col">
-          <!-- Service 1 -->
-          <div
-            class="group border-t border-brand-dark/20 py-10 flex justify-between items-center cursor-pointer scroll-fade-up hover:border-brand-accent transition-colors duration-500"
-          >
-            <div class="flex gap-6 md:gap-12 items-center">
-              <span
-                class="font-inter text-sm text-gray-400 group-hover:text-brand-accent transition-colors duration-500"
-                >01</span
+              <img
+                src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-700"
+              />
+              <div
+                class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black/90 to-transparent"
               >
-              <h3
-                class="font-syne text-3xl md:text-5xl uppercase font-bold group-hover:translate-x-6 transition-transform duration-500 ease-out"
-              >
-                New Construction
-              </h3>
+                <h3 class="text-3xl font-bold uppercase">Thermal Insulation</h3>
+                <p class="text-gray-400 mt-2 font-medium">
+                  Energy-efficient climate control materials.
+                </p>
+              </div>
             </div>
-            <i
-              class="fa-solid fa-arrow-right text-3xl opacity-0 -translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out text-brand-accent -rotate-45"
-            ></i>
           </div>
-          <!-- Service 2 -->
-          <div
-            class="group border-t border-brand-dark/20 py-10 flex justify-between items-center cursor-pointer scroll-fade-up hover:border-brand-accent transition-colors duration-500"
-          >
-            <div class="flex gap-6 md:gap-12 items-center">
-              <span
-                class="font-inter text-sm text-gray-400 group-hover:text-brand-accent transition-colors duration-500"
-                >02</span
+          <!-- Card 3 -->
+          <div class="h-screen w-full flex items-center justify-center p-10">
+            <div
+              class="w-full h-[70vh] relative group cursor-pointer hover-target"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-700"
+              />
+              <div
+                class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black/90 to-transparent"
               >
-              <h3
-                class="font-syne text-3xl md:text-5xl uppercase font-bold group-hover:translate-x-6 transition-transform duration-500 ease-out"
-              >
-                Renovations
-              </h3>
+                <h3 class="text-3xl font-bold uppercase">Impact Protection</h3>
+                <p class="text-gray-400 mt-2 font-medium">
+                  Seismic and weather-resistant structures.
+                </p>
+              </div>
             </div>
-            <i
-              class="fa-solid fa-arrow-right text-3xl opacity-0 -translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out text-brand-accent -rotate-45"
-            ></i>
-          </div>
-          <!-- Service 3 -->
-          <div
-            class="group border-t border-b border-brand-dark/20 py-10 flex justify-between items-center cursor-pointer scroll-fade-up hover:border-brand-accent transition-colors duration-500"
-          >
-            <div class="flex gap-6 md:gap-12 items-center">
-              <span
-                class="font-inter text-sm text-gray-400 group-hover:text-brand-accent transition-colors duration-500"
-                >03</span
-              >
-              <h3
-                class="font-syne text-3xl md:text-5xl uppercase font-bold group-hover:translate-x-6 transition-transform duration-500 ease-out"
-              >
-                Maintenance
-              </h3>
-            </div>
-            <i
-              class="fa-solid fa-arrow-right text-3xl opacity-0 -translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out text-brand-accent -rotate-45"
-            ></i>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Massive Footer -->
-    <footer
-      id="contact"
-      class="bg-brand-dark text-brand-light pt-32 pb-8 px-6 md:px-12 relative overflow-hidden"
+    <!-- Massive Marquee -->
+    <section
+      class="py-32 bg-accent text-background overflow-hidden flex whitespace-nowrap"
     >
-      <div class="max-w-7xl mx-auto relative z-10">
-        <div
-          class="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-12 scroll-fade-up"
-        >
-          <div>
-            <h2
-              class="font-syne text-5xl md:text-7xl font-bold uppercase mb-6 leading-[0.9]"
+      <div
+        class="marquee-track flex font-extrabold text-[12vw] uppercase tracking-tighter leading-none"
+      >
+        <span class="pr-12">INNOVATION IN ACTION •</span>
+        <span class="pr-12">INNOVATION IN ACTION •</span>
+        <span class="pr-12">INNOVATION IN ACTION •</span>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="bg-background pt-[15vh] pb-10 px-8 md:px-[10vw] border-t border-white/10"
+    >
+      <div
+        class="flex flex-col md:flex-row justify-between items-end mb-20 gap-10"
+      >
+        <div>
+          <p
+            class="text-gray-400 text-sm font-bold tracking-[0.2em] uppercase mb-6"
+          >
+            Start a project
+          </p>
+          <h2
+            class="text-5xl md:text-[6vw] leading-[0.9] font-extrabold uppercase tracking-tighter"
+          >
+            Have a<br />Project?
+          </h2>
+        </div>
+        <a href="#" class="magnetic-btn hover-target">
+          <span
+            class="magnetic-text text-sm font-bold tracking-widest uppercase text-center leading-tight"
+            >Contact<br />Us</span
+          >
+        </a>
+      </div>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-4 gap-10 border-t border-white/20 pt-10 text-sm font-semibold tracking-widest uppercase text-gray-400"
+      >
+        <div>
+          <p class="text-white mb-4">Contact</p>
+          <a
+            href="#"
+            class="block hover:text-accent transition hover-target mb-2"
+            >relatshq@buru.com</a
+          >
+          <a href="#" class="block hover:text-accent transition hover-target"
+            >+31 20 123 4567</a
+          >
+        </div>
+        <div>
+          <p class="text-white mb-4">Locations</p>
+          <a
+            href="#"
+            class="block hover:text-accent transition hover-target mb-2"
+            >Amsterdam, NL</a
+          >
+          <a href="#" class="block hover:text-accent transition hover-target"
+            >Barcelona, ES</a
+          >
+        </div>
+        <div class="md:col-span-2 flex justify-between items-end h-full">
+          <div class="flex gap-6">
+            <a href="#" class="hover:text-white transition hover-target"
+              >Linkedin</a
             >
-              Got a project<br /><span
-                class="font-playfair italic text-brand-accent lowercase"
-                >in mind?</span
-              >
-            </h2>
-            <a
-              href="mailto:info@buruconstruction.nl"
-              class="font-inter text-xl md:text-3xl border-b-2 border-brand-light pb-2 hover:text-brand-accent hover:border-brand-accent transition-all duration-300"
-              >info@buru.nl</a
+            <a href="#" class="hover:text-white transition hover-target"
+              >Twitter</a
             >
           </div>
-
-          <div
-            class="flex gap-16 font-inter text-xs uppercase tracking-[0.15em] font-medium"
-          >
-            <div class="flex flex-col gap-5">
-              <span class="text-gray-500 mb-2">Socials</span>
-              <a
-                href="#"
-                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
-                >Instagram</a
-              >
-              <a
-                href="#"
-                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
-                >Twitter / X</a
-              >
-              <a
-                href="#"
-                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
-                >LinkedIn</a
-              >
-            </div>
-            <div class="flex flex-col gap-5">
-              <span class="text-gray-500 mb-2">Company</span>
-              <a
-                href="#about"
-                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
-                >About</a
-              >
-              <a
-                href="#work"
-                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
-                >Works</a
-              >
-              <a
-                href="#services"
-                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
-                >Services</a
-              >
-            </div>
-          </div>
-        </div>
-
-        <!-- Giant Typography Logo -->
-        <div
-          class="w-full text-center border-t border-brand-light/10 pt-16 scroll-fade-up"
-        >
-          <h1
-            class="font-syne text-[16vw] leading-none font-extrabold uppercase tracking-tighter text-brand-light/5 select-none transition-colors duration-700 hover:text-brand-light/10"
-          >
-            BURU.
-          </h1>
-        </div>
-
-        <div
-          class="flex flex-col md:flex-row justify-between items-center mt-12 font-inter text-xs text-gray-500 uppercase tracking-widest gap-4"
-        >
-          <span>&copy; 2024 Buru Construction.</span>
-          <span>By othman Tretrak</span>
+          <p>BY othman tretrak</p>
         </div>
       </div>
     </footer>
 
-    <!-- GSAP Animation Logic -->
+    <!-- JS Logic for Relats-style Advanced Animations -->
     <script>
-      document.addEventListener("DOMContentLoaded", (event) => {
-        gsap.registerPlugin(ScrollTrigger);
+      // 1. Initialize Lenis (Smooth Scrolling)
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smooth: true,
+      });
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
 
-        // 1. Lenis Smooth Scroll Initialization
-        const lenis = new Lenis({
-          duration: 1.2,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          direction: "vertical",
-          gestureDirection: "vertical",
-          smooth: true,
-          mouseMultiplier: 1,
-          smoothTouch: false,
-          touchMultiplier: 2,
-          infinite: false,
+      // Register GSAP ScrollTrigger
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Sync Lenis with GSAP ScrollTrigger
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
+
+      // 2. Custom Cursor Logic (Using GSAP QuickTo for performance)
+      const cursorDot = document.querySelector(".cursor-dot");
+      const cursorRing = document.querySelector(".cursor-ring");
+
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+
+      const xToDot = gsap.quickTo(cursorDot, "x", {
+        duration: 0.1,
+        ease: "power3",
+      });
+      const yToDot = gsap.quickTo(cursorDot, "y", {
+        duration: 0.1,
+        ease: "power3",
+      });
+      const xToRing = gsap.quickTo(cursorRing, "x", {
+        duration: 0.3,
+        ease: "power3",
+      });
+      const yToRing = gsap.quickTo(cursorRing, "y", {
+        duration: 0.3,
+        ease: "power3",
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        xToDot(mouseX);
+        yToDot(mouseY);
+        xToRing(mouseX);
+        yToRing(mouseY);
+      });
+
+      // Add hover effect to links/buttons
+      document.querySelectorAll(".hover-target").forEach((link) => {
+        link.addEventListener("mouseenter", () =>
+          document.body.classList.add("cursor-hover"),
+        );
+        link.addEventListener("mouseleave", () =>
+          document.body.classList.remove("cursor-hover"),
+        );
+      });
+
+      // 3. Magnetic Button Logic
+      const magneticBtns = document.querySelectorAll(".magnetic-btn");
+      magneticBtns.forEach((btn) => {
+        btn.addEventListener("mousemove", function (e) {
+          const position = btn.getBoundingClientRect();
+          const x = e.pageX - position.left - position.width / 2;
+          const y = e.pageY - position.top - position.height / 2;
+
+          gsap.to(btn, {
+            x: x * 0.3,
+            y: y * 0.5,
+            duration: 0.5,
+            ease: "power3.out",
+          });
+          gsap.to(btn.children[0], {
+            x: x * 0.1,
+            y: y * 0.1,
+            duration: 0.5,
+            ease: "power3.out",
+          });
         });
-
-        lenis.on("scroll", ScrollTrigger.update);
-        gsap.ticker.add((time) => {
-          lenis.raf(time * 1000);
+        btn.addEventListener("mouseleave", function () {
+          gsap.to(btn, {
+            x: 0,
+            y: 0,
+            duration: 0.5,
+            ease: "elastic.out(1, 0.3)",
+          });
+          gsap.to(btn.children[0], {
+            x: 0,
+            y: 0,
+            duration: 0.5,
+            ease: "elastic.out(1, 0.3)",
+          });
         });
-        gsap.ticker.lagSmoothing(0);
+      });
 
-        // 2. Initial Page Load Animations (Hero Section)
+      // 4. Preloader & Initial Reveal Sequence
+      let progress = 0;
+      const loaderText = document.getElementById("loader-text");
+
+      // Simulate loading
+      const loaderInterval = setInterval(() => {
+        progress += Math.floor(Math.random() * 15) + 5;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(loaderInterval);
+          loaderText.innerText = progress + "%";
+          startIntroAnimation();
+        } else {
+          loaderText.innerText = progress + "%";
+        }
+      }, 150);
+
+      function startIntroAnimation() {
         const tl = gsap.timeline();
-        tl.to(".gsap-reveal", {
-          y: "0%",
+
+        // Slide Preloader Up
+        tl.to("#preloader", {
+          yPercent: -100,
           duration: 1.2,
-          ease: "power4.out",
-          stagger: 0.1,
+          ease: "power4.inOut",
           delay: 0.2,
         })
-          .to(
-            ".gsap-fade",
-            { opacity: 1, y: 0, duration: 1, ease: "power3.out", stagger: 0.1 },
-            "-=0.8",
+
+          // Reveal Hero Text
+          .fromTo(
+            ".hero-text",
+            { yPercent: 100 },
+            { yPercent: 0, duration: 1.5, ease: "power4.out", stagger: 0.1 },
+            "-=0.6",
           )
-          .to(
-            ".gsap-img-reveal-overlay",
-            { height: 0, duration: 1.4, ease: "power4.inOut" },
-            "-=1.2",
+          // Reveal scroll line
+          .fromTo(
+            ".scroll-line",
+            { yPercent: -100 },
+            { yPercent: 0, duration: 1, ease: "power3.inOut" },
+            "-=1",
           );
+      }
 
-        // 3. Typography Reveals on Scroll
-        gsap.utils.toArray(".scroll-reveal-text").forEach((text) => {
-          gsap.to(text, {
-            y: "0%",
-            duration: 1.2,
-            ease: "power4.out",
-            scrollTrigger: {
-              trigger: text.parentElement,
-              start: "top 90%",
-            },
-          });
+      // 5. ScrollTrigger: Parallax Hero Text
+      gsap.to(".hero-text", {
+        yPercent: 50,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: "section.relative",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      // 6. SplitType Logic for Character Reveal (Intro Text)
+      const splitText = new SplitType(".split-text", {
+        types: "lines, words, chars",
+      });
+
+      // Hide characters initially via CSS class logic handled by SplitType, animate them in:
+      gsap.from(splitText.chars, {
+        y: 100,
+        opacity: 0,
+        rotationZ: 5,
+        duration: 0.8,
+        ease: "power4.out",
+        stagger: 0.015,
+        scrollTrigger: {
+          trigger: ".split-text",
+          start: "top 80%",
+        },
+      });
+
+      // 7. Horizontal Scroll Section Setup
+      const horizontalSec = document.getElementById("horizontal-sec");
+      const panels = gsap.utils.toArray(".panel");
+
+      // Calculate total width of all panels minus 1 viewport width (since 1vw is already showing)
+      const totalWidth = panels.reduce(
+        (acc, panel) => acc + panel.offsetWidth,
+        0,
+      );
+
+      gsap.to(panels, {
+        x: () => -(totalWidth - window.innerWidth),
+        ease: "none",
+        scrollTrigger: {
+          trigger: horizontalSec,
+          pin: true,
+          start: "top top",
+          end: () => "+=" + (totalWidth - window.innerWidth),
+          scrub: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // 8. Image Parallax inside Horizontal Scroll
+      gsap.utils.toArray(".img-parallax").forEach((img) => {
+        gsap.to(img, {
+          xPercent: 15, // Moves image slightly opposite to the scroll
+          ease: "none",
+          scrollTrigger: {
+            trigger: horizontalSec, // Use container as trigger
+            start: "top top",
+            end: () => "+=" + (totalWidth - window.innerWidth),
+            scrub: true,
+          },
         });
+      });
 
-        // 4. Fade Up Elements on Scroll
-        gsap.utils.toArray(".scroll-fade-up").forEach((el) => {
-          gsap.to(el, {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-            },
-          });
-        });
+      // 9. Marquee Animation
+      const marqueeTrack = document.querySelector(".marquee-track");
+      gsap.to(marqueeTrack, {
+        xPercent: -33.33, // Depends on how many duplicates you have
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".marquee-track",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
 
-        // 5. Image Block Reveal Animations
-        gsap.utils.toArray(".scroll-img-overlay").forEach((overlay) => {
-          gsap.to(overlay, {
-            height: 0,
-            duration: 1.5,
-            ease: "power4.inOut",
-            scrollTrigger: {
-              trigger: overlay.parentElement,
-              start: "top 80%",
-            },
-          });
-        });
-
-        // 6. Image Parallax (Moving images slightly up while scrolling down)
-        gsap.utils.toArray(".scroll-parallax").forEach((container) => {
-          const img = container.querySelector("img");
-          const speed = container.getAttribute("data-speed") || 0.15;
-
-          gsap.to(img, {
-            yPercent: speed * 100,
-            ease: "none",
-            scrollTrigger: {
-              trigger: container.parentElement,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            },
-          });
-        });
+      // Refresh ScrollTrigger after loading fonts/images
+      window.addEventListener("load", () => {
+        ScrollTrigger.refresh();
       });
     </script>
   </body>
