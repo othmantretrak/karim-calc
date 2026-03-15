@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buru Construction | Premium Architecture & Build</title>
+
+    <!-- Custom Fonts: Syne (Brutalist Modern), Playfair (Elegant Italics), Inter (Clean Body) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@1,500;1,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              syne: ["Syne", "sans-serif"],
+              inter: ["Inter", "sans-serif"],
+              playfair: ["Playfair Display", "serif"],
+            },
+            colors: {
+              brand: {
+                dark: "#121212", // Rich Black
+                light: "#EFECE6", // Warm Off-White (Arisca signature)
+                accent: "#FF4A1C", // Vibrant Construction Orange
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Lenis & GSAP Libraries for Webflow-style Animations -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+      /* Smooth Scroll Base */
+      html.lenis {
+        height: auto;
+      }
+      .lenis.lenis-smooth {
+        scroll-behavior: auto;
+      }
+      body {
+        background-color: #efece6;
+        color: #121212;
+        overflow-x: hidden;
+      }
+
+      /* GSAP Initial States (prevents flickering before JS loads) */
+      .gsap-reveal,
+      .scroll-reveal-text {
+        transform: translateY(100%);
+        display: block;
+      }
+      .gsap-fade,
+      .scroll-fade-up {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      .gsap-img-reveal-overlay,
+      .scroll-img-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #efece6;
+        z-index: 10;
+      }
+      .dark-section .scroll-img-overlay {
+        background: #121212;
+      }
+
+      /* Arisca-style Circular Hover Button */
+      .circle-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        border: 1px solid #121212;
+        transition: all 0.6s cubic-bezier(0.3, 1, 0.3, 1);
+        overflow: hidden;
+        text-align: center;
+      }
+      .circle-btn:hover {
+        background-color: #ff4a1c;
+        border-color: #ff4a1c;
+        color: #efece6;
+        transform: scale(1.05);
+      }
+      .circle-btn i {
+        transition: transform 0.4s ease;
+      }
+      .circle-btn:hover i {
+        transform: translateX(4px) rotate(-45deg);
+      }
+
+      .circle-btn-light {
+        border-color: #efece6;
+        color: #efece6;
+      }
+      .circle-btn-light:hover {
+        background-color: #efece6;
+        color: #121212;
+        border-color: #efece6;
+      }
+
+      /* Infinite Marquee */
+      .marquee-container {
+        width: 100vw;
+        overflow: hidden;
+        white-space: nowrap;
+        display: flex;
+      }
+      .marquee-content {
+        display: inline-block;
+        animation: marquee 15s linear infinite;
+      }
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-33.3333%);
+        }
+      }
+
+      /* Image Hover Effect */
+      .project-card img {
+        transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .project-card:hover img {
+        transform: scale(1.08);
+      }
+    </style>
+  </head>
+  <body
+    class="font-inter antialiased selection:bg-brand-accent selection:text-white"
+  >
+    <!-- Navigation -->
+    <nav
+      class="fixed top-0 w-full p-6 md:px-12 flex justify-between items-center z-50 mix-blend-difference text-brand-light"
+    >
+      <a
+        href="#"
+        class="font-syne font-bold text-2xl uppercase tracking-tighter hover:text-brand-accent transition-colors duration-300"
+        >Buru.</a
+      >
+      <div
+        class="hidden md:flex gap-10 font-inter text-xs uppercase tracking-[0.2em] font-medium"
+      >
+        <a
+          href="#about"
+          class="hover:text-brand-accent transition-colors duration-300"
+          >About</a
+        >
+        <a
+          href="#work"
+          class="hover:text-brand-accent transition-colors duration-300"
+          >Works</a
+        >
+        <a
+          href="#services"
+          class="hover:text-brand-accent transition-colors duration-300"
+          >Services</a
+        >
+      </div>
+      <a
+        href="#contact"
+        class="font-inter text-xs uppercase tracking-[0.2em] font-medium hover:text-brand-accent transition-colors duration-300"
+        >Get in touch</a
+      >
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      class="h-screen relative pt-32 pb-10 px-6 md:px-12 flex flex-col justify-center"
+    >
+      <div class="max-w-7xl mx-auto w-full relative z-10">
+        <!-- Animated Typograpy -->
+        <div class="overflow-hidden mb-[-2vw]">
+          <h1
+            class="font-syne text-[11vw] leading-none font-extrabold uppercase tracking-tighter gsap-reveal text-brand-dark"
+          >
+            Building
+          </h1>
+        </div>
+        <div class="overflow-hidden flex items-center gap-4 md:gap-8 mb-[-2vw]">
+          <h1
+            class="font-playfair italic text-[11vw] leading-none text-brand-accent lowercase gsap-reveal"
+          >
+            the
+          </h1>
+          <h1
+            class="font-syne text-[11vw] leading-none font-extrabold uppercase tracking-tighter gsap-reveal text-brand-dark"
+          >
+            Future
+          </h1>
+        </div>
+        <div class="overflow-hidden">
+          <h1
+            class="font-syne text-[11vw] leading-none font-extrabold uppercase tracking-tighter gsap-reveal text-brand-dark"
+          >
+            Today.
+          </h1>
+        </div>
+
+        <div
+          class="mt-12 md:mt-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-10"
+        >
+          <p
+            class="max-w-sm font-inter text-sm md:text-base leading-relaxed text-gray-600 gsap-fade"
+          >
+            Designed to spark ideas. Buru is a modern construction and
+            architectural agency creating innovative, functional, and highly
+            sustainable spaces.
+          </p>
+          <a href="#work" class="circle-btn gsap-fade">
+            <span
+              class="text-xs font-bold uppercase tracking-widest flex flex-col items-center gap-2"
+            >
+              Explore <i class="fa-solid fa-arrow-right text-lg"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Floating Parallax Image -->
+      <div
+        class="absolute top-24 right-10 md:right-24 w-1/3 md:w-1/4 aspect-[3/4] overflow-hidden hidden sm:block rounded-sm pointer-events-none"
+      >
+        <div class="gsap-img-reveal-overlay"></div>
+        <div class="w-full h-full scroll-parallax" data-speed="0.15">
+          <img
+            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            alt="Architecture"
+            class="w-full h-full object-cover scale-125"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Infinite Marquee Section -->
+    <div
+      class="py-12 border-y border-brand-dark/10 bg-brand-dark text-brand-light"
+    >
+      <div class="marquee-container">
+        <div
+          class="marquee-content flex gap-12 font-syne text-5xl md:text-7xl uppercase font-bold tracking-wider"
+        >
+          <span>• ARCHITECTURE</span><span>• CONSTRUCTION</span
+          ><span>• INNOVATION</span><span>• RENOVATION</span>
+          <!-- Duplicates for seamless loop -->
+          <span>• ARCHITECTURE</span><span>• CONSTRUCTION</span
+          ><span>• INNOVATION</span><span>• RENOVATION</span>
+          <span>• ARCHITECTURE</span><span>• CONSTRUCTION</span
+          ><span>• INNOVATION</span><span>• RENOVATION</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Section (Large Typography & Image) -->
+    <section id="about" class="py-32 px-6 md:px-12">
+      <div
+        class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 items-center"
+      >
+        <div class="w-full lg:w-1/2">
+          <div class="overflow-hidden mb-2">
+            <h2
+              class="font-syne text-6xl md:text-8xl font-bold uppercase leading-[0.85] scroll-reveal-text"
+            >
+              Structural
+            </h2>
+          </div>
+          <div class="overflow-hidden mb-2">
+            <h2
+              class="font-playfair italic text-6xl md:text-8xl text-brand-accent lowercase leading-[0.85] scroll-reveal-text"
+            >
+              harmony in
+            </h2>
+          </div>
+          <div class="overflow-hidden mb-10">
+            <h2
+              class="font-syne text-6xl md:text-8xl font-bold uppercase leading-[0.85] scroll-reveal-text"
+            >
+              Every build.
+            </h2>
+          </div>
+          <p class="font-inter text-lg text-gray-600 max-w-md scroll-fade-up">
+            We pride ourselves on delivering projects on time and to the highest
+            standards. From small residential renovations to massive commercial
+            structures, our expert team brings structural perfection.
+          </p>
+          <div class="mt-12 scroll-fade-up">
+            <a
+              href="#services"
+              class="border-b-2 border-brand-dark pb-1 text-sm uppercase font-syne font-bold tracking-[0.2em] hover:text-brand-accent hover:border-brand-accent transition-colors duration-300"
+              >Discover Our Services</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="w-full lg:w-1/2 h-[70vh] md:h-[90vh] relative overflow-hidden rounded group"
+        >
+          <div class="scroll-img-overlay"></div>
+          <div class="w-full h-full scroll-parallax" data-speed="0.1">
+            <img
+              src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/6.webp"
+              alt="About"
+              class="w-full h-full object-cover scale-[1.15] transition-transform duration-1000 group-hover:scale-100"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Projects (Dark Section) -->
+    <section
+      id="work"
+      class="py-32 px-6 md:px-12 bg-brand-dark text-brand-light dark-section"
+    >
+      <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-10 scroll-fade-up"
+        >
+          <div>
+            <h2
+              class="font-syne text-5xl md:text-7xl font-bold uppercase leading-none"
+            >
+              Featured
+            </h2>
+            <h2
+              class="font-playfair italic text-5xl md:text-7xl text-brand-accent lowercase leading-none mt-2"
+            >
+              works.
+            </h2>
+          </div>
+          <a href="#" class="circle-btn circle-btn-light hidden md:inline-flex">
+            <span class="text-xs font-bold uppercase tracking-widest"
+              >View All</span
+            >
+          </a>
+        </div>
+
+        <!-- Staggered Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-32">
+          <!-- Project 1 -->
+          <div class="mt-0 project-card scroll-fade-up group cursor-pointer">
+            <div class="relative overflow-hidden aspect-[4/5] mb-8 rounded">
+              <div class="scroll-img-overlay"></div>
+              <img
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                alt="Lunexa Villa"
+                class="w-full h-full object-cover"
+              />
+              <!-- Hover Reveal Arrow -->
+              <div
+                class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center z-20"
+              >
+                <div
+                  class="w-24 h-24 bg-brand-accent rounded-full flex items-center justify-center text-white -rotate-45 translate-y-8 group-hover:translate-y-0 transition-all duration-500 ease-out"
+                >
+                  <i class="fa-solid fa-arrow-right text-3xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2">
+              <div
+                class="flex justify-between items-center border-b border-white/20 pb-4"
+              >
+                <h3 class="font-syne text-3xl md:text-4xl uppercase font-bold">
+                  Lunexa Villa
+                </h3>
+                <span class="font-inter text-sm text-gray-400">2023</span>
+              </div>
+              <p class="font-playfair italic text-gray-400 text-lg">
+                Residential Architecture
+              </p>
+            </div>
+          </div>
+
+          <!-- Project 2 (Staggered down) -->
+          <div
+            class="md:mt-40 project-card scroll-fade-up group cursor-pointer"
+          >
+            <div class="relative overflow-hidden aspect-[4/5] mb-8 rounded">
+              <div class="scroll-img-overlay"></div>
+              <img
+                src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/12.webp"
+                alt="The Creatify"
+                class="w-full h-full object-cover"
+              />
+              <!-- Hover Reveal Arrow -->
+              <div
+                class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center z-20"
+              >
+                <div
+                  class="w-24 h-24 bg-brand-accent rounded-full flex items-center justify-center text-white -rotate-45 translate-y-8 group-hover:translate-y-0 transition-all duration-500 ease-out"
+                >
+                  <i class="fa-solid fa-arrow-right text-3xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2">
+              <div
+                class="flex justify-between items-center border-b border-white/20 pb-4"
+              >
+                <h3 class="font-syne text-3xl md:text-4xl uppercase font-bold">
+                  The Creatify
+                </h3>
+                <span class="font-inter text-sm text-gray-400">2023</span>
+              </div>
+              <p class="font-playfair italic text-gray-400 text-lg">
+                Commercial Space
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Services Section -->
+    <section id="services" class="py-32 px-6 md:px-12 bg-brand-light">
+      <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20">
+        <div class="w-full lg:w-1/3">
+          <h2
+            class="font-syne text-5xl md:text-6xl font-bold uppercase mb-4 scroll-fade-up leading-tight"
+          >
+            Our<br /><span
+              class="font-playfair italic text-brand-accent lowercase text-5xl md:text-6xl"
+              >Expertise</span
+            >
+          </h2>
+          <p class="font-inter text-gray-600 mb-8 scroll-fade-up text-lg">
+            We cover all phases of construction, ensuring the highest level of
+            quality and precision in every build we undertake.
+          </p>
+        </div>
+
+        <div class="w-full lg:w-2/3 flex flex-col">
+          <!-- Service 1 -->
+          <div
+            class="group border-t border-brand-dark/20 py-10 flex justify-between items-center cursor-pointer scroll-fade-up hover:border-brand-accent transition-colors duration-500"
+          >
+            <div class="flex gap-6 md:gap-12 items-center">
+              <span
+                class="font-inter text-sm text-gray-400 group-hover:text-brand-accent transition-colors duration-500"
+                >01</span
+              >
+              <h3
+                class="font-syne text-3xl md:text-5xl uppercase font-bold group-hover:translate-x-6 transition-transform duration-500 ease-out"
+              >
+                New Construction
+              </h3>
+            </div>
+            <i
+              class="fa-solid fa-arrow-right text-3xl opacity-0 -translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out text-brand-accent -rotate-45"
+            ></i>
+          </div>
+          <!-- Service 2 -->
+          <div
+            class="group border-t border-brand-dark/20 py-10 flex justify-between items-center cursor-pointer scroll-fade-up hover:border-brand-accent transition-colors duration-500"
+          >
+            <div class="flex gap-6 md:gap-12 items-center">
+              <span
+                class="font-inter text-sm text-gray-400 group-hover:text-brand-accent transition-colors duration-500"
+                >02</span
+              >
+              <h3
+                class="font-syne text-3xl md:text-5xl uppercase font-bold group-hover:translate-x-6 transition-transform duration-500 ease-out"
+              >
+                Renovations
+              </h3>
+            </div>
+            <i
+              class="fa-solid fa-arrow-right text-3xl opacity-0 -translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out text-brand-accent -rotate-45"
+            ></i>
+          </div>
+          <!-- Service 3 -->
+          <div
+            class="group border-t border-b border-brand-dark/20 py-10 flex justify-between items-center cursor-pointer scroll-fade-up hover:border-brand-accent transition-colors duration-500"
+          >
+            <div class="flex gap-6 md:gap-12 items-center">
+              <span
+                class="font-inter text-sm text-gray-400 group-hover:text-brand-accent transition-colors duration-500"
+                >03</span
+              >
+              <h3
+                class="font-syne text-3xl md:text-5xl uppercase font-bold group-hover:translate-x-6 transition-transform duration-500 ease-out"
+              >
+                Maintenance
+              </h3>
+            </div>
+            <i
+              class="fa-solid fa-arrow-right text-3xl opacity-0 -translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out text-brand-accent -rotate-45"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Massive Footer -->
+    <footer
+      id="contact"
+      class="bg-brand-dark text-brand-light pt-32 pb-8 px-6 md:px-12 relative overflow-hidden"
+    >
+      <div class="max-w-7xl mx-auto relative z-10">
+        <div
+          class="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-12 scroll-fade-up"
+        >
+          <div>
+            <h2
+              class="font-syne text-5xl md:text-7xl font-bold uppercase mb-6 leading-[0.9]"
+            >
+              Got a project<br /><span
+                class="font-playfair italic text-brand-accent lowercase"
+                >in mind?</span
+              >
+            </h2>
+            <a
+              href="mailto:info@buruconstruction.nl"
+              class="font-inter text-xl md:text-3xl border-b-2 border-brand-light pb-2 hover:text-brand-accent hover:border-brand-accent transition-all duration-300"
+              >info@buru.nl</a
+            >
+          </div>
+
+          <div
+            class="flex gap-16 font-inter text-xs uppercase tracking-[0.15em] font-medium"
+          >
+            <div class="flex flex-col gap-5">
+              <span class="text-gray-500 mb-2">Socials</span>
+              <a
+                href="#"
+                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
+                >Instagram</a
+              >
+              <a
+                href="#"
+                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
+                >Twitter / X</a
+              >
+              <a
+                href="#"
+                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
+                >LinkedIn</a
+              >
+            </div>
+            <div class="flex flex-col gap-5">
+              <span class="text-gray-500 mb-2">Company</span>
+              <a
+                href="#about"
+                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
+                >About</a
+              >
+              <a
+                href="#work"
+                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
+                >Works</a
+              >
+              <a
+                href="#services"
+                class="hover:text-brand-accent hover:translate-x-2 transition-transform duration-300"
+                >Services</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Giant Typography Logo -->
+        <div
+          class="w-full text-center border-t border-brand-light/10 pt-16 scroll-fade-up"
+        >
+          <h1
+            class="font-syne text-[16vw] leading-none font-extrabold uppercase tracking-tighter text-brand-light/5 select-none transition-colors duration-700 hover:text-brand-light/10"
+          >
+            BURU.
+          </h1>
+        </div>
+
+        <div
+          class="flex flex-col md:flex-row justify-between items-center mt-12 font-inter text-xs text-gray-500 uppercase tracking-widest gap-4"
+        >
+          <span>&copy; 2024 Buru Construction.</span>
+          <span>By othman Tretrak</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- GSAP Animation Logic -->
+    <script>
+      document.addEventListener("DOMContentLoaded", (event) => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Lenis Smooth Scroll Initialization
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          direction: "vertical",
+          gestureDirection: "vertical",
+          smooth: true,
+          mouseMultiplier: 1,
+          smoothTouch: false,
+          touchMultiplier: 2,
+          infinite: false,
+        });
+
+        lenis.on("scroll", ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // 2. Initial Page Load Animations (Hero Section)
+        const tl = gsap.timeline();
+        tl.to(".gsap-reveal", {
+          y: "0%",
+          duration: 1.2,
+          ease: "power4.out",
+          stagger: 0.1,
+          delay: 0.2,
+        })
+          .to(
+            ".gsap-fade",
+            { opacity: 1, y: 0, duration: 1, ease: "power3.out", stagger: 0.1 },
+            "-=0.8",
+          )
+          .to(
+            ".gsap-img-reveal-overlay",
+            { height: 0, duration: 1.4, ease: "power4.inOut" },
+            "-=1.2",
+          );
+
+        // 3. Typography Reveals on Scroll
+        gsap.utils.toArray(".scroll-reveal-text").forEach((text) => {
+          gsap.to(text, {
+            y: "0%",
+            duration: 1.2,
+            ease: "power4.out",
+            scrollTrigger: {
+              trigger: text.parentElement,
+              start: "top 90%",
+            },
+          });
+        });
+
+        // 4. Fade Up Elements on Scroll
+        gsap.utils.toArray(".scroll-fade-up").forEach((el) => {
+          gsap.to(el, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+            },
+          });
+        });
+
+        // 5. Image Block Reveal Animations
+        gsap.utils.toArray(".scroll-img-overlay").forEach((overlay) => {
+          gsap.to(overlay, {
+            height: 0,
+            duration: 1.5,
+            ease: "power4.inOut",
+            scrollTrigger: {
+              trigger: overlay.parentElement,
+              start: "top 80%",
+            },
+          });
+        });
+
+        // 6. Image Parallax (Moving images slightly up while scrolling down)
+        gsap.utils.toArray(".scroll-parallax").forEach((container) => {
+          const img = container.querySelector("img");
+          const speed = container.getAttribute("data-speed") || 0.15;
+
+          gsap.to(img, {
+            yPercent: speed * 100,
+            ease: "none",
+            scrollTrigger: {
+              trigger: container.parentElement,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
