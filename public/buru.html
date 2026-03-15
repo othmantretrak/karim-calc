@@ -123,11 +123,7 @@
         background: linear-gradient(to bottom, rgba(5, 5, 5, 0.2), #050505);
       }
 
-      /* Typography & Splitting */
-      .char {
-        transform: translateY(110%);
-        transition: transform 0.5s;
-      }
+      /* Typography & Splitting (Removed CSS transitions to prevent GSAP conflict bugs) */
       .clip-text {
         clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
       }
@@ -250,11 +246,10 @@
       </div>
     </section>
 
-    <!-- Massive Intro Text (Relats Style) - Fixed layout & loading sequence -->
+    <!-- Intro Text -->
     <section
       class="py-[15vh] md:py-[20vh] px-8 md:px-[10vw] bg-background relative z-20"
     >
-      <!-- FIXED: Replaced 'leading-' with 'leading-tight' to prevent CSS breaks -->
       <h2
         class="text-3xl md:text-[5vw] leading-tight font-medium tracking-tight split-text w-full max-w-[95%] md:max-w-[90%]"
       >
@@ -274,132 +269,150 @@
     <!-- Horizontal Scroll Section (Industries) -->
     <section
       id="horizontal-sec"
-      class="h-screen bg-surface flex flex-nowrap overflow-hidden relative"
+      class="h-screen bg-surface overflow-hidden relative"
     >
-      <!-- Panel 1: Title -->
-      <div
-        class="panel w-screen h-screen flex-shrink-0 flex items-center justify-start pl-8 md:pl-[10vw]"
-      >
-        <div>
-          <p
-            class="text-accent text-sm font-bold tracking-[0.2em] uppercase mb-4"
-          >
-            Our Industries
-          </p>
-          <h2
-            class="text-[12vw] md:text-[8vw] leading-[0.9] font-extrabold uppercase tracking-tighter"
-          >
-            Staying<br />Ahead<br />Of the<br />Curve.
-          </h2>
-        </div>
-      </div>
-
-      <!-- Panel 2: Commercial -->
-      <div
-        class="panel w-[90vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-10"
-      >
-        <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden group">
-          <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
-            class="w-full h-full object-cover scale-110 img-parallax"
-            alt="Commercial"
-          />
-          <div
-            class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition duration-700"
-          ></div>
-        </div>
+      <!-- Fixed: Added Wrapper to prevent sliding layout bugs -->
+      <div class="panels-wrapper flex flex-nowrap h-full w-max">
+        <!-- Panel 1: Title -->
         <div
-          class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
+          class="panel w-screen h-screen flex-shrink-0 flex items-center justify-start pl-8 md:pl-[10vw]"
         >
-          <h3 class="text-2xl md:text-4xl font-bold uppercase">
-            Commercial<br />& Corporate
-          </h3>
-          <span class="text-gray-400 font-mono text-sm hidden md:block"
-            >87 Projects</span
-          >
+          <div>
+            <p
+              class="text-accent text-sm font-bold tracking-[0.2em] uppercase mb-4"
+            >
+              Our Industries
+            </p>
+            <h2
+              class="text-[12vw] md:text-[8vw] leading-[0.9] font-extrabold uppercase tracking-tighter"
+            >
+              Staying<br />Ahead<br />Of the<br />Curve.
+            </h2>
+          </div>
         </div>
-      </div>
 
-      <!-- Panel 3: Infrastructure -->
-      <div
-        class="panel w-[90vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-10"
-      >
-        <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden group">
-          <img
-            src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/12.webp"
-            class="w-full h-full object-cover scale-110 img-parallax"
-            alt="Infrastructure"
-          />
-          <div
-            class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition duration-700"
-          ></div>
-        </div>
+        <!-- Panel 2: Commercial -->
         <div
-          class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
+          class="panel w-[90vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-10"
         >
-          <h3 class="text-2xl md:text-4xl font-bold uppercase">
-            Industrial<br />& Energy
-          </h3>
-          <span class="text-gray-400 font-mono text-sm hidden md:block"
-            >46 Projects</span
+          <div
+            class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden group"
           >
+            <img
+              src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
+              class="w-full h-full object-cover scale-110 img-parallax"
+              alt="Commercial"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition duration-700"
+            ></div>
+          </div>
+          <div
+            class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
+          >
+            <h3 class="text-2xl md:text-4xl font-bold uppercase">
+              Commercial<br />& Corporate
+            </h3>
+            <span class="text-gray-400 font-mono text-sm hidden md:block"
+              >87 Projects</span
+            >
+          </div>
         </div>
-      </div>
 
-      <!-- Panel 4: Residential -->
-      <div
-        class="panel w-[90vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-10 pr-[10vw]"
-      >
-        <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden group">
-          <img
-            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
-            class="w-full h-full object-cover scale-110 img-parallax"
-            alt="Residential"
-          />
-          <div
-            class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition duration-700"
-          ></div>
-        </div>
+        <!-- Panel 3: Infrastructure -->
         <div
-          class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
+          class="panel w-[90vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-10"
         >
-          <h3 class="text-2xl md:text-4xl font-bold uppercase">
-            Modern<br />Residential
-          </h3>
-          <span class="text-gray-400 font-mono text-sm hidden md:block"
-            >112 Projects</span
+          <div
+            class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden group"
           >
+            <img
+              src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/12.webp"
+              class="w-full h-full object-cover scale-110 img-parallax"
+              alt="Infrastructure"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition duration-700"
+            ></div>
+          </div>
+          <div
+            class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
+          >
+            <h3 class="text-2xl md:text-4xl font-bold uppercase">
+              Industrial<br />& Energy
+            </h3>
+            <span class="text-gray-400 font-mono text-sm hidden md:block"
+              >46 Projects</span
+            >
+          </div>
+        </div>
+
+        <!-- Panel 4: Residential -->
+        <div
+          class="panel w-[90vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-10 pr-[10vw]"
+        >
+          <div
+            class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden group"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
+              class="w-full h-full object-cover scale-110 img-parallax"
+              alt="Residential"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition duration-700"
+            ></div>
+          </div>
+          <div
+            class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
+          >
+            <h3 class="text-2xl md:text-4xl font-bold uppercase">
+              Modern<br />Residential
+            </h3>
+            <span class="text-gray-400 font-mono text-sm hidden md:block"
+              >112 Projects</span
+            >
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Sticky Pinned Section (Solutions) - FIXED for Mobile -->
+    <!-- Sticky Pinned Section (Solutions) -->
     <section class="bg-background relative text-white">
       <div class="flex flex-col md:flex-row w-full">
         <!-- Left Side (Sticky on MD+ only) -->
-        <!-- FIXED: Changed 'h-screen sticky top-0' to 'md:h-screen md:sticky md:top-0 h-auto py-16 md:py-0 relative' -->
         <div
-          class="w-full md:w-1/2 h-auto py-16 md:py-0 md:h-screen relative md:sticky md:top-0 flex flex-col justify-center pl-8 md:pl-[10vw] pr-8 border-r border-white/10 z-10 bg-background"
+          class="w-full md:w-1/2 h-auto py-16 md:py-0 md:h-screen relative md:sticky md:top-0 flex flex-col justify-center pl-8 md:pl-[10vw] pr-8 border-r border-white/10 z-10 bg-background overflow-hidden"
         >
-          <p
-            class="text-accent text-sm font-bold tracking-[0.2em] uppercase mb-4"
-          >
-            Core Competencies
-          </p>
-          <h2
-            class="text-5xl md:text-[5vw] leading-[0.9] font-extrabold uppercase tracking-tighter mb-8"
-          >
-            Sustainable<br />Solutions<br />for the<br />Future.
-          </h2>
-          <a
-            href="#"
-            class="inline-flex items-center gap-4 text-sm font-bold uppercase tracking-widest hover-target group"
-          >
-            Explore Catalog
-            <div
-              class="w-8 h-[1px] bg-white group-hover:w-12 group-hover:bg-accent transition-all duration-300"
-            ></div>
-          </a>
+          <!-- MASCOT 1: Drill Bull as a sleek background watermark element -->
+          <!-- Note: Update "bull-drill.webp" to match your exact file name -->
+          <img
+            src="bull-drill.webp"
+            alt="Buru Mascot Drill"
+            class="absolute bottom-0 right-[-10%] md:right-[-5%] w-[300px] md:w-[450px] opacity-15 pointer-events-none mix-blend-lighten z-0"
+          />
+
+          <div class="relative z-10">
+            <p
+              class="text-accent text-sm font-bold tracking-[0.2em] uppercase mb-4"
+            >
+              Core Competencies
+            </p>
+            <h2
+              class="text-5xl md:text-[5vw] leading-[0.9] font-extrabold uppercase tracking-tighter mb-8"
+            >
+              Sustainable<br />Solutions<br />for the<br />Future.
+            </h2>
+            <a
+              href="#"
+              class="inline-flex items-center gap-4 text-sm font-bold uppercase tracking-widest hover-target group"
+            >
+              Explore Catalog
+              <div
+                class="w-8 h-[1px] bg-white group-hover:w-12 group-hover:bg-accent transition-all duration-300"
+              ></div>
+            </a>
+          </div>
         </div>
 
         <!-- Right Side (Scrollable Cards) -->
@@ -478,22 +491,31 @@
     </section>
 
     <!-- Massive Marquee -->
-    <section
-      class="py-20 md:py-32 bg-accent text-background overflow-hidden flex whitespace-nowrap"
-    >
+    <section class="py-20 md:py-32 bg-accent text-background overflow-hidden">
       <div
-        class="marquee-track flex font-extrabold text-[15vw] md:text-[12vw] uppercase tracking-tighter leading-none"
+        class="marquee-track flex font-extrabold text-[15vw] md:text-[12vw] uppercase tracking-tighter leading-none whitespace-nowrap"
       >
-        <span class="pr-8 md:pr-12">INNOVATION IN ACTION •</span>
-        <span class="pr-8 md:pr-12">INNOVATION IN ACTION •</span>
-        <span class="pr-8 md:pr-12">INNOVATION IN ACTION •</span>
+        <span class="pr-8 md:pr-12 flex-shrink-0">INNOVATION IN ACTION •</span>
+        <span class="pr-8 md:pr-12 flex-shrink-0">INNOVATION IN ACTION •</span>
+        <span class="pr-8 md:pr-12 flex-shrink-0">INNOVATION IN ACTION •</span>
+        <span class="pr-8 md:pr-12 flex-shrink-0">INNOVATION IN ACTION •</span>
+        <span class="pr-8 md:pr-12 flex-shrink-0">INNOVATION IN ACTION •</span>
       </div>
     </section>
 
     <!-- Footer -->
+    <!-- Added top margin and z-index to allow the overlapping mascot drop-shadow effect -->
     <footer
-      class="bg-background pt-[10vh] md:pt-[15vh] pb-10 px-8 md:px-[10vw] border-t border-white/10"
+      class="bg-background pt-[10vh] md:pt-[15vh] pb-10 px-8 md:px-[10vw] border-t border-white/10 relative mt-12 md:mt-24 z-20"
     >
+      <!-- MASCOT 2: Pointing Bull resting perfectly on the top-border edge of the Footer -->
+      <!-- Note: Update "bull-pointing.webp" to match your exact file name -->
+      <img
+        src="bull-pointing.webp"
+        alt="Buru Mascot Pointing"
+        class="absolute left-1/2 -translate-x-1/2 top-[1px] -translate-y-[100%] w-40 md:w-56 z-20 pointer-events-none drop-shadow-2xl"
+      />
+
       <div
         class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-20 gap-10"
       >
@@ -566,17 +588,15 @@
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smooth: true,
       });
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-      requestAnimationFrame(raf);
 
       // Register GSAP ScrollTrigger
       gsap.registerPlugin(ScrollTrigger);
 
       // Sync Lenis with GSAP ScrollTrigger
       lenis.on("scroll", ScrollTrigger.update);
+
+      // FIXED: Removed the secondary native requestAnimationFrame loop that was causing
+      // double-firing jitters. The gsap.ticker handles it all flawlessly alone.
       gsap.ticker.add((time) => {
         lenis.raf(time * 1000);
       });
@@ -717,16 +737,15 @@
         },
       });
 
-      // FIXED: Wait for full window load (including web fonts) before calculating SplitType & Scroll positions
+      // Wait for full window load (including web fonts) before calculating SplitType & Scroll positions
       window.addEventListener("load", () => {
         // 6. SplitType Logic for Character Reveal (Intro Text)
-        // Initializing this after font load ensures exact measurements on Desktop.
         const splitText = new SplitType(".split-text", {
           types: "lines, words, chars",
         });
 
         gsap.from(splitText.chars, {
-          yPercent: 120, // using yPercent is safer than fixed y pixels
+          yPercent: 120,
           opacity: 0,
           rotationZ: 5,
           duration: 0.8,
@@ -739,22 +758,18 @@
         });
 
         // 7. Horizontal Scroll Section Setup
+        // FIXED: Animating a unified `.panels-wrapper` to calculate distance correctly
         const horizontalSec = document.getElementById("horizontal-sec");
-        const panels = gsap.utils.toArray(".panel");
-        const totalWidth = panels.reduce(
-          (acc, panel) => acc + panel.offsetWidth,
-          0,
-        );
+        const wrapper = document.querySelector(".panels-wrapper");
 
-        // Create horizontal scroll timeline
-        gsap.to(panels, {
-          x: () => -(totalWidth - window.innerWidth),
+        gsap.to(wrapper, {
+          x: () => -(wrapper.offsetWidth - window.innerWidth),
           ease: "none",
           scrollTrigger: {
             trigger: horizontalSec,
             pin: true,
             start: "top top",
-            end: () => "+=" + (totalWidth - window.innerWidth),
+            end: () => "+=" + (wrapper.offsetWidth - window.innerWidth),
             scrub: 1,
             invalidateOnRefresh: true, // Re-calculates on browser resize
           },
@@ -768,7 +783,7 @@
             scrollTrigger: {
               trigger: horizontalSec,
               start: "top top",
-              end: () => "+=" + (totalWidth - window.innerWidth),
+              end: () => "+=" + (wrapper.offsetWidth - window.innerWidth),
               scrub: true,
               invalidateOnRefresh: true,
             },
@@ -779,17 +794,19 @@
         ScrollTrigger.refresh();
       });
 
-      // 9. Marquee Animation
+      // 9. Marquee Animation (Infinite Loop)
       const marqueeTrack = document.querySelector(".marquee-track");
+      const marqueeSpans = gsap.utils.toArray(".marquee-track span");
+      const marqueeWidth = marqueeTrack.offsetWidth;
+      const firstSpanWidth =
+        marqueeSpans[0].offsetWidth +
+        parseFloat(getComputedStyle(marqueeSpans[0]).marginRight);
+
       gsap.to(marqueeTrack, {
-        xPercent: -33.33,
+        x: -firstSpanWidth,
+        duration: 20,
         ease: "none",
-        scrollTrigger: {
-          trigger: ".marquee-track",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
+        repeat: -1,
       });
     </script>
   </body>
