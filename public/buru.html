@@ -53,7 +53,16 @@
         background: transparent;
       }
 
-      /* Custom Cursor */
+      /* Custom Cursor (Hidden on smaller screens for better mobile UX) */
+      @media (max-width: 768px) {
+        .cursor-dot,
+        .cursor-ring {
+          display: none !important;
+        }
+        :root {
+          cursor: auto;
+        }
+      }
       .cursor-dot {
         position: fixed;
         top: 0;
@@ -174,20 +183,22 @@
 
     <!-- Navigation -->
     <nav
-      class="fixed top-0 w-full p-8 flex justify-between items-center z-50 mix-diff hover-target"
+      class="fixed top-0 w-full p-6 md:p-8 flex justify-between items-center z-50 mix-diff hover-target"
     >
       <div class="text-2xl font-extrabold tracking-tighter uppercase">
         Buru.
       </div>
-      <div class="flex gap-8 text-sm font-semibold tracking-widest uppercase">
+      <div
+        class="hidden md:flex gap-8 text-sm font-semibold tracking-widest uppercase"
+      >
         <a href="#" class="hover-target">Industries</a>
         <a href="#" class="hover-target">Solutions</a>
         <a href="#" class="hover-target">Sustainability</a>
       </div>
       <a
         href="#"
-        class="text-sm font-semibold tracking-widest uppercase hover-target border-b border-white pb-1"
-        >Sign In to Pro</a
+        class="text-xs md:text-sm font-semibold tracking-widest uppercase hover-target border-b border-white pb-1"
+        >Sign In</a
       >
     </nav>
 
@@ -215,14 +226,14 @@
       >
         <div class="clip-text">
           <h1
-            class="text-[15vw] leading-[0.8] font-extrabold uppercase tracking-tighter hero-text"
+            class="text-[20vw] md:text-[15vw] leading-[0.8] font-extrabold uppercase tracking-tighter hero-text"
           >
             Buru
           </h1>
         </div>
         <div class="clip-text mt-4">
           <h2
-            class="text-[3vw] leading-none font-medium uppercase tracking-[0.5em] text-gray-300 hero-text"
+            class="text-[5vw] md:text-[3vw] leading-none font-medium uppercase tracking-[0.5em] text-gray-300 hero-text"
           >
             Construction
           </h2>
@@ -230,7 +241,7 @@
       </div>
 
       <div
-        class="absolute bottom-10 left-8 z-10 text-xs font-bold uppercase tracking-widest mix-diff"
+        class="absolute bottom-10 left-8 z-10 text-xs font-bold uppercase tracking-widest mix-diff hidden md:block"
       >
         <span class="block mb-2">Scroll to explore</span>
         <div class="w-[1px] h-16 bg-white overflow-hidden origin-top">
@@ -239,15 +250,18 @@
       </div>
     </section>
 
-    <!-- Massive Intro Text (Relats Style) -->
-    <section class="py-[20vh] px-8 md:px-[10vw] bg-background relative z-20">
+    <!-- Massive Intro Text (Relats Style) - Fixed layout & loading sequence -->
+    <section
+      class="py-[15vh] md:py-[20vh] px-8 md:px-[10vw] bg-background relative z-20"
+    >
+      <!-- FIXED: Replaced 'leading-' with 'leading-tight' to prevent CSS breaks -->
       <h2
-        class="text-4xl md:text-[5vw] leading- font-medium tracking-tight split-text w-full max-w-[90%]"
+        class="text-3xl md:text-[5vw] leading-tight font-medium tracking-tight split-text w-full max-w-[95%] md:max-w-[90%]"
       >
         We are global leaders in the engineering of structural solutions for
         safety, longevity, and modern aesthetics.
       </h2>
-      <div class="mt-20 flex justify-end">
+      <div class="mt-12 md:mt-20 flex justify-start md:justify-end">
         <a href="#" class="magnetic-btn hover-target">
           <span
             class="magnetic-text text-sm font-bold tracking-widest uppercase text-center leading-tight"
@@ -264,7 +278,7 @@
     >
       <!-- Panel 1: Title -->
       <div
-        class="panel w-screen h-screen flex-shrink-0 flex items-center justify-start pl-[10vw]"
+        class="panel w-screen h-screen flex-shrink-0 flex items-center justify-start pl-8 md:pl-[10vw]"
       >
         <div>
           <p
@@ -273,7 +287,7 @@
             Our Industries
           </p>
           <h2
-            class="text-[8vw] leading-[0.9] font-extrabold uppercase tracking-tighter"
+            class="text-[12vw] md:text-[8vw] leading-[0.9] font-extrabold uppercase tracking-tighter"
           >
             Staying<br />Ahead<br />Of the<br />Curve.
           </h2>
@@ -282,9 +296,9 @@
 
       <!-- Panel 2: Commercial -->
       <div
-        class="panel w-[80vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-10"
+        class="panel w-[90vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-10"
       >
-        <div class="relative w-full h-[60vh] overflow-hidden group">
+        <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden group">
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
             class="w-full h-full object-cover scale-110 img-parallax"
@@ -297,20 +311,22 @@
         <div
           class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
         >
-          <h3 class="text-4xl font-bold uppercase">
+          <h3 class="text-2xl md:text-4xl font-bold uppercase">
             Commercial<br />& Corporate
           </h3>
-          <span class="text-gray-400 font-mono text-sm">87 Projects</span>
+          <span class="text-gray-400 font-mono text-sm hidden md:block"
+            >87 Projects</span
+          >
         </div>
       </div>
 
       <!-- Panel 3: Infrastructure -->
       <div
-        class="panel w-[80vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-10"
+        class="panel w-[90vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-10"
       >
-        <div class="relative w-full h-[60vh] overflow-hidden group">
+        <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden group">
           <img
-            src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/6.webp"
+            src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/12.webp"
             class="w-full h-full object-cover scale-110 img-parallax"
             alt="Infrastructure"
           />
@@ -321,16 +337,20 @@
         <div
           class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
         >
-          <h3 class="text-4xl font-bold uppercase">Industrial<br />& Energy</h3>
-          <span class="text-gray-400 font-mono text-sm">46 Projects</span>
+          <h3 class="text-2xl md:text-4xl font-bold uppercase">
+            Industrial<br />& Energy
+          </h3>
+          <span class="text-gray-400 font-mono text-sm hidden md:block"
+            >46 Projects</span
+          >
         </div>
       </div>
 
       <!-- Panel 4: Residential -->
       <div
-        class="panel w-[80vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-10 pr-[10vw]"
+        class="panel w-[90vw] md:w-[60vw] h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-10 pr-[10vw]"
       >
-        <div class="relative w-full h-[60vh] overflow-hidden group">
+        <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden group">
           <img
             src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
             class="w-full h-full object-cover scale-110 img-parallax"
@@ -343,18 +363,23 @@
         <div
           class="flex justify-between items-end mt-8 border-t border-white/20 pt-6"
         >
-          <h3 class="text-4xl font-bold uppercase">Modern<br />Residential</h3>
-          <span class="text-gray-400 font-mono text-sm">112 Projects</span>
+          <h3 class="text-2xl md:text-4xl font-bold uppercase">
+            Modern<br />Residential
+          </h3>
+          <span class="text-gray-400 font-mono text-sm hidden md:block"
+            >112 Projects</span
+          >
         </div>
       </div>
     </section>
 
-    <!-- Sticky Pinned Section (Solutions) -->
+    <!-- Sticky Pinned Section (Solutions) - FIXED for Mobile -->
     <section class="bg-background relative text-white">
       <div class="flex flex-col md:flex-row w-full">
-        <!-- Left Side (Sticky) -->
+        <!-- Left Side (Sticky on MD+ only) -->
+        <!-- FIXED: Changed 'h-screen sticky top-0' to 'md:h-screen md:sticky md:top-0 h-auto py-16 md:py-0 relative' -->
         <div
-          class="w-full md:w-1/2 h-screen sticky top-0 flex flex-col justify-center pl-8 md:pl-[10vw] pr-8 border-r border-white/10 z-10 bg-background"
+          class="w-full md:w-1/2 h-auto py-16 md:py-0 md:h-screen relative md:sticky md:top-0 flex flex-col justify-center pl-8 md:pl-[10vw] pr-8 border-r border-white/10 z-10 bg-background"
         >
           <p
             class="text-accent text-sm font-bold tracking-[0.2em] uppercase mb-4"
@@ -381,22 +406,22 @@
         <div class="w-full md:w-1/2 relative z-0">
           <!-- Card 1 -->
           <div
-            class="h-screen w-full flex items-center justify-center p-10 border-b border-white/10"
+            class="h-[60vh] md:h-screen w-full flex items-center justify-center p-6 md:p-10 border-b border-white/10"
           >
             <div
-              class="w-full h-[70vh] relative group cursor-pointer hover-target"
+              class="w-full h-full md:h-[70vh] relative group cursor-pointer hover-target"
             >
               <img
-                src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/12.webp"
-                class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-700"
+                src="https://www.buruconstruction.nl/aanbouw-en-uitbouw/sliders/6.webp"
+                class="w-full h-full object-cover filter md:grayscale md:group-hover:grayscale-0 transition duration-700"
               />
               <div
-                class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black/90 to-transparent"
+                class="absolute bottom-0 left-0 p-6 md:p-8 w-full bg-gradient-to-t from-black/90 to-transparent"
               >
-                <h3 class="text-3xl font-bold uppercase">
+                <h3 class="text-2xl md:text-3xl font-bold uppercase">
                   Structural Integration
                 </h3>
-                <p class="text-gray-400 mt-2 font-medium">
+                <p class="text-gray-400 mt-2 font-medium text-sm md:text-base">
                   Advanced load-bearing technologies.
                 </p>
               </div>
@@ -404,39 +429,45 @@
           </div>
           <!-- Card 2 -->
           <div
-            class="h-screen w-full flex items-center justify-center p-10 border-b border-white/10"
+            class="h-[60vh] md:h-screen w-full flex items-center justify-center p-6 md:p-10 border-b border-white/10"
           >
             <div
-              class="w-full h-[70vh] relative group cursor-pointer hover-target"
+              class="w-full h-full md:h-[70vh] relative group cursor-pointer hover-target"
             >
               <img
                 src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-700"
+                class="w-full h-full object-cover filter md:grayscale md:group-hover:grayscale-0 transition duration-700"
               />
               <div
-                class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black/90 to-transparent"
+                class="absolute bottom-0 left-0 p-6 md:p-8 w-full bg-gradient-to-t from-black/90 to-transparent"
               >
-                <h3 class="text-3xl font-bold uppercase">Thermal Insulation</h3>
-                <p class="text-gray-400 mt-2 font-medium">
+                <h3 class="text-2xl md:text-3xl font-bold uppercase">
+                  Thermal Insulation
+                </h3>
+                <p class="text-gray-400 mt-2 font-medium text-sm md:text-base">
                   Energy-efficient climate control materials.
                 </p>
               </div>
             </div>
           </div>
           <!-- Card 3 -->
-          <div class="h-screen w-full flex items-center justify-center p-10">
+          <div
+            class="h-[60vh] md:h-screen w-full flex items-center justify-center p-6 md:p-10"
+          >
             <div
-              class="w-full h-[70vh] relative group cursor-pointer hover-target"
+              class="w-full h-full md:h-[70vh] relative group cursor-pointer hover-target"
             >
               <img
                 src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-700"
+                class="w-full h-full object-cover filter md:grayscale md:group-hover:grayscale-0 transition duration-700"
               />
               <div
-                class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black/90 to-transparent"
+                class="absolute bottom-0 left-0 p-6 md:p-8 w-full bg-gradient-to-t from-black/90 to-transparent"
               >
-                <h3 class="text-3xl font-bold uppercase">Impact Protection</h3>
-                <p class="text-gray-400 mt-2 font-medium">
+                <h3 class="text-2xl md:text-3xl font-bold uppercase">
+                  Impact Protection
+                </h3>
+                <p class="text-gray-400 mt-2 font-medium text-sm md:text-base">
                   Seismic and weather-resistant structures.
                 </p>
               </div>
@@ -448,27 +479,27 @@
 
     <!-- Massive Marquee -->
     <section
-      class="py-32 bg-accent text-background overflow-hidden flex whitespace-nowrap"
+      class="py-20 md:py-32 bg-accent text-background overflow-hidden flex whitespace-nowrap"
     >
       <div
-        class="marquee-track flex font-extrabold text-[12vw] uppercase tracking-tighter leading-none"
+        class="marquee-track flex font-extrabold text-[15vw] md:text-[12vw] uppercase tracking-tighter leading-none"
       >
-        <span class="pr-12">INNOVATION IN ACTION •</span>
-        <span class="pr-12">INNOVATION IN ACTION •</span>
-        <span class="pr-12">INNOVATION IN ACTION •</span>
+        <span class="pr-8 md:pr-12">INNOVATION IN ACTION •</span>
+        <span class="pr-8 md:pr-12">INNOVATION IN ACTION •</span>
+        <span class="pr-8 md:pr-12">INNOVATION IN ACTION •</span>
       </div>
     </section>
 
     <!-- Footer -->
     <footer
-      class="bg-background pt-[15vh] pb-10 px-8 md:px-[10vw] border-t border-white/10"
+      class="bg-background pt-[10vh] md:pt-[15vh] pb-10 px-8 md:px-[10vw] border-t border-white/10"
     >
       <div
-        class="flex flex-col md:flex-row justify-between items-end mb-20 gap-10"
+        class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-20 gap-10"
       >
         <div>
           <p
-            class="text-gray-400 text-sm font-bold tracking-[0.2em] uppercase mb-6"
+            class="text-gray-400 text-sm font-bold tracking-[0.2em] uppercase mb-4 md:mb-6"
           >
             Start a project
           </p>
@@ -487,7 +518,7 @@
       </div>
 
       <div
-        class="grid grid-cols-1 md:grid-cols-4 gap-10 border-t border-white/20 pt-10 text-sm font-semibold tracking-widest uppercase text-gray-400"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 border-t border-white/20 pt-10 text-sm font-semibold tracking-widest uppercase text-gray-400"
       >
         <div>
           <p class="text-white mb-4">Contact</p>
@@ -511,7 +542,9 @@
             >Barcelona, ES</a
           >
         </div>
-        <div class="md:col-span-2 flex justify-between items-end h-full">
+        <div
+          class="md:col-span-2 flex flex-col md:flex-row justify-between items-start md:items-end h-full gap-6 md:gap-0"
+        >
           <div class="flex gap-6">
             <a href="#" class="hover:text-white transition hover-target"
               >Linkedin</a
@@ -520,7 +553,7 @@
               >Twitter</a
             >
           </div>
-          <p>BY othman tretrak</p>
+          <p>BY otman tretrak</p>
         </div>
       </div>
     </footer>
@@ -549,7 +582,7 @@
       });
       gsap.ticker.lagSmoothing(0);
 
-      // 2. Custom Cursor Logic (Using GSAP QuickTo for performance)
+      // 2. Custom Cursor Logic (Disabled automatically on mobile via CSS)
       const cursorDot = document.querySelector(".cursor-dot");
       const cursorRing = document.querySelector(".cursor-ring");
 
@@ -596,6 +629,9 @@
       const magneticBtns = document.querySelectorAll(".magnetic-btn");
       magneticBtns.forEach((btn) => {
         btn.addEventListener("mousemove", function (e) {
+          // Ignore magnetic effect on touch devices to prevent sticky hover issues
+          if (window.innerWidth < 768) return;
+
           const position = btn.getBoundingClientRect();
           const x = e.pageX - position.left - position.width / 2;
           const y = e.pageY - position.top - position.height / 2;
@@ -649,22 +685,18 @@
       function startIntroAnimation() {
         const tl = gsap.timeline();
 
-        // Slide Preloader Up
         tl.to("#preloader", {
           yPercent: -100,
           duration: 1.2,
           ease: "power4.inOut",
           delay: 0.2,
         })
-
-          // Reveal Hero Text
           .fromTo(
             ".hero-text",
             { yPercent: 100 },
             { yPercent: 0, duration: 1.5, ease: "power4.out", stagger: 0.1 },
             "-=0.6",
           )
-          // Reveal scroll line
           .fromTo(
             ".scroll-line",
             { yPercent: -100 },
@@ -685,66 +717,72 @@
         },
       });
 
-      // 6. SplitType Logic for Character Reveal (Intro Text)
-      const splitText = new SplitType(".split-text", {
-        types: "lines, words, chars",
-      });
+      // FIXED: Wait for full window load (including web fonts) before calculating SplitType & Scroll positions
+      window.addEventListener("load", () => {
+        // 6. SplitType Logic for Character Reveal (Intro Text)
+        // Initializing this after font load ensures exact measurements on Desktop.
+        const splitText = new SplitType(".split-text", {
+          types: "lines, words, chars",
+        });
 
-      // Hide characters initially via CSS class logic handled by SplitType, animate them in:
-      gsap.from(splitText.chars, {
-        y: 100,
-        opacity: 0,
-        rotationZ: 5,
-        duration: 0.8,
-        ease: "power4.out",
-        stagger: 0.015,
-        scrollTrigger: {
-          trigger: ".split-text",
-          start: "top 80%",
-        },
-      });
-
-      // 7. Horizontal Scroll Section Setup
-      const horizontalSec = document.getElementById("horizontal-sec");
-      const panels = gsap.utils.toArray(".panel");
-
-      // Calculate total width of all panels minus 1 viewport width (since 1vw is already showing)
-      const totalWidth = panels.reduce(
-        (acc, panel) => acc + panel.offsetWidth,
-        0,
-      );
-
-      gsap.to(panels, {
-        x: () => -(totalWidth - window.innerWidth),
-        ease: "none",
-        scrollTrigger: {
-          trigger: horizontalSec,
-          pin: true,
-          start: "top top",
-          end: () => "+=" + (totalWidth - window.innerWidth),
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      // 8. Image Parallax inside Horizontal Scroll
-      gsap.utils.toArray(".img-parallax").forEach((img) => {
-        gsap.to(img, {
-          xPercent: 15, // Moves image slightly opposite to the scroll
-          ease: "none",
+        gsap.from(splitText.chars, {
+          yPercent: 120, // using yPercent is safer than fixed y pixels
+          opacity: 0,
+          rotationZ: 5,
+          duration: 0.8,
+          ease: "power4.out",
+          stagger: 0.015,
           scrollTrigger: {
-            trigger: horizontalSec, // Use container as trigger
-            start: "top top",
-            end: () => "+=" + (totalWidth - window.innerWidth),
-            scrub: true,
+            trigger: ".split-text",
+            start: "top 85%",
           },
         });
+
+        // 7. Horizontal Scroll Section Setup
+        const horizontalSec = document.getElementById("horizontal-sec");
+        const panels = gsap.utils.toArray(".panel");
+        const totalWidth = panels.reduce(
+          (acc, panel) => acc + panel.offsetWidth,
+          0,
+        );
+
+        // Create horizontal scroll timeline
+        gsap.to(panels, {
+          x: () => -(totalWidth - window.innerWidth),
+          ease: "none",
+          scrollTrigger: {
+            trigger: horizontalSec,
+            pin: true,
+            start: "top top",
+            end: () => "+=" + (totalWidth - window.innerWidth),
+            scrub: 1,
+            invalidateOnRefresh: true, // Re-calculates on browser resize
+          },
+        });
+
+        // 8. Image Parallax inside Horizontal Scroll
+        gsap.utils.toArray(".img-parallax").forEach((img) => {
+          gsap.to(img, {
+            xPercent: 15,
+            ease: "none",
+            scrollTrigger: {
+              trigger: horizontalSec,
+              start: "top top",
+              end: () => "+=" + (totalWidth - window.innerWidth),
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          });
+        });
+
+        // Refresh ScrollTrigger to catch any layout shifts caused by font loading
+        ScrollTrigger.refresh();
       });
 
       // 9. Marquee Animation
       const marqueeTrack = document.querySelector(".marquee-track");
       gsap.to(marqueeTrack, {
-        xPercent: -33.33, // Depends on how many duplicates you have
+        xPercent: -33.33,
         ease: "none",
         scrollTrigger: {
           trigger: ".marquee-track",
@@ -752,11 +790,6 @@
           end: "bottom top",
           scrub: 1,
         },
-      });
-
-      // Refresh ScrollTrigger after loading fonts/images
-      window.addEventListener("load", () => {
-        ScrollTrigger.refresh();
       });
     </script>
   </body>
